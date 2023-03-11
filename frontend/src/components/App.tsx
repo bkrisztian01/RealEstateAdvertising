@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import Ad from './Ad';
+import AdPage from './Ad';
 import AdList from './AdList';
 import CreateListing from './CreateListing';
 import { Layout } from './Layout';
@@ -16,7 +16,7 @@ function App() {
           <Route path="messages" element={<Messages />} />
           <Route path="profile/:userId" element={<Profile />} />
           <Route path="create" element={<CreateListing />} />
-          <Route path="ad/:adId" element={<Ad />} />
+          <Route path="ad/:adId" element={<AdPage />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
       </Routes>

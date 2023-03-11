@@ -10,18 +10,14 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
+import { Ad } from '../model/Ad';
 
 type PropsType = {
-  id: number;
+  ad: Ad;
 };
 
-const AdCard = ({ id }: PropsType) => {
-  // Filler
-  const { price, numberOfRooms, area } = {
-    price: 100500000,
-    numberOfRooms: 1,
-    area: 30010,
-  };
+const AdCard = ({ ad }: PropsType) => {
+  const { id, price, roomCount, area, image } = ad;
 
   const priceString = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -30,11 +26,11 @@ const AdCard = ({ id }: PropsType) => {
 
   return (
     <LinkBox>
-      <Card key="1">
+      <Card width="300px">
         <CardBody>
           <LinkOverlay as={NavLink} to={`/ad/${id}`}>
             <Image
-              src="minimalism.jpg"
+              src={image}
               fallbackSrc="blank-house.png"
               alt="house"
               height="200px"
@@ -52,7 +48,7 @@ const AdCard = ({ id }: PropsType) => {
             divider={<StackDivider borderColor="gray.300" />}
           >
             <Text>
-              {numberOfRooms} {numberOfRooms === 1 ? 'Room' : 'Rooms'}
+              {roomCount} {roomCount === 1 ? 'Room' : 'Rooms'}
             </Text>
 
             <Text>{area} m2</Text>
