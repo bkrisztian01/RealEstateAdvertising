@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Domain
+namespace Domain.Models
 {
     public class Ad
     {
@@ -12,7 +12,7 @@ namespace Domain
         public int RoomCount { get; set; }
         public int Area { get; set; }
         public DateTime CreatedAt { get; set; }
-        //public Image Image { get; set; }    // Use Base64 representation when sending in JSON
+        public string Image { get; set; }    // Use Base64 representation
         //public User
     }
 }
