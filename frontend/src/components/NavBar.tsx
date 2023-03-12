@@ -11,17 +11,21 @@ import {
   MenuList,
   Spacer,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import RegisterModal from './RegisterModal';
 
 const NavBar = () => {
   const [loggedIn, setLoggedIn] = useState(false);
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const SignedOutButtons = () => (
     <>
       <Button onClick={() => setLoggedIn(true)}>Sign in</Button>
-      <Button as={NavLink} to="/register" colorScheme="green">
+      <Button onClick={onOpen} colorScheme="green">
         Sign up
       </Button>
     </>
@@ -60,28 +64,32 @@ const NavBar = () => {
   );
 
   return (
-    <Flex
-      as="nav"
-      alignItems="center"
-      gap="20px"
-      marginBottom="40px"
-      py="2"
-      px="4"
-      borderBottom="1px solid"
-      borderColor="gray.200"
-    >
-      <Link as={NavLink} to="/home">
-        <Text fontSize="3xl" fontWeight="bold">
-          LOGO
-        </Text>
-      </Link>
+    <>
+      <Flex
+        as="nav"
+        alignItems="center"
+        gap="20px"
+        marginBottom="40px"
+        py="2"
+        px="4"
+        borderBottom="1px solid"
+        borderColor="gray.200"
+      >
+        <Link as={NavLink} to="/home">
+          <Text fontSize="3xl" fontWeight="bold">
+            LOGO
+          </Text>
+        </Link>
 
-      <Spacer />
+        <Spacer />
 
-      <HStack spacing="20px">
-        {loggedIn ? <SignedInButtons /> : <SignedOutButtons />}
-      </HStack>
-    </Flex>
+        <HStack spacing="20px">
+          {loggedIn ? <SignedInButtons /> : <SignedOutButtons />}
+        </HStack>
+      </Flex>
+
+      <RegisterModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+    </>
   );
 };
 

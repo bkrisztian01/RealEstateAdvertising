@@ -5,7 +5,6 @@ import CreateListing from './CreateListing';
 import { Layout } from './Layout';
 import Messages from './Messages';
 import Profile from './Profile';
-import Register from './Register';
 
 function App() {
   return (
@@ -18,7 +17,6 @@ function App() {
           <Route path="profile/:userId" element={<Profile />} />
           <Route path="create" element={<CreateListing />} />
           <Route path="ad/:adId" element={<AdPage />} />
-          <Route path="register" element={<Register />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
       </Routes>
