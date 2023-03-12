@@ -21,7 +21,9 @@ const NavBar = () => {
   const SignedOutButtons = () => (
     <>
       <Button onClick={() => setLoggedIn(true)}>Sign in</Button>
-      <Button colorScheme="green">Sign up</Button>
+      <Button as={NavLink} to="/register" colorScheme="green">
+        Sign up
+      </Button>
     </>
   );
 
