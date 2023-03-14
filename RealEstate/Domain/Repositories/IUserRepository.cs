@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.DTOs;
+using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Domain.Repositories
     public interface IUserRepository
     {
         Task<User> GetByUserName(string userName);
-        Task<IdentityResult> Register(User user, string password);
-        Task<SignInResult> Login(string userName, string password);
+        Task<IdentityResult> SignUpAsync(SignUpDTO signUpDTO);
+        Task<SignInResult> LoginAsync(LoginDTO loginDTO);
     }
 }

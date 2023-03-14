@@ -1,9 +1,7 @@
-﻿using Domain.Models;
-using Domain.Repositories;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Domain.DTOs;
+using Domain.Services;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Models;
+using System.Security.Authentication;
 
 namespace WebApi.Controllers
 {
@@ -11,16 +9,16 @@ namespace WebApi.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly UserService _userService;
 
-        public AccountController(IUserRepository userRepository)
+        public AccountController(UserService userService)
         {
-            _userRepository = userRepository;
+            _userService = userService;
         }
 
         [Route("register")]
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] UserDTO userDTO)
+        public async Task<IActionResult> SignUp([FromBody] SignUpDTO signUpDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -29,14 +27,7 @@ namespace WebApi.Controllers
 
             try
             {
-                var user = new User()
-                {
-                    UserName = userDTO.UserName,
-                    Email = userDTO.Email,
-                    PhoneNumber = userDTO.PhoneNumber,
-                    FullName = userDTO.FullName,
-                };
-                var result = await _userRepository.Register(user, userDTO.Password);
+                var result = await _userService.SignUpAsync(signUpDTO);
 
                 if (!result.Succeeded)
                 {
@@ -53,7 +44,7 @@ namespace WebApi.Controllers
 
         [Route("login")]
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginUserDTO userDTO)
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -62,14 +53,11 @@ namespace WebApi.Controllers
 
             try
             {
-                var result = await _userRepository.Login(userDTO.UserName, userDTO.Password);
-
-                if (!result.Succeeded)
-                {
-                    return Unauthorized();
-                }
-
-                return Ok();
+                return Ok(await _userService.LoginAsync(loginDTO));
+            }
+            catch (AuthenticationException ex)
+            {
+                return Unauthorized();
             }
             catch (Exception ex)
             {

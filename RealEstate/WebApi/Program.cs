@@ -2,10 +2,17 @@ using Database;
 using Database.Repositories;
 using Domain.Models;
 using Domain.Repositories;
+using Domain.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.AddEnvironmentVariables();
 
 var frontendPolicy = "frontend";
 builder.Services.AddCors(options =>
@@ -31,28 +38,31 @@ builder.Services.AddSwaggerGen();
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<RealEstateDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddScoped<IAdRepository, AdRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<AdService, AdService>();
+builder.Services.AddScoped<UserService, UserService>();
 builder.Services.AddIdentity<User, IdentityRole>(options => options.User.RequireUniqueEmail = true)
-    .AddEntityFrameworkStores<RealEstateDbContext>();
+    .AddEntityFrameworkStores<RealEstateDbContext>()
+    .AddDefaultTokenProviders();
 
-//var jwtSettings = builder.Configuration.GetSection("Jwt");
-////var key = Environment.GetEnvironmentVariable("KEY");
-//var key = jwtSettings.GetRequiredSection("Key").Value;
-//builder.Services.AddAuthentication(options =>
-//    {
-//        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//    })
-//    .AddJwtBearer(options =>
-//    {
-//        options.TokenValidationParameters = new TokenValidationParameters()
-//        {
-//            ValidateIssuer = true,
-//            ValidateLifetime = true,
-//            ValidateIssuerSigningKey = true,
-//            ValidIssuer = jwtSettings.GetSection("Issuer").Value,
-//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
-//        };
-//    });
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(option =>
+    {
+        option.SaveToken = true;
+        option.RequireHttpsMetadata = true;
+        option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["JWT:ValidAudience"],
+            ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
+        };
+    });
 
 var app = builder.Build();
 
@@ -67,6 +77,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

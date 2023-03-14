@@ -14,18 +14,18 @@ namespace Database.Repositories
             _context = context;
         }
 
-        public IEnumerable<Ad> GetAll(int pageIndex = 0, int pageSize = 12)
+        public IEnumerable<Ad> GetAds(int pageIndex = 0, int pageSize = 12)
         {
             return _context.Ads.Skip(pageIndex * pageSize).Take(pageSize).ToList();
 
         }
 
-        public Ad GetById(int id)
+        public Ad GetAdById(int id)
         {
             return _context.Ads.Find(id);
         }
 
-        public void DeleteById(int id)
+        public void DeleteAdById(int id)
         {
             Ad ad = _context.Ads.Find(id);
             if (ad == null)

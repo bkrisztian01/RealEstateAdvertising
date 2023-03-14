@@ -9,8 +9,8 @@ namespace Domain.Repositories
 {
     public interface IAdRepository
     {
-        Ad GetById(int id);
-        IEnumerable<Ad> GetAll(int pageIndex = 0, int pageSize = 12);
-        void DeleteById(int id);
+        Ad GetAdById(int id);
+        IEnumerable<Ad> GetAds(int pageIndex = 0, int pageSize = 12);
+        void DeleteAdById(int id);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Domain.Models;
 using Domain.Repositories;
+using Domain.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,24 +13,24 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     public class AdController : ControllerBase
     {
-        private readonly IAdRepository adRepository;
+        private readonly AdService _adService;
 
-        public AdController(IAdRepository adRepository)
+        public AdController(AdService adService)
         {
-            this.adRepository = adRepository;
+            _adService = adService;
         }
 
         [HttpGet]
-        public IEnumerable<Ad> Get()
+        public IEnumerable<Ad> GetAds()
         {
-            return adRepository.GetAll();
+            return _adService.GetAds();
         }
 
         [HttpGet]
         [Route("{id}")]
         public IActionResult GetById(int id)
         {
-            Ad ad = adRepository.GetById(id);
+            Ad ad = _adService.GetAdById(id);
             if (ad == null)
             {
                 return NotFound();
@@ -38,9 +40,10 @@ namespace WebApi.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize]
         public IActionResult DeleteById(int id)
         {
-            adRepository.DeleteById(id);
+            _adService.DeleteAdById(id);
             return NoContent();
         }
     }
