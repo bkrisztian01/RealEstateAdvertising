@@ -15,17 +15,28 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
 
 const NavBar = () => {
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isRegisterOpen,
+    onOpen: onRegisterOpen,
+    onClose: onRegisterClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isLoginOpen,
+    onOpen: onLoginOpen,
+    onClose: onLoginClose,
+  } = useDisclosure();
 
   const SignedOutButtons = () => (
     <>
-      <Button onClick={() => setLoggedIn(true)}>Sign in</Button>
-      <Button onClick={onOpen} colorScheme="green">
+      <Button onClick={onLoginOpen}>Sign in</Button>
+      <Button onClick={onRegisterOpen} colorScheme="green">
         Sign up
       </Button>
     </>
@@ -88,7 +99,16 @@ const NavBar = () => {
         </HStack>
       </Flex>
 
-      <RegisterModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <RegisterModal
+        isOpen={isRegisterOpen}
+        onOpen={onRegisterOpen}
+        onClose={onRegisterClose}
+      />
+      <LoginModal
+        isOpen={isLoginOpen}
+        onOpen={onLoginOpen}
+        onClose={onLoginClose}
+      />
     </>
   );
 };
