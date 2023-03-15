@@ -31,7 +31,7 @@ namespace Domain.Services
             return await _userRepository.SignUpAsync(user);
         }
 
-        public async Task<string> LoginAsync(LoginDTO loginDTO)
+        public async Task<TokenDTO> LoginAsync(LoginDTO loginDTO)
         {
             var result = await _userRepository.LoginAsync(loginDTO);
 
@@ -46,7 +46,6 @@ namespace Domain.Services
                 new Claim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
             var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
@@ -55,7 +54,9 @@ namespace Domain.Services
                 signingCredentials: new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha256Signature)
                 );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var accessToken =  new JwtSecurityTokenHandler().WriteToken(token);
+
+            return new TokenDTO { AccessToken = accessToken };
         }
     }
 }
