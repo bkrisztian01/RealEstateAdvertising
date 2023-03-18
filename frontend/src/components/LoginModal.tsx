@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
-import { useSignIn } from 'react-auth-kit';
+import { useAuthUser, useSignIn } from 'react-auth-kit';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import * as yup from 'yup';
@@ -53,6 +53,8 @@ const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
     resolver: yupResolver(registerSchema),
   });
   const signIn = useSignIn();
+
+  const auth = useAuthUser();
   const { mutate, isLoading, isError, error } = useMutation<
     Tokens,
     AxiosError,
@@ -62,11 +64,15 @@ const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
       return userLogin(variables).then((tokens) => {
         signIn({
           token: tokens.accessToken,
-          expiresIn: 3600,
+          expiresIn: tokens.expiresIn,
           tokenType: 'Bearer',
+          authState: { userName: tokens.userName },
         });
 
         onClose();
+
+        const asd = auth();
+        console.log(asd);
 
         return tokens;
       });

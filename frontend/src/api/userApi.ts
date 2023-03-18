@@ -11,6 +11,8 @@ export type LoginProps = {
 
 export type Tokens = {
   accessToken: string;
+  expiresIn: number;
+  userName: string;
 };
 
 export const userLogin = async (cred: LoginProps): Promise<Tokens> => {

@@ -46,17 +46,22 @@ namespace Domain.Services
                 new Claim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
             var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+            var expiresIn = 1440;   // minutes
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddMinutes(expiresIn),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha256Signature)
                 );
 
             var accessToken =  new JwtSecurityTokenHandler().WriteToken(token);
 
-            return new TokenDTO { AccessToken = accessToken };
+            return new TokenDTO { 
+                AccessToken = accessToken,
+                ExpiresIn = expiresIn,
+                UserName = loginDTO.UserName,
+            };
         }
     }
 }

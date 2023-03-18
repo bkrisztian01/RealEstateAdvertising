@@ -13,6 +13,6 @@ namespace Domain.Models
         public int Area { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Image { get; set; }    // Use Base64 representation
-        //public User
+        //public User Owner { get; set; }
     }
 }

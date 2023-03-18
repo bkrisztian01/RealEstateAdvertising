@@ -13,14 +13,13 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useState } from 'react';
-import { useIsAuthenticated } from 'react-auth-kit';
+import { useIsAuthenticated, useSignOut } from 'react-auth-kit';
 import { NavLink } from 'react-router-dom';
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
 
 const NavBar = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const signOut = useSignOut();
 
   const {
     isOpen: isRegisterOpen,
@@ -69,7 +68,7 @@ const NavBar = () => {
 
           <MenuDivider />
 
-          <MenuItem as={NavLink} to="/home" onClick={() => setLoggedIn(false)}>
+          <MenuItem as={NavLink} to="/home" onClick={signOut}>
             Sign out
           </MenuItem>
         </MenuList>
