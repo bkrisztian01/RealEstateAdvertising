@@ -24,6 +24,15 @@ type IFormInput = {
   phoneNumber: string;
 };
 
+const style = {
+  '.chakra-form-control': {
+    marginTop: 3,
+  },
+  '.chakra-form-control:first-child': {
+    marginTop: 0,
+  },
+};
+
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
@@ -52,17 +61,9 @@ const RegisterModal = ({ isOpen, onOpen, onClose }: PropsType) => {
   } = useForm<IFormInput>({
     resolver: yupResolver(registerSchema),
   });
+
   const onSubmit: SubmitHandler<IFormInput> = (data: IFormInput) => {
     alert(JSON.stringify(data));
-  };
-
-  const style = {
-    '.chakra-form-control': {
-      marginTop: 3,
-    },
-    '.chakra-form-control:first-child': {
-      marginTop: 0,
-    },
   };
 
   return (

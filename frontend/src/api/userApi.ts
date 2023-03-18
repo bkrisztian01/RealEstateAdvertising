@@ -15,5 +15,6 @@ export type Tokens = {
 
 export const userLogin = async (cred: LoginProps): Promise<Tokens> => {
   const response = await userApi.post('/api/Account/login', cred);
+  console.log('login');
   return response.data;
 };

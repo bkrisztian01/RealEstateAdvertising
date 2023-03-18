@@ -14,6 +14,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useIsAuthenticated } from 'react-auth-kit';
 import { NavLink } from 'react-router-dom';
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
@@ -32,6 +33,8 @@ const NavBar = () => {
     onOpen: onLoginOpen,
     onClose: onLoginClose,
   } = useDisclosure();
+
+  const isAuthenticated = useIsAuthenticated();
 
   const SignedOutButtons = () => (
     <>
@@ -95,7 +98,7 @@ const NavBar = () => {
         <Spacer />
 
         <HStack spacing="20px">
-          {loggedIn ? <SignedInButtons /> : <SignedOutButtons />}
+          {isAuthenticated() ? <SignedInButtons /> : <SignedOutButtons />}
         </HStack>
       </Flex>
 

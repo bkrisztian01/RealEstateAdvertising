@@ -25,6 +25,15 @@ type IFormInput = {
   password: string;
 };
 
+const style = {
+  '.chakra-form-control': {
+    marginTop: 3,
+  },
+  '.chakra-form-control:first-child': {
+    marginTop: 0,
+  },
+};
+
 const registerSchema = yup.object<IFormInput>({
   userName: yup.string().required(),
   password: yup.string().required(),
@@ -44,35 +53,27 @@ const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
     resolver: yupResolver(registerSchema),
   });
   const signIn = useSignIn();
-  const {
-    mutate,
-    isLoading,
-    isSuccess,
-    isError,
-    data: tokens,
-    error,
-  } = useMutation<Tokens, AxiosError, LoginProps>({
-    mutationFn: (variables) => userLogin(variables),
+  const { mutate, isLoading, isError, error } = useMutation<
+    Tokens,
+    AxiosError,
+    LoginProps
+  >({
+    mutationFn: (variables) => {
+      return userLogin(variables).then((tokens) => {
+        signIn({
+          token: tokens.accessToken,
+          expiresIn: 3600,
+          tokenType: 'Bearer',
+        });
+
+        onClose();
+
+        return tokens;
+      });
+    },
   });
   const onSubmit: SubmitHandler<IFormInput> = async (data: IFormInput) => {
     mutate(data);
-  };
-
-  if (isSuccess) {
-    signIn({
-      token: tokens.accessToken,
-      expiresIn: 3600,
-      tokenType: 'Bearer',
-    });
-  }
-
-  const style = {
-    '.chakra-form-control': {
-      marginTop: 3,
-    },
-    '.chakra-form-control:first-child': {
-      marginTop: 0,
-    },
   };
 
   return (
