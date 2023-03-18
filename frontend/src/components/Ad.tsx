@@ -1,4 +1,5 @@
-import { Heading, Image, Spinner, Text } from '@chakra-ui/react';
+import { Center, Heading, Image, Spinner, Text } from '@chakra-ui/react';
+import { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getAdById } from '../api/adsApi';
@@ -12,18 +13,22 @@ const AdPage = () => {
     isError,
     error,
     data: ad,
-  } = useQuery<Ad, Error>(`ad${adId}`, () => getAdById(parseInt(adId || '0')));
+  } = useQuery<Ad, AxiosError>(`ad${adId}`, () =>
+    getAdById(parseInt(adId || '0')),
+  );
 
   let content;
   if (isLoading) {
     content = (
-      <Spinner
-        thickness="4px"
-        speed="0.65s"
-        emptyColor="gray.200"
-        color="blue.500"
-        size="xl"
-      />
+      <Center>
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
+      </Center>
     );
   } else if (isError || !ad) {
     content = <Heading>{error instanceof Error ? error.message : ''}</Heading>;

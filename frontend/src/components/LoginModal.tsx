@@ -13,8 +13,12 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AxiosError } from 'axios';
+import { useSignIn } from 'react-auth-kit';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useMutation } from 'react-query';
 import * as yup from 'yup';
+import { LoginProps, Tokens, userLogin } from '../api/userApi';
 
 type IFormInput = {
   userName: string;
@@ -39,9 +43,28 @@ const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
   } = useForm<IFormInput>({
     resolver: yupResolver(registerSchema),
   });
-  const onSubmit: SubmitHandler<IFormInput> = (data: IFormInput) => {
-    alert(JSON.stringify(data));
+  const signIn = useSignIn();
+  const {
+    mutate,
+    isLoading,
+    isSuccess,
+    isError,
+    data: tokens,
+    error,
+  } = useMutation<Tokens, AxiosError, LoginProps>({
+    mutationFn: (variables) => userLogin(variables),
+  });
+  const onSubmit: SubmitHandler<IFormInput> = async (data: IFormInput) => {
+    mutate(data);
   };
+
+  if (isSuccess) {
+    signIn({
+      token: tokens.accessToken,
+      expiresIn: 3600,
+      tokenType: 'Bearer',
+    });
+  }
 
   const style = {
     '.chakra-form-control': {
@@ -71,10 +94,19 @@ const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
               <Input {...register('password')} type="password" />
               <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
             </FormControl>
+
+            <FormControl isInvalid={isError}>
+              <FormErrorMessage>{error?.message}</FormErrorMessage>
+            </FormControl>
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={handleSubmit(onSubmit)} colorScheme="green" mr="3">
+            <Button
+              isLoading={isLoading}
+              onClick={handleSubmit(onSubmit)}
+              colorScheme="green"
+              mr="3"
+            >
               Login
             </Button>
             <Button onClick={onClose}>Cancel</Button>
