@@ -23,7 +23,14 @@ function App() {
             }
           />
           <Route path="profile/:userName" element={<Profile />} />
-          <Route path="create" element={<CreateListing />} />
+          <Route
+            path="create"
+            element={
+              <RequireAuth loginPath="/home">
+                <CreateListing />
+              </RequireAuth>
+            }
+          />
           <Route path="ad/:adId" element={<AdPage />} />
           <Route path="*" element={<NoMatch />} />
         </Route>

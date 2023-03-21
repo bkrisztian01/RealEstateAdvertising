@@ -83,21 +83,25 @@ const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Login</ModalHeader>
           <ModalCloseButton />
           <ModalBody sx={style}>
-            <FormControl isInvalid={!!errors.userName}>
+            <FormControl variant="floating" isInvalid={!!errors.userName}>
+              <Input placeholder=" " {...register('userName')} />
               <FormLabel>Username</FormLabel>
-              <Input {...register('userName')} />
               <FormErrorMessage>{errors.userName?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.password}>
+            <FormControl variant="floating" isInvalid={!!errors.password}>
+              <Input
+                placeholder=" "
+                {...register('password')}
+                type="password"
+              />
               <FormLabel>Password</FormLabel>
-              <Input {...register('password')} type="password" />
               <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
             </FormControl>
 

@@ -1,11 +1,13 @@
-import { Heading } from '@chakra-ui/react';
+import { Container, Heading } from '@chakra-ui/react';
 
 const Messages = () => {
   return (
     <>
-      <Heading as="h2" size="md">
-        Messages
-      </Heading>
+      <Container maxW="container.lg" py="10px">
+        <Heading as="h2" size="md">
+          Messages
+        </Heading>
+      </Container>
     </>
   );
 };

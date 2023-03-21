@@ -43,17 +43,19 @@ const AdList = () => {
     content = <Heading>{error instanceof Error ? error.message : ''}</Heading>;
   } else {
     content = (
-      <Center>
-        <SimpleGrid spacing={5} columns={{ base: 1, md: 2, lg: 3 }}>
-          {ads.map((x, i) => {
-            return (
-              <>
-                <AdCard ad={x} key={i} />
-              </>
-            );
-          })}
-        </SimpleGrid>
-      </Center>
+      <Container maxW="container.lg" py="10px">
+        <Center>
+          <SimpleGrid spacing={5} columns={{ base: 1, md: 2, lg: 3 }}>
+            {ads.map((x, i) => {
+              return (
+                <>
+                  <AdCard ad={x} key={i} />
+                </>
+              );
+            })}
+          </SimpleGrid>
+        </Center>
+      </Container>
     );
   }
 

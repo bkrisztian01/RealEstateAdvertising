@@ -21,7 +21,7 @@ import * as yup from 'yup';
 import { SignUpProps, userSignUp } from '../../api/userApi';
 import SuccessfulModal from './SuccessfulModal';
 
-type IFormInput = {
+type FormInput = {
   userName: string;
   password: string;
   fullName: string;
@@ -41,7 +41,7 @@ const style = {
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-const registerSchema = yup.object<IFormInput>({
+const registerSchema = yup.object<FormInput>({
   userName: yup.string().required(),
   password: yup.string().required(),
   fullName: yup.string().required(),
@@ -63,7 +63,7 @@ const RegisterModal = ({ isOpen, onOpen, onClose }: PropsType) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormInput>({
+  } = useForm<FormInput>({
     resolver: yupResolver(registerSchema),
   });
 
@@ -84,7 +84,7 @@ const RegisterModal = ({ isOpen, onOpen, onClose }: PropsType) => {
     });
   });
 
-  const onSubmit: SubmitHandler<IFormInput> = (data: IFormInput) => {
+  const onSubmit: SubmitHandler<FormInput> = (data: FormInput) => {
     mutate(data);
   };
 
@@ -97,39 +97,43 @@ const RegisterModal = ({ isOpen, onOpen, onClose }: PropsType) => {
         text="You signed up!"
       />
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Create your account</ModalHeader>
           <ModalCloseButton />
           <ModalBody sx={style}>
-            <FormControl isInvalid={!!errors.userName}>
+            <FormControl variant="floating" isInvalid={!!errors.userName}>
+              <Input placeholder=" " {...register('userName')} />
               <FormLabel>Username</FormLabel>
-              <Input {...register('userName')} />
               <FormErrorMessage>{errors.userName?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.email}>
+            <FormControl variant="floating" isInvalid={!!errors.email}>
+              <Input placeholder=" " {...register('email')} />
               <FormLabel>Email address</FormLabel>
-              <Input {...register('email')} />
               <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.fullName}>
-              <FormLabel>Full name</FormLabel>
-              <Input {...register('fullName')} />
+            <FormControl variant="floating" isInvalid={!!errors.fullName}>
+              <Input placeholder=" " {...register('fullName')} />
+              <FormLabel>Name</FormLabel>
               <FormErrorMessage>{errors.fullName?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.password}>
+            <FormControl variant="floating" isInvalid={!!errors.password}>
+              <Input
+                placeholder=" "
+                {...register('password')}
+                type="password"
+              />
               <FormLabel>Password</FormLabel>
-              <Input {...register('password')} type="password" />
               <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.phoneNumber}>
+            <FormControl variant="floating" isInvalid={!!errors.phoneNumber}>
+              <Input placeholder=" " {...register('phoneNumber')} />
               <FormLabel>Phone number</FormLabel>
-              <Input {...register('phoneNumber')} />
               <FormErrorMessage>{errors.phoneNumber?.message}</FormErrorMessage>
             </FormControl>
 
