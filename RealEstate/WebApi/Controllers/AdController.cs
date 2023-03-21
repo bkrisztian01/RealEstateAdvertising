@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.DTOs;
+using Domain.Models;
 using Domain.Repositories;
 using Domain.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -21,9 +22,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Ad> GetAds()
+        public IEnumerable<AdListingDTO> GetAds([FromQuery] string userName = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 12)
         {
-            return _adService.GetAds();
+            return _adService.GetAds(userName, pageIndex, pageSize);
         }
 
         [HttpGet]
@@ -45,6 +46,15 @@ namespace WebApi.Controllers
         {
             _adService.DeleteAdById(id);
             return NoContent();
+        }
+
+        [HttpPost]
+        [Route("create")]
+        [Authorize]
+        public IActionResult CreateAd([FromBody] AdListingDTO ad)
+        {
+            string userName = User.Identity.Name;
+            return Ok(_adService.CreateAd(ad, userName));
         }
     }
 }

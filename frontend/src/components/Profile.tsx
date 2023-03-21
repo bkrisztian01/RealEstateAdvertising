@@ -2,14 +2,14 @@ import { Heading, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 const Profile = () => {
-  const { userId } = useParams();
+  const { userId: userName } = useParams();
 
   return (
     <>
       <Heading as="h2" size="md">
         Profile
       </Heading>
-      <Text>{userId}</Text>
+      <Text>{userName}</Text>
     </>
   );
 };

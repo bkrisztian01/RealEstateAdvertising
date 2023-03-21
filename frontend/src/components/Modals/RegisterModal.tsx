@@ -11,10 +11,15 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { AxiosError } from 'axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useMutation } from 'react-query';
 import * as yup from 'yup';
+import { SignUpProps, userSignUp } from '../../api/userApi';
+import SuccessfulModal from './SuccessfulModal';
 
 type IFormInput = {
   userName: string;
@@ -62,12 +67,36 @@ const RegisterModal = ({ isOpen, onOpen, onClose }: PropsType) => {
     resolver: yupResolver(registerSchema),
   });
 
+  const {
+    isOpen: successIsOpen,
+    onOpen: successOnOpen,
+    onClose: successOnClose,
+  } = useDisclosure();
+
+  const { mutate, isLoading, isError, error } = useMutation<
+    unknown,
+    AxiosError,
+    SignUpProps
+  >((data) => {
+    return userSignUp(data).then((responseData) => {
+      onClose();
+      successOnOpen();
+    });
+  });
+
   const onSubmit: SubmitHandler<IFormInput> = (data: IFormInput) => {
-    alert(JSON.stringify(data));
+    mutate(data);
   };
 
   return (
     <>
+      <SuccessfulModal
+        isOpen={successIsOpen}
+        onClose={successOnClose}
+        onOpen={successOnOpen}
+        text="You signed up!"
+      />
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
@@ -103,10 +132,19 @@ const RegisterModal = ({ isOpen, onOpen, onClose }: PropsType) => {
               <Input {...register('phoneNumber')} />
               <FormErrorMessage>{errors.phoneNumber?.message}</FormErrorMessage>
             </FormControl>
+
+            <FormControl isInvalid={isError}>
+              <FormErrorMessage>{error?.message}</FormErrorMessage>
+            </FormControl>
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={handleSubmit(onSubmit)} colorScheme="green" mr="3">
+            <Button
+              onClick={handleSubmit(onSubmit)}
+              isLoading={isLoading}
+              colorScheme="green"
+              mr="3"
+            >
               Sign up
             </Button>
             <Button onClick={onClose}>Cancel</Button>

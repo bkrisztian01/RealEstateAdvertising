@@ -1,3 +1,4 @@
+import { RequireAuth } from 'react-auth-kit';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import AdPage from './Ad';
 import AdList from './AdList';
@@ -13,8 +14,15 @@ function App() {
         <Route element={<Layout />}>
           <Route index element={<Navigate to="/home" />} />
           <Route path="home" element={<AdList />} />
-          <Route path="messages" element={<Messages />} />
-          <Route path="profile/:userId" element={<Profile />} />
+          <Route
+            path="messages"
+            element={
+              <RequireAuth loginPath="/home">
+                <Messages />
+              </RequireAuth>
+            }
+          />
+          <Route path="profile/:userName" element={<Profile />} />
           <Route path="create" element={<CreateListing />} />
           <Route path="ad/:adId" element={<AdPage />} />
           <Route path="*" element={<NoMatch />} />

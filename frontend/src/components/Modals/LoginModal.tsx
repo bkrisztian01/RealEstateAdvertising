@@ -14,11 +14,11 @@ import {
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
-import { useAuthUser, useSignIn } from 'react-auth-kit';
+import { useSignIn } from 'react-auth-kit';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import * as yup from 'yup';
-import { LoginProps, Tokens, userLogin } from '../api/userApi';
+import { LoginProps, Tokens, userLogin } from '../../api/userApi';
 
 type IFormInput = {
   userName: string;
@@ -44,6 +44,7 @@ type PropsType = {
   onOpen: () => void;
   onClose: () => void;
 };
+
 const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
   const {
     register,
@@ -52,9 +53,9 @@ const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
   } = useForm<IFormInput>({
     resolver: yupResolver(registerSchema),
   });
+
   const signIn = useSignIn();
 
-  const auth = useAuthUser();
   const { mutate, isLoading, isError, error } = useMutation<
     Tokens,
     AxiosError,
@@ -71,13 +72,11 @@ const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
 
         onClose();
 
-        const asd = auth();
-        console.log(asd);
-
         return tokens;
       });
     },
   });
+
   const onSubmit: SubmitHandler<IFormInput> = async (data: IFormInput) => {
     mutate(data);
   };

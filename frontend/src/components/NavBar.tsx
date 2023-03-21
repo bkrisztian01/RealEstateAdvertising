@@ -13,10 +13,10 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useIsAuthenticated, useSignOut } from 'react-auth-kit';
+import { useAuthUser, useIsAuthenticated, useSignOut } from 'react-auth-kit';
 import { NavLink } from 'react-router-dom';
-import LoginModal from './LoginModal';
-import RegisterModal from './RegisterModal';
+import LoginModal from './Modals/LoginModal';
+import RegisterModal from './Modals/RegisterModal';
 
 const NavBar = () => {
   const signOut = useSignOut();
@@ -34,6 +34,8 @@ const NavBar = () => {
   } = useDisclosure();
 
   const isAuthenticated = useIsAuthenticated();
+
+  const auth = useAuthUser();
 
   const SignedOutButtons = () => (
     <>
@@ -62,7 +64,7 @@ const NavBar = () => {
 
           <MenuItem>Show listings</MenuItem>
 
-          <MenuItem as={NavLink} to="/profile/1">
+          <MenuItem as={NavLink} to={`/profile/${auth()?.userName}`}>
             Show Profile
           </MenuItem>
 

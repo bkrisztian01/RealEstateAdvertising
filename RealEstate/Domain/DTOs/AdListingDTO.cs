@@ -1,8 +1,12 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Domain.Models
+namespace Domain.DTOs
 {
-    public class Ad
+    public class AdListingDTO
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -13,6 +17,5 @@ namespace Domain.Models
         public int Area { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Image { get; set; }    // Use Base64 representation
-        public User Owner { get; set; }
     }
 }
