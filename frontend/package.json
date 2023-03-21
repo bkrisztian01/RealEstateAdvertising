@@ -23,6 +23,7 @@
     "react-auth-kit": "^2.8.2",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.5",
+    "react-icons": "^4.8.0",
     "react-query": "^3.39.3",
     "react-query-devtools": "^2.6.3",
     "react-router-dom": "^6.8.2",
