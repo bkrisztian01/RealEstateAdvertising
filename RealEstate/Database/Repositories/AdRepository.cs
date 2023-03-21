@@ -4,7 +4,7 @@ using Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace Database.Repositories
+namespace DAL.Repositories
 {
     public class AdRepository : IAdRepository
     {
@@ -84,15 +84,15 @@ namespace Database.Repositories
 
             var dbAd = new Ad
             {
-                Title = ad.Title,
+                Title       = ad.Title,
                 Description = ad.Description,
-                Price = ad.Price,
-                RoomCount = ad.RoomCount,
-                Address = ad.Address,
-                Area = ad.Area,
-                CreatedAt = ad.CreatedAt,
-                Image = ad.Image,
-                Owner = dbUser,
+                Price       = ad.Price,
+                RoomCount   = ad.RoomCount,
+                Address     = ad.Address,
+                Area        = ad.Area,
+                CreatedAt   = ad.CreatedAt,
+                Image       = ad.Image,
+                Owner       = dbUser,
             };
 
             dbAd = _context.Ads.Add(dbAd).Entity;

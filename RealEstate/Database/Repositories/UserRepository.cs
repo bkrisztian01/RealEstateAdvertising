@@ -15,19 +15,17 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Database.Repositories
+namespace DAL.Repositories
 {
     public class UserRepository : IUserRepository
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly IConfiguration _configuration;
 
-        public UserRepository(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
+        public UserRepository(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _configuration = configuration;
         }
 
         public async Task<User> GetByUserName(string userName)

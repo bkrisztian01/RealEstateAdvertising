@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Database
+namespace DAL
 {
     public class RealEstateDbContext: IdentityDbContext<User>
     {
