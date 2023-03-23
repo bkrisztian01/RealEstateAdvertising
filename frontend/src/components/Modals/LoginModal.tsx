@@ -20,7 +20,7 @@ import { useMutation } from 'react-query';
 import * as yup from 'yup';
 import { LoginProps, Tokens, userLogin } from '../../api/userApi';
 
-type IFormInput = {
+type FormInput = {
   userName: string;
   password: string;
 };
@@ -34,7 +34,7 @@ const style = {
   },
 };
 
-const registerSchema = yup.object<IFormInput>({
+const registerSchema = yup.object<FormInput>({
   userName: yup.string().required(),
   password: yup.string().required(),
 });
@@ -50,7 +50,7 @@ const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormInput>({
+  } = useForm<FormInput>({
     resolver: yupResolver(registerSchema),
   });
 
@@ -77,7 +77,7 @@ const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
     },
   });
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data: IFormInput) => {
+  const onSubmit: SubmitHandler<FormInput> = async (data: FormInput) => {
     mutate(data);
   };
 
@@ -106,7 +106,11 @@ const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
             </FormControl>
 
             <FormControl isInvalid={isError}>
-              <FormErrorMessage>{error?.message}</FormErrorMessage>
+              <FormErrorMessage>
+                {error?.code === '401'
+                  ? 'Wrong username or password.'
+                  : error?.message}
+              </FormErrorMessage>
             </FormControl>
           </ModalBody>
 
