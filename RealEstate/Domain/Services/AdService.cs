@@ -28,7 +28,7 @@ namespace Domain.Services
             return _adRepository.GetAdById(adId);
         }
 
-        public void DeleteAdById(int adId) 
+        public void DeleteAdById(int adId)
         {
             _adRepository.DeleteAdById(adId);
         }

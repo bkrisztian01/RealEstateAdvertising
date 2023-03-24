@@ -15,10 +15,12 @@ namespace WebApi.Controllers
     public class AdController : ControllerBase
     {
         private readonly AdService _adService;
+        private readonly AuthorizationService _authorizationService;
 
-        public AdController(AdService adService)
+        public AdController(AdService adService, AuthorizationService authorizationService)
         {
             _adService = adService;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet]
@@ -44,6 +46,13 @@ namespace WebApi.Controllers
         [Authorize]
         public IActionResult DeleteById(int id)
         {
+            var userName = User.Identity!.Name;
+            if (userName != null) {
+                return Unauthorized();
+            } else if (!_authorizationService.IsOwnerOfAd(id, userName!)) {
+                return Forbid();
+            }
+
             _adService.DeleteAdById(id);
             return NoContent();
         }
@@ -53,8 +62,8 @@ namespace WebApi.Controllers
         [Authorize]
         public IActionResult CreateAd([FromBody] AdListingDTO ad)
         {
-            string userName = User.Identity.Name;
-            return Ok(_adService.CreateAd(ad, userName));
+            var userName = User.Identity!.Name;
+            return Ok(_adService.CreateAd(ad, userName!));
         }
     }
 }
