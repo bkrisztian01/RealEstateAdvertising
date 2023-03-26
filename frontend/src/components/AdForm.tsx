@@ -19,7 +19,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
 import { useAuthHeader } from 'react-auth-kit';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { createAd } from '../api/adsApi';
@@ -44,7 +44,7 @@ const createListingSchema = yup.object<AdFormInput>({
   price: yup.number().required('Price is required.'),
   roomCount: yup.number().required('Room count is required.'),
   area: yup.number().required('Area is required.'),
-  // image: yup.string().required(),
+  image: yup.mixed<FileList>().required('Image is required.'),
 });
 
 // type PropsType = {
@@ -64,6 +64,8 @@ const AdForm = () => {
 
   const navigate = useNavigate();
 
+  const queryClient = useQueryClient();
+
   const { mutate, isLoading, isError, error } = useMutation<
     Ad,
     AxiosError,
@@ -71,10 +73,11 @@ const AdForm = () => {
   >({
     mutationFn: async (data: AdFormInput) => {
       const imageBase64 = await toBase64(data.image[0]);
-      return createAd({ ...data, image: imageBase64 }, auth()).then((ad) => {
-        navigate(`/ad/${ad.id}`);
-        return ad;
-      });
+      return createAd({ ...data, image: imageBase64 }, auth());
+    },
+    onSuccess: (ad) => {
+      navigate(`/ad/${ad.id}`);
+      queryClient.invalidateQueries('ads');
     },
   });
 

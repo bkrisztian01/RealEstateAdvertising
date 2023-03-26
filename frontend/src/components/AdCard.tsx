@@ -22,6 +22,7 @@ const AdCard = ({ ad }: PropsType) => {
   const priceString = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
+    maximumFractionDigits: 0,
   }).format(price);
 
   return (
@@ -51,7 +52,9 @@ const AdCard = ({ ad }: PropsType) => {
               {roomCount} {roomCount === 1 ? 'Room' : 'Rooms'}
             </Text>
 
-            <Text>{area} m2</Text>
+            <Text>
+              {area} m<sup>2</sup>
+            </Text>
           </HStack>
         </CardBody>
       </Card>

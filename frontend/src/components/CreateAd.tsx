@@ -1,15 +1,6 @@
 import { Container, Heading } from '@chakra-ui/react';
 import AdForm from './AdForm';
 
-// const style = {
-//   '.chakra-form-control': {
-//     marginTop: 3,
-//   },
-//   '.chakra-form-control:first-child': {
-//     marginTop: 0,
-//   },
-// };
-
 const CreatingAd = () => {
   return (
     <>

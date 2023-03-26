@@ -62,18 +62,17 @@ const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
     LoginProps
   >({
     mutationFn: (variables) => {
-      return userLogin(variables).then((tokens) => {
-        signIn({
-          token: tokens.accessToken,
-          expiresIn: tokens.expiresIn,
-          tokenType: 'Bearer',
-          authState: { userName: tokens.userName },
-        });
-
-        onClose();
-
-        return tokens;
+      return userLogin(variables);
+    },
+    onSuccess: (tokens) => {
+      signIn({
+        token: tokens.accessToken,
+        expiresIn: tokens.expiresIn,
+        tokenType: 'Bearer',
+        authState: { userName: tokens.userName },
       });
+
+      onClose();
     },
   });
 

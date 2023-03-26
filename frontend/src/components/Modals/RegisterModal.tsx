@@ -77,11 +77,14 @@ const RegisterModal = ({ isOpen, onOpen, onClose }: PropsType) => {
     unknown,
     AxiosError,
     SignUpProps
-  >((data) => {
-    return userSignUp(data).then((responseData) => {
+  >({
+    mutationFn: (data) => {
+      return userSignUp(data);
+    },
+    onSuccess: () => {
       onClose();
       successOnOpen();
-    });
+    },
   });
 
   const onSubmit: SubmitHandler<FormInput> = (data: FormInput) => {
