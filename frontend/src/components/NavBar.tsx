@@ -62,7 +62,9 @@ const NavBar = () => {
             Create listing
           </MenuItem>
 
-          <MenuItem>Show listings</MenuItem>
+          <MenuItem as={NavLink} to={'/listings'}>
+            Show listings
+          </MenuItem>
 
           <MenuItem as={NavLink} to={`/profile/${auth()?.userName}`}>
             Show Profile

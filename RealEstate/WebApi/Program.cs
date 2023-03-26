@@ -70,6 +70,7 @@ builder.Services.AddScoped<IAdRepository, AdRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<AdService, AdService>();
 builder.Services.AddScoped<UserService, UserService>();
+builder.Services.AddScoped<AuthorizationService, AuthorizationService>();
 builder.Services.AddIdentity<User, IdentityRole>(options => options.User.RequireUniqueEmail = true)
     .AddEntityFrameworkStores<RealEstateDbContext>()
     .AddDefaultTokenProviders();

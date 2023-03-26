@@ -1,11 +1,12 @@
 import { RequireAuth } from 'react-auth-kit';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import AdPage from './Ad';
 import AdList from './AdList';
+import AdPage from './AdPage';
 import CreateListing from './CreateListing';
 import { Layout } from './Layout';
 import Messages from './Messages';
 import Profile from './Profile';
+import ShowListings from './ShowListings/ShowListings';
 
 function App() {
   return (
@@ -33,6 +34,14 @@ function App() {
           />
           <Route path="ad/:adId" element={<AdPage />} />
           <Route path="*" element={<NoMatch />} />
+          <Route
+            path="listings"
+            element={
+              <RequireAuth loginPath="/home">
+                <ShowListings />
+              </RequireAuth>
+            }
+          />
         </Route>
       </Routes>
     </>

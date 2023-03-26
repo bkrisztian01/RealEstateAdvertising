@@ -50,6 +50,5 @@ namespace Domain.Services
                 RoomCount = dbAd.RoomCount,
             };
         }
-
     }
 }

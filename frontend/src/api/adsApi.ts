@@ -15,8 +15,10 @@ export type CreateAdProps = {
   image: string;
 };
 
-export const getAds = async () => {
-  const response = await adsApi.get<Ad[]>('/api/ad');
+export const getAds = async (userName: string | null = null) => {
+  const route = '/api/ad' + (userName ? `?userName=${userName}` : '');
+  console.log(route);
+  const response = await adsApi.get<Ad[]>(route);
   return response.data;
 };
 

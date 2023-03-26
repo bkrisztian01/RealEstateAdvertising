@@ -64,7 +64,7 @@ const AdForm = () => {
 
   const navigate = useNavigate();
 
-  const { mutate, isLoading, isError, error, isSuccess } = useMutation<
+  const { mutate, isLoading, isError, error } = useMutation<
     Ad,
     AxiosError,
     AdFormInput
@@ -81,10 +81,6 @@ const AdForm = () => {
   const onSubmit: SubmitHandler<AdFormInput> = (data: AdFormInput) => {
     mutate(data);
   };
-
-  // if (isSuccess) {
-  //   return <Redirect to={`/ad/${data.id}`} />;
-  // }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

@@ -5,6 +5,7 @@ import {
   SimpleGrid,
   Spinner,
 } from '@chakra-ui/react';
+import { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
 import { getAds } from '../api/adsApi';
 import { Ad } from '../model/Ad';
@@ -16,15 +17,7 @@ const AdList = () => {
     isError,
     error,
     data: ads,
-  } = useQuery<Ad[], Error>('ads', getAds);
-  // const queryClient = useQueryClient();
-
-  // const addAdMutation = useMutation(addAd, {
-  //   onSuccess: () => {
-  //     // Invalidates and refetch
-  //     queryClient.invalidateQueries('asd');
-  //   },
-  // });
+  } = useQuery<Ad[], AxiosError>('ads', () => getAds());
 
   let content;
   if (isLoading) {
@@ -46,10 +39,10 @@ const AdList = () => {
       <Container maxW="container.lg" py="10px">
         <Center>
           <SimpleGrid spacing={5} columns={{ base: 1, md: 2, lg: 3 }}>
-            {ads.map((x, i) => {
+            {ads.map((ad, i) => {
               return (
                 <>
-                  <AdCard ad={x} key={i} />
+                  <AdCard ad={ad} key={i} />
                 </>
               );
             })}
