@@ -11,7 +11,7 @@ namespace Domain.Services
 {
     public class AdService
     {
-        private readonly IAdRepository  _adRepository;
+        private readonly IAdRepository _adRepository;
 
         public AdService(IAdRepository repository)
         {
@@ -19,7 +19,7 @@ namespace Domain.Services
         }
 
         public IEnumerable<AdListingDTO> GetAds(string userName = null, int pageIndex = 0, int pageSize = 12)
-        { 
+        {
             return _adRepository.GetAds(userName, pageIndex, pageSize);
         }
 
@@ -36,6 +36,24 @@ namespace Domain.Services
         public AdListingDTO CreateAd(AdListingDTO ad, string userName)
         {
             var dbAd = _adRepository.CreateAd(ad, userName);
+
+            return new AdListingDTO
+            {
+                Id = dbAd.Id,
+                Title = dbAd.Title,
+                Address = dbAd.Address,
+                Description = dbAd.Description,
+                Area = dbAd.Area,
+                CreatedAt = dbAd.CreatedAt,
+                Image = dbAd.Image,
+                Price = dbAd.Price,
+                RoomCount = dbAd.RoomCount,
+            };
+        }
+
+        public AdListingDTO EditAd(AdListingDTO ad)
+        {
+            var dbAd = _adRepository.EditAd(ad);
 
             return new AdListingDTO
             {

@@ -14,5 +14,6 @@ namespace Domain.Repositories
         IEnumerable<AdListingDTO> GetAds(string userName = "", int pageIndex = 0, int pageSize = 12);
         void DeleteAdById(int id);
         Ad CreateAd(AdListingDTO ad, string userName);
+        Ad EditAd(AdListingDTO ad);
     }
 }

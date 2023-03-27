@@ -14,15 +14,15 @@ namespace DAL.Repositories
         {
             return new AdListingDTO
             {
-                Id          = ad.Id,
-                Title       = ad.Title,
+                Id = ad.Id,
+                Title = ad.Title,
                 Description = ad.Description,
-                Address     = ad.Address,
-                Price       = ad.Price,
-                RoomCount   = ad.RoomCount,
-                Area        = ad.Area,
-                CreatedAt   = ad.CreatedAt,
-                Image       = ad.Image,
+                Address = ad.Address,
+                Price = ad.Price,
+                RoomCount = ad.RoomCount,
+                Area = ad.Area,
+                CreatedAt = ad.CreatedAt,
+                Image = ad.Image,
             };
         }
 
@@ -55,7 +55,7 @@ namespace DAL.Repositories
 
         public Ad GetAdById(int id)
         {
-            return _context.Ads.Find(id);
+            return _context.Ads.Include(ad => ad.Owner).Where(ad => ad.Id == id).SingleOrDefault();
         }
 
         public void DeleteAdById(int id)
@@ -84,19 +84,41 @@ namespace DAL.Repositories
 
             var dbAd = new Ad
             {
-                Title       = ad.Title,
+                Title = ad.Title,
                 Description = ad.Description,
-                Price       = ad.Price,
-                RoomCount   = ad.RoomCount,
-                Address     = ad.Address,
-                Area        = ad.Area,
-                CreatedAt   = ad.CreatedAt,
-                Image       = ad.Image,
-                Owner       = dbUser,
+                Price = ad.Price,
+                RoomCount = ad.RoomCount,
+                Address = ad.Address,
+                Area = ad.Area,
+                CreatedAt = ad.CreatedAt,
+                Image = ad.Image,
+                Owner = dbUser,
             };
 
             dbAd = _context.Ads.Add(dbAd).Entity;
             _context.SaveChanges();
+            return dbAd;
+        }
+
+        public Ad EditAd(AdListingDTO ad)
+        {
+            var dbAd = _context.Ads.Find(ad.Id);
+
+            if (dbAd == null)
+            {
+                throw new ArgumentException("Ad was not found");
+            }
+
+            dbAd.Title = ad.Title;
+            dbAd.Description = ad.Description;
+            dbAd.Price = ad.Price;
+            dbAd.RoomCount = ad.RoomCount;
+            dbAd.Address = ad.Address;
+            dbAd.Area = ad.Area;
+            dbAd.Image = ad.Image;
+
+            _context.SaveChanges();
+
             return dbAd;
         }
     }

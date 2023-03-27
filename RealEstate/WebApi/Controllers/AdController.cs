@@ -47,9 +47,12 @@ namespace WebApi.Controllers
         public IActionResult DeleteById(int id)
         {
             var userName = User.Identity!.Name;
-            if (userName != null) {
+            if (userName == null)
+            {
                 return Unauthorized();
-            } else if (!_authorizationService.IsOwnerOfAd(id, userName!)) {
+            }
+            else if (!_authorizationService.IsOwnerOfAd(id, userName!))
+            {
                 return Forbid();
             }
 
@@ -64,6 +67,25 @@ namespace WebApi.Controllers
         {
             var userName = User.Identity!.Name;
             return Ok(_adService.CreateAd(ad, userName!));
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        [Authorize]
+        public IActionResult EditAd([FromBody] AdListingDTO ad, int id)
+        {
+            ad.Id = id;
+            var userName = User.Identity!.Name;
+            if (userName == null)
+            {
+                return Unauthorized();
+            }
+            else if (!_authorizationService.IsOwnerOfAd(ad.Id, userName!))
+            {
+                return Forbid();
+            }
+
+            return Ok(_adService.EditAd(ad));
         }
     }
 }
