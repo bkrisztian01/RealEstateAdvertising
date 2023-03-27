@@ -28,7 +28,7 @@ export const getAdById = async (id: number) => {
 };
 
 export const createAd = async (data: AdProps, accessToken: string) => {
-  const response = await adsApi.post<Ad>('/api/ad/create', data, {
+  const response = await adsApi.post<Ad>('/api/ad', data, {
     withCredentials: true,
     headers: {
       Authorization: accessToken,

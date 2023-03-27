@@ -1,11 +1,5 @@
 ﻿using Domain.DTOs;
-using Domain.Models;
 using Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Services
 {
@@ -18,14 +12,32 @@ namespace Domain.Services
             _adRepository = repository;
         }
 
-        public IEnumerable<AdListingDTO> GetAds(string userName = null, int pageIndex = 0, int pageSize = 12)
+        public IEnumerable<AdDTO> GetAds(string userName = null, int pageIndex = 0, int pageSize = 12)
         {
             return _adRepository.GetAds(userName, pageIndex, pageSize);
         }
 
-        public Ad GetAdById(int adId)
+        public AdWithOwnerDTO GetAdById(int adId)
         {
-            return _adRepository.GetAdById(adId);
+            var dbAd = _adRepository.GetAdById(adId);
+            return new AdWithOwnerDTO
+            {
+                Id = dbAd.Id,
+                Title = dbAd.Title,
+                Address = dbAd.Address,
+                Description = dbAd.Description,
+                Area = dbAd.Area,
+                CreatedAt = dbAd.CreatedAt,
+                Image = dbAd.Image,
+                Price = dbAd.Price,
+                RoomCount = dbAd.RoomCount,
+                Owner = new OwnerDTO
+                {
+                    FullName = dbAd.Owner.FullName,
+                    UserName = dbAd.Owner.UserName,
+                    Email = dbAd.Owner.Email,
+                }
+            };
         }
 
         public void DeleteAdById(int adId)
@@ -33,11 +45,11 @@ namespace Domain.Services
             _adRepository.DeleteAdById(adId);
         }
 
-        public AdListingDTO CreateAd(AdListingDTO ad, string userName)
+        public AdDTO CreateAd(CreateAdDTO ad, string userName)
         {
             var dbAd = _adRepository.CreateAd(ad, userName);
 
-            return new AdListingDTO
+            return new AdDTO
             {
                 Id = dbAd.Id,
                 Title = dbAd.Title,
@@ -51,11 +63,11 @@ namespace Domain.Services
             };
         }
 
-        public AdListingDTO EditAd(AdListingDTO ad)
+        public AdDTO EditAd(EditAdDTO ad)
         {
             var dbAd = _adRepository.EditAd(ad);
 
-            return new AdListingDTO
+            return new AdDTO
             {
                 Id = dbAd.Id,
                 Title = dbAd.Title,

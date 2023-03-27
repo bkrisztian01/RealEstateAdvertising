@@ -10,9 +10,9 @@ namespace DAL.Repositories
     {
         private readonly RealEstateDbContext _context;
 
-        private AdListingDTO mapAdToAdListingDTO(Ad ad)
+        private AdDTO mapAdToAdDTO(Ad ad)
         {
-            return new AdListingDTO
+            return new AdDTO
             {
                 Id = ad.Id,
                 Title = ad.Title,
@@ -31,14 +31,14 @@ namespace DAL.Repositories
             _context = context;
         }
 
-        public IEnumerable<AdListingDTO> GetAds(string userName = "", int pageIndex = 0, int pageSize = 12)
+        public IEnumerable<AdDTO> GetAds(string userName = "", int pageIndex = 0, int pageSize = 12)
         {
             if (string.IsNullOrEmpty(userName))
             {
                 return _context.Ads
                     .Skip(pageIndex * pageSize)
                     .Take(pageSize)
-                    .Select(mapAdToAdListingDTO)
+                    .Select(mapAdToAdDTO)
                     .ToList();
             }
             else
@@ -48,14 +48,16 @@ namespace DAL.Repositories
                     .Where(ad => ad.Owner.UserName == userName)
                     .Skip(pageIndex * pageSize)
                     .Take(pageSize)
-                    .Select(mapAdToAdListingDTO)
+                    .Select(mapAdToAdDTO)
                     .ToList();
             }
         }
 
-        public Ad GetAdById(int id)
+        public Ad? GetAdById(int id)
         {
-            return _context.Ads.Include(ad => ad.Owner).Where(ad => ad.Id == id).SingleOrDefault();
+            return _context.Ads
+                .Include(ad => ad.Owner)
+                .Where(ad => ad.Id == id).SingleOrDefault();
         }
 
         public void DeleteAdById(int id)
@@ -73,7 +75,7 @@ namespace DAL.Repositories
             _context.Ads.Add(ad);
         }
 
-        public Ad CreateAd(AdListingDTO ad, string userName)
+        public Ad CreateAd(CreateAdDTO ad, string userName)
         {
             var dbUser = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
 
@@ -90,7 +92,7 @@ namespace DAL.Repositories
                 RoomCount = ad.RoomCount,
                 Address = ad.Address,
                 Area = ad.Area,
-                CreatedAt = ad.CreatedAt,
+                CreatedAt = DateTime.Now,
                 Image = ad.Image,
                 Owner = dbUser,
             };
@@ -100,7 +102,7 @@ namespace DAL.Repositories
             return dbAd;
         }
 
-        public Ad EditAd(AdListingDTO ad)
+        public Ad EditAd(EditAdDTO ad)
         {
             var dbAd = _context.Ads.Find(ad.Id);
 
@@ -118,7 +120,6 @@ namespace DAL.Repositories
             dbAd.Image = ad.Image;
 
             _context.SaveChanges();
-
             return dbAd;
         }
     }

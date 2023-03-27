@@ -24,7 +24,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<AdListingDTO> GetAds([FromQuery] string userName = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 12)
+        public IEnumerable<AdDTO> GetAds([FromQuery] string userName = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 12)
         {
             return _adService.GetAds(userName, pageIndex, pageSize);
         }
@@ -33,7 +33,7 @@ namespace WebApi.Controllers
         [Route("{id}")]
         public IActionResult GetById(int id)
         {
-            Ad ad = _adService.GetAdById(id);
+            var ad = _adService.GetAdById(id);
             if (ad == null)
             {
                 return NotFound();
@@ -61,9 +61,8 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("create")]
         [Authorize]
-        public IActionResult CreateAd([FromBody] AdListingDTO ad)
+        public IActionResult CreateAd([FromBody] CreateAdDTO ad)
         {
             var userName = User.Identity!.Name;
             return Ok(_adService.CreateAd(ad, userName!));
@@ -72,7 +71,7 @@ namespace WebApi.Controllers
         [HttpPut]
         [Route("{id}")]
         [Authorize]
-        public IActionResult EditAd([FromBody] AdListingDTO ad, int id)
+        public IActionResult EditAd([FromBody] EditAdDTO ad, int id)
         {
             ad.Id = id;
             var userName = User.Identity!.Name;

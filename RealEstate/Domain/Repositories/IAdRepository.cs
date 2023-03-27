@@ -10,10 +10,10 @@ namespace Domain.Repositories
 {
     public interface IAdRepository
     {
-        Ad GetAdById(int id);
-        IEnumerable<AdListingDTO> GetAds(string userName = "", int pageIndex = 0, int pageSize = 12);
+        Ad? GetAdById(int id);
+        IEnumerable<AdDTO> GetAds(string userName = "", int pageIndex = 0, int pageSize = 12);
         void DeleteAdById(int id);
-        Ad CreateAd(AdListingDTO ad, string userName);
-        Ad EditAd(AdListingDTO ad);
+        Ad CreateAd(CreateAdDTO ad, string userName);
+        Ad EditAd(EditAdDTO ad);
     }
 }
