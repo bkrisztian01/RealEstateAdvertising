@@ -11,7 +11,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { MdDelete, MdOutlineEdit } from 'react-icons/md';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Ad } from '../../model/Ad';
 
 type PropsType = {
@@ -22,6 +22,12 @@ const ListingRow = ({ ad }: PropsType) => {
   const { id, title, address, image, createdAt } = ad;
 
   const createdAtString = new Date(createdAt).toLocaleDateString();
+
+  const navigate = useNavigate();
+
+  const onEditButtonClick = () => {
+    navigate(`/ad/${ad.id}/edit`);
+  };
 
   return (
     <Tr>
@@ -55,6 +61,7 @@ const ListingRow = ({ ad }: PropsType) => {
             <IconButton
               aria-label="Edit listing"
               icon={<Icon as={MdOutlineEdit} />}
+              onClick={onEditButtonClick}
             />
             <IconButton
               colorScheme="red"

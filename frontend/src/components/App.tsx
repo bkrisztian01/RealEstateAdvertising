@@ -2,9 +2,11 @@ import { RequireAuth } from 'react-auth-kit';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import AdList from './AdList';
 import AdPage from './AdPage';
-import CreateListing from './CreateListing';
+import CreateAd from './CreateAd';
+import EditAd from './EditAd';
 import { Layout } from './Layout';
 import Messages from './Messages';
+import NoMatch from './NoMatch';
 import Profile from './Profile';
 import ShowListings from './ShowListings/ShowListings';
 
@@ -28,12 +30,11 @@ function App() {
             path="create"
             element={
               <RequireAuth loginPath="/home">
-                <CreateListing />
+                <CreateAd />
               </RequireAuth>
             }
           />
           <Route path="ad/:adId" element={<AdPage />} />
-          <Route path="*" element={<NoMatch />} />
           <Route
             path="listings"
             element={
@@ -42,14 +43,19 @@ function App() {
               </RequireAuth>
             }
           />
+          <Route
+            path="ad/:adId/edit"
+            element={
+              <RequireAuth loginPath="/home">
+                <EditAd />
+              </RequireAuth>
+            }
+          />
+          <Route path="*" element={<NoMatch />} />
         </Route>
       </Routes>
     </>
   );
 }
-
-const NoMatch = () => {
-  return <p>404: There&apos;s nothing here!</p>;
-};
 
 export default App;

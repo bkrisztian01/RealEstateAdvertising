@@ -1,9 +1,11 @@
 import {
   Button,
+  Container,
   FormControl,
   FormErrorMessage,
   FormLabel,
   GridItem,
+  Heading,
   Input,
   InputGroup,
   InputRightAddon,
@@ -17,64 +19,84 @@ import {
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuthHeader } from 'react-auth-kit';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
-import { createAd } from '../api/adsApi';
+import { getAdById, updateAd } from '../api/adsApi';
 import { Ad } from '../model/Ad';
 import { toBase64 } from '../util/toBase64';
 import FileUpload from './FileUpload';
+import NoMatch from './NoMatch';
 
-type AdFormInput = {
-  title: string;
-  description: string;
-  address: string;
-  price: number;
-  roomCount: number;
-  area: number;
-  image: FileList;
-};
-
-const createListingSchema = yup.object<AdFormInput>({
+const listingSchema = yup.object<AdFormInput>({
   title: yup.string().required('Title is required.'),
   description: yup.string(),
   address: yup.string().required('Address is required.'),
   price: yup.number().required('Price is required.'),
   roomCount: yup.number().required('Room count is required.'),
   area: yup.number().required('Area is required.'),
-  image: yup.mixed<FileList>().required('Image is required.'),
+  image: yup.mixed<FileList>(),
 });
 
-// type PropsType = {
-//   mutationFn:
-// }
+export type AdFormInput = {
+  title: string;
+  description: string;
+  address: string;
+  price: number;
+  roomCount: number;
+  area: number;
+  image?: FileList;
+};
 
-const AdForm = () => {
+const EditAd = () => {
+  const { adId } = useParams();
+
+  const [ad, setAd] = useState<Ad | undefined>(undefined);
+  const [notFound, setNotFound] = useState<boolean>(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<AdFormInput>({
-    resolver: yupResolver(createListingSchema),
+    resolver: yupResolver(listingSchema),
+    values: useMemo(() => {
+      return !ad ? undefined : { ...ad, image: undefined };
+    }, [ad]),
   });
-
-  const auth = useAuthHeader();
 
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
 
-  const { mutate, isLoading, isError, error } = useMutation<
+  const auth = useAuthHeader();
+
+  const mutationFn = async (data: AdFormInput) => {
+    if (!ad) throw Error('Ad is null');
+
+    return updateAd(
+      ad.id,
+      {
+        ...data,
+        image:
+          !!data.image && data.image.length > 0
+            ? await toBase64(data.image[0])
+            : ad.image,
+        createdAt: ad.createdAt,
+      },
+      auth(),
+    );
+  };
+
+  const { mutate, isError, error, isLoading } = useMutation<
     Ad,
     AxiosError,
     AdFormInput
   >({
-    mutationFn: async (data: AdFormInput) => {
-      const imageBase64 = await toBase64(data.image[0]);
-      return createAd({ ...data, image: imageBase64 }, auth());
-    },
+    mutationFn,
     onSuccess: (ad) => {
       navigate(`/ad/${ad.id}`);
       queryClient.invalidateQueries('ads');
@@ -85,13 +107,33 @@ const AdForm = () => {
     mutate(data);
   };
 
-  return (
+  useEffect(() => {
+    async function f() {
+      if (!Number(adId)) {
+        setNotFound(true);
+        return;
+      }
+      const ad = await getAdById(Number(adId));
+      if (!ad) {
+        setNotFound(true);
+        return;
+      }
+      setAd(ad);
+    }
+    f();
+  }, [adId]);
+
+  if (notFound) {
+    return <NoMatch />;
+  }
+
+  const adForm = (
     <form onSubmit={handleSubmit(onSubmit)}>
       <SimpleGrid columns={{ base: 2, sm: 1 }} columnGap={2} rowGap={2}>
         <GridItem colSpan={2}>
           <FormControl isInvalid={!!errors.title}>
             <FormLabel>Title</FormLabel>
-            <Input {...register('title')} />
+            <Input {...register('title')} defaultValue={ad?.title} />
             <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
           </FormControl>
         </GridItem>
@@ -104,6 +146,7 @@ const AdForm = () => {
               {...register('description')}
               size="sm"
               rounded="md"
+              defaultValue={ad?.description}
             />
             <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
           </FormControl>
@@ -112,7 +155,7 @@ const AdForm = () => {
         <GridItem colSpan={2}>
           <FormControl isInvalid={!!errors.address}>
             <FormLabel>Address</FormLabel>
-            <Input {...register('address')} />
+            <Input {...register('address')} defaultValue={ad?.address} />
             <FormErrorMessage>{errors.address?.message}</FormErrorMessage>
           </FormControl>
         </GridItem>
@@ -120,7 +163,7 @@ const AdForm = () => {
         <GridItem colSpan={2}>
           <FormControl isInvalid={!!errors.price}>
             <FormLabel>Price</FormLabel>
-            <NumberInput min={0} defaultValue={0}>
+            <NumberInput min={0} defaultValue={ad?.price || 0}>
               <NumberInputField {...register('price')} />
               <NumberInputStepper>
                 <NumberIncrementStepper />
@@ -134,7 +177,7 @@ const AdForm = () => {
         <GridItem colSpan={1}>
           <FormControl isInvalid={!!errors.roomCount}>
             <FormLabel>Room count</FormLabel>
-            <NumberInput min={1} defaultValue={1}>
+            <NumberInput min={1} defaultValue={ad?.roomCount || 1}>
               <NumberInputField {...register('roomCount')} />
               <NumberInputStepper>
                 <NumberIncrementStepper />
@@ -149,7 +192,7 @@ const AdForm = () => {
           <FormControl isInvalid={!!errors.area}>
             <FormLabel>Area</FormLabel>
             <InputGroup>
-              <NumberInput max={50} min={1} defaultValue={1}>
+              <NumberInput min={1} defaultValue={ad?.area || 1}>
                 <NumberInputField {...register('area')} />
                 <NumberInputStepper>
                   <NumberIncrementStepper />
@@ -194,5 +237,17 @@ const AdForm = () => {
       </SimpleGrid>
     </form>
   );
+
+  return (
+    <>
+      <Container maxW="container.sm" py="10px">
+        <Heading as="h1" mb="4">
+          Edit advertisement
+        </Heading>
+        {adForm}
+      </Container>
+    </>
+  );
 };
-export default AdForm;
+
+export default EditAd;
