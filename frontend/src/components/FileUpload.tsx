@@ -52,6 +52,7 @@ const FileUpload = (props: FileUploadProps) => {
         <Box width="" ml="2" mt="auto" mb="auto" overflowX="hidden">
           <Text overflow="hidden">{fileName}</Text>
         </Box>
+        {children}
       </>
     </InputGroup>
   );

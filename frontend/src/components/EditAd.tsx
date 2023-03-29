@@ -1,5 +1,6 @@
 import {
   Button,
+  Center,
   Container,
   FormControl,
   FormErrorMessage,
@@ -15,21 +16,23 @@ import {
   NumberInputField,
   NumberInputStepper,
   SimpleGrid,
+  Spinner,
   Textarea,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
-import { useEffect, useMemo, useState } from 'react';
-import { useAuthHeader } from 'react-auth-kit';
+import { useMemo } from 'react';
+import { useAuthHeader, useAuthUser } from 'react-auth-kit';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import { getAdById, updateAd } from '../api/adsApi';
 import { Ad } from '../model/Ad';
 import { toBase64 } from '../util/toBase64';
 import FileUpload from './FileUpload';
-import NoMatch from './NoMatch';
+import Forbidden from './Forbidden';
+import NotFound from './NotFound';
 
 const listingSchema = yup.object<AdFormInput>({
   title: yup.string().required('Title is required.'),
@@ -54,8 +57,17 @@ export type AdFormInput = {
 const EditAd = () => {
   const { adId } = useParams();
 
-  const [ad, setAd] = useState<Ad | undefined>(undefined);
-  const [notFound, setNotFound] = useState<boolean>(false);
+  const {
+    isLoading: isAdLoading,
+    data: ad,
+    error: adError,
+  } = useQuery<Ad, AxiosError>(`ad${adId}`, () => {
+    const id = Number(adId);
+    if (!id) {
+      return Promise.reject(new Error('adId is not a number'));
+    }
+    return getAdById(id);
+  });
 
   const {
     register,
@@ -69,10 +81,9 @@ const EditAd = () => {
   });
 
   const navigate = useNavigate();
-
   const queryClient = useQueryClient();
-
-  const auth = useAuthHeader();
+  const authHeader = useAuthHeader();
+  const authUser = useAuthUser();
 
   const mutationFn = async (data: AdFormInput) => {
     if (!ad) throw Error('Ad is null');
@@ -87,7 +98,7 @@ const EditAd = () => {
             : ad.image,
         createdAt: ad.createdAt,
       },
-      auth(),
+      authHeader(),
     );
   };
 
@@ -100,6 +111,7 @@ const EditAd = () => {
     onSuccess: (ad) => {
       navigate(`/ad/${ad.id}`);
       queryClient.invalidateQueries('ads');
+      queryClient.invalidateQueries(`ad${adId}`);
     },
   });
 
@@ -107,24 +119,26 @@ const EditAd = () => {
     mutate(data);
   };
 
-  useEffect(() => {
-    async function f() {
-      if (!Number(adId)) {
-        setNotFound(true);
-        return;
-      }
-      const ad = await getAdById(Number(adId));
-      if (!ad) {
-        setNotFound(true);
-        return;
-      }
-      setAd(ad);
-    }
-    f();
-  }, [adId]);
+  if (!!adError?.response && adError.response?.status === 404) {
+    return <NotFound />;
+  }
 
-  if (notFound) {
-    return <NoMatch />;
+  if (!!ad && ad.owner.userName !== authUser()?.userName) {
+    return <Forbidden />;
+  }
+
+  if (isAdLoading) {
+    return (
+      <Center>
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
+      </Center>
+    );
   }
 
   const adForm = (
