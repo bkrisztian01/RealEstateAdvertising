@@ -7,5 +7,10 @@ export type Ad = {
   roomCount: number;
   area: number;
   createdAt: Date;
+  owner: {
+    fullName: string;
+    userName: string;
+    email: string;
+  };
   image: string; // Base64
 };

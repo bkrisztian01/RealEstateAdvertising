@@ -6,7 +6,7 @@ import CreateAd from './CreateAd';
 import EditAd from './EditAd';
 import { Layout } from './Layout';
 import Messages from './Messages';
-import NoMatch from './NoMatch';
+import NotFound from './NotFound';
 import Profile from './Profile';
 import ShowListings from './ShowListings/ShowListings';
 
@@ -51,7 +51,7 @@ function App() {
               </RequireAuth>
             }
           />
-          <Route path="*" element={<NoMatch />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </>
