@@ -1,4 +1,4 @@
-import { Box, Button, Icon, InputGroup, Text } from '@chakra-ui/react';
+import { Box, Button, Icon, Input, InputGroup, Text } from '@chakra-ui/react';
 import { ChangeEvent, ReactNode, useRef, useState } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { AiOutlineUpload } from 'react-icons/ai';
@@ -29,7 +29,7 @@ const FileUpload = (props: FileUploadProps) => {
 
   return (
     <InputGroup onClick={handleClick}>
-      <input
+      <Input
         type={'file'}
         multiple={multiple || false}
         hidden
@@ -52,6 +52,7 @@ const FileUpload = (props: FileUploadProps) => {
         <Box width="" ml="2" mt="auto" mb="auto" overflowX="hidden">
           <Text overflow="hidden">{fileName}</Text>
         </Box>
+        {children}
       </>
     </InputGroup>
   );
