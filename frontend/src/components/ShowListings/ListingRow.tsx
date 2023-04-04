@@ -16,9 +16,10 @@ import { Ad } from '../../model/Ad';
 
 type PropsType = {
   ad: Ad;
+  onDeleteButtonClick: () => void;
 };
 
-const ListingRow = ({ ad }: PropsType) => {
+const ListingRow = ({ ad, onDeleteButtonClick }: PropsType) => {
   const { id, title, address, image, createdAt } = ad;
 
   const createdAtString = new Date(createdAt).toLocaleDateString();
@@ -66,6 +67,7 @@ const ListingRow = ({ ad }: PropsType) => {
             <IconButton
               colorScheme="red"
               aria-label="Remove listing"
+              onClick={onDeleteButtonClick}
               icon={<Icon as={MdDelete} />}
             />
           </ButtonGroup>
