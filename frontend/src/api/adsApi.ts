@@ -50,3 +50,12 @@ export const updateAd = async (
   });
   return response.data;
 };
+
+export const deleteAd = async (id: number, accessToken: string) => {
+  await adsApi.delete(`/api/ad/${id}`, {
+    withCredentials: true,
+    headers: {
+      Authorization: accessToken,
+    },
+  });
+};
