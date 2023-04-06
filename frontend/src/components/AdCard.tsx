@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import { Ad } from '../model/Ad';
+import { formatPrice } from '../util/formatPrice';
 
 type PropsType = {
   ad: Ad;
@@ -19,11 +20,7 @@ type PropsType = {
 const AdCard = ({ ad }: PropsType) => {
   const { id, price, roomCount, area, image } = ad;
 
-  const priceString = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(price);
+  const priceString = formatPrice(price);
 
   return (
     <LinkBox>

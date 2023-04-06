@@ -11,6 +11,7 @@ export type Ad = {
     fullName: string;
     userName: string;
     email: string;
+    phoneNumber: string;
   };
   image: string; // Base64
 };

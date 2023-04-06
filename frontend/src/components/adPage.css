@@ -1,0 +1,32 @@
+.image-container {
+  border-radius: 1%;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+img.ad-image {
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.details-container {
+  /* background: #e9e9e9; */
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.contacts-container {
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.detail {
+  margin-top: 4px;
+  width: 100%;
+}
+
+.display-linebreak {
+  white-space: pre-line;
+}
