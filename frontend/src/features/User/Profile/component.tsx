@@ -1,7 +1,7 @@
 import { Container, Heading, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
-const Profile = () => {
+export const Profile = () => {
   const { userId: userName } = useParams();
 
   return (
@@ -15,5 +15,3 @@ const Profile = () => {
     </>
   );
 };
-
-export default Profile;

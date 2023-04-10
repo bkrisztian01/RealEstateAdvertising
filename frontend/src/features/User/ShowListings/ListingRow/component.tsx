@@ -12,14 +12,9 @@ import {
 } from '@chakra-ui/react';
 import { MdDelete, MdOutlineEdit } from 'react-icons/md';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Ad } from '../../model/Ad';
+import { ListingRowProps } from './types';
 
-type PropsType = {
-  ad: Ad;
-  onDeleteButtonClick: () => void;
-};
-
-const ListingRow = ({ ad, onDeleteButtonClick }: PropsType) => {
+export const ListingRow = ({ ad, onDeleteButtonClick }: ListingRowProps) => {
   const { id, title, address, image, createdAt } = ad;
 
   const createdAtString = new Date(createdAt).toLocaleDateString();
@@ -76,4 +71,3 @@ const ListingRow = ({ ad, onDeleteButtonClick }: PropsType) => {
     </Tr>
   );
 };
-export default ListingRow;

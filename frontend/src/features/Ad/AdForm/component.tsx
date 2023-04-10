@@ -19,21 +19,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
 import { useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { MutationFunction, useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import { Ad } from '../model/Ad';
-import FileUpload from './FileUpload';
-
-export type AdFormInput = {
-  title: string;
-  description: string;
-  address: string;
-  price: number;
-  roomCount: number;
-  area: number;
-  image: FileList;
-};
+import FileUpload from '../../../components/FileUpload';
+import { Ad } from '../../../model/Ad';
+import { AdFormInput, AdFormProps } from './types';
 
 function dataURLtoFile(dataurl: string, filename = 'image') {
   const arr = dataurl.split(',');
@@ -65,12 +56,7 @@ const adSchema = yup.object<AdFormInput>({
     ),
 });
 
-export type AdFormProps = {
-  mutationFn: MutationFunction<Ad, AdFormInput>;
-  ad?: Ad;
-};
-
-const AdForm = ({ mutationFn, ad }: AdFormProps) => {
+export const AdForm = ({ mutationFn, ad }: AdFormProps) => {
   const {
     register,
     handleSubmit,
@@ -220,5 +206,3 @@ const AdForm = ({ mutationFn, ad }: AdFormProps) => {
     </form>
   );
 };
-
-export default AdForm;

@@ -1,6 +1,5 @@
 import {
   Box,
-  Center,
   Container,
   Grid,
   GridItem,
@@ -8,7 +7,6 @@ import {
   HStack,
   Icon,
   Image,
-  Spinner,
   Text,
 } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
@@ -19,12 +17,13 @@ import { ImLocation2, ImPriceTag } from 'react-icons/im';
 import { MdBed, MdEmail } from 'react-icons/md';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { getAdById } from '../api/adsApi';
-import { Ad } from '../model/Ad';
-import { formatPrice } from '../util/formatPrice';
-import './adPage.css';
+import { getAdById } from '../../../api/adsApi';
+import Loading from '../../../components/Loading';
+import { Ad } from '../../../model/Ad';
+import { formatPrice } from '../../../util/formatPrice';
+import './style.css';
 
-const AdPage = () => {
+export const AdPage = () => {
   const { adId } = useParams();
 
   const {
@@ -63,17 +62,7 @@ const AdPage = () => {
 
   let content;
   if (isLoading) {
-    content = (
-      <Center>
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
-      </Center>
-    );
+    content = <Loading />;
   } else if (isError || !ad) {
     content = <Heading>{error instanceof Error ? error.message : ''}</Heading>;
   } else {
@@ -138,4 +127,3 @@ const AdPage = () => {
   }
   return content;
 };
-export default AdPage;

@@ -15,8 +15,8 @@ import {
 } from '@chakra-ui/react';
 import { useAuthUser, useIsAuthenticated, useSignOut } from 'react-auth-kit';
 import { NavLink } from 'react-router-dom';
-import LoginModal from './Modals/LoginModal';
-import RegisterModal from './Modals/RegisterModal';
+import { LoginModal } from '../features/User/LoginModal';
+import { RegisterModal } from '../features/User/RegisterModal';
 
 const NavBar = () => {
   const signOut = useSignOut();

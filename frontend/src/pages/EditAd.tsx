@@ -1,13 +1,14 @@
-import { Center, Container, Heading, Spinner } from '@chakra-ui/react';
+import { Container, Heading } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
 import { useCallback } from 'react';
 import { useAuthHeader, useAuthUser } from 'react-auth-kit';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { getAdById, updateAd } from '../api/adsApi';
+import Loading from '../components/Loading';
+import { AdForm, AdFormInput } from '../features/Ad/AdForm';
 import { Ad } from '../model/Ad';
 import { toBase64 } from '../util/toBase64';
-import AdForm, { AdFormInput } from './AdForm';
 import Forbidden from './Forbidden';
 import NotFound from './NotFound';
 
@@ -58,17 +59,7 @@ const EditAd = () => {
   }
 
   if (isAdLoading) {
-    return (
-      <Center>
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
-      </Center>
-    );
+    return <Loading />;
   }
 
   return (

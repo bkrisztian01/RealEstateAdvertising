@@ -2,7 +2,6 @@ import {
   Center,
   Container,
   Heading,
-  Spinner,
   Table,
   Tbody,
   Th,
@@ -13,13 +12,14 @@ import {
 import { useCallback, useState } from 'react';
 import { useAuthHeader, useAuthUser } from 'react-auth-kit';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { deleteAd, getAds } from '../../api/adsApi';
-import { Ad } from '../../model/Ad';
-import DeleteModal from '../Modals/DeleteModal';
-import ListingRow from './ListingRow';
-import './showListings.css';
+import { deleteAd, getAds } from '../../../api/adsApi';
+import Loading from '../../../components/Loading';
+import DeleteModal from '../../../components/Modals/DeleteModal';
+import { Ad } from '../../../model/Ad';
+import { ListingRow } from './ListingRow/component';
+import './style.css';
 
-const ShowListings = () => {
+export const ShowListings = () => {
   const authUser = useAuthUser();
   const authHeader = useAuthHeader();
   const userName = authUser()?.userName;
@@ -34,6 +34,7 @@ const ShowListings = () => {
     error,
     data: ads,
   } = useQuery<Ad[]>('ownListings', () => getAds(userName));
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const mutationFn = useCallback(
@@ -45,7 +46,7 @@ const ShowListings = () => {
     [adId, authHeader],
   );
 
-  const { mutate } = useMutation({
+  const { mutate: mutateDelete } = useMutation({
     mutationFn,
     onSuccess: (_) => {
       queryClient.invalidateQueries('ownListings');
@@ -54,23 +55,13 @@ const ShowListings = () => {
   });
 
   const onDelete = () => {
-    mutate();
+    mutateDelete();
     onClose();
   };
 
   let content;
   if (isLoading) {
-    content = (
-      <Center>
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
-      </Center>
-    );
+    content = <Loading />;
   } else if (isError || !ads) {
     content = (
       <Heading size="md">{error instanceof Error ? error.message : ''}</Heading>
@@ -126,4 +117,3 @@ const ShowListings = () => {
     </>
   );
 };
-export default ShowListings;

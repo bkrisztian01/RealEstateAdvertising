@@ -1,0 +1,1 @@
+export { AdPage } from './component';

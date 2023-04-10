@@ -11,12 +11,11 @@ import {
 
 type PropsType = {
   isOpen: boolean;
-  onOpen: () => void;
   onClose: () => void;
   text: string;
 };
 
-const SuccessfulModal = ({ isOpen, onOpen, onClose, text }: PropsType) => {
+const SuccessfulModal = ({ isOpen, onClose, text }: PropsType) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -34,4 +33,5 @@ const SuccessfulModal = ({ isOpen, onOpen, onClose, text }: PropsType) => {
     </Modal>
   );
 };
+
 export default SuccessfulModal;

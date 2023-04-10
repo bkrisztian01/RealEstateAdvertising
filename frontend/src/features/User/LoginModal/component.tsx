@@ -18,40 +18,22 @@ import { useSignIn } from 'react-auth-kit';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import * as yup from 'yup';
-import { LoginProps, Tokens, userLogin } from '../../api/userApi';
+import { LoginProps, Tokens, userLogin } from '../../../api/userApi';
+import './style.css';
+import { LoginFormInput, LoginModalProps } from './types';
 
-type FormInput = {
-  userName: string;
-  password: string;
-};
-
-const style = {
-  '.chakra-form-control': {
-    marginTop: 3,
-  },
-  '.chakra-form-control:first-child': {
-    marginTop: 0,
-  },
-};
-
-const registerSchema = yup.object<FormInput>({
+const loginSchema = yup.object<LoginFormInput>({
   userName: yup.string().required(),
   password: yup.string().required(),
 });
 
-type PropsType = {
-  isOpen: boolean;
-  onOpen: () => void;
-  onClose: () => void;
-};
-
-const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
+export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormInput>({
-    resolver: yupResolver(registerSchema),
+  } = useForm<LoginFormInput>({
+    resolver: yupResolver(loginSchema),
   });
 
   const signIn = useSignIn();
@@ -76,7 +58,9 @@ const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
     },
   });
 
-  const onSubmit: SubmitHandler<FormInput> = async (data: FormInput) => {
+  const onSubmit: SubmitHandler<LoginFormInput> = async (
+    data: LoginFormInput,
+  ) => {
     mutate(data);
   };
 
@@ -87,7 +71,7 @@ const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
         <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Login</ModalHeader>
           <ModalCloseButton />
-          <ModalBody sx={style}>
+          <ModalBody>
             <FormControl variant="floating" isInvalid={!!errors.userName}>
               <Input placeholder=" " {...register('userName')} />
               <FormLabel>Username</FormLabel>
@@ -129,4 +113,3 @@ const LoginModal = ({ isOpen, onOpen, onClose }: PropsType) => {
     </>
   );
 };
-export default LoginModal;

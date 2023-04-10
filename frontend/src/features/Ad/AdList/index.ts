@@ -1,0 +1,1 @@
+export { AdList } from './component';

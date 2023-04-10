@@ -10,14 +10,10 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
-import { Ad } from '../model/Ad';
-import { formatPrice } from '../util/formatPrice';
+import { formatPrice } from '../../../../util/formatPrice';
+import { AdCardProps } from './types';
 
-type PropsType = {
-  ad: Ad;
-};
-
-const AdCard = ({ ad }: PropsType) => {
+export const AdCard = ({ ad }: AdCardProps) => {
   const { id, price, roomCount, area, image } = ad;
 
   const priceString = formatPrice(price);
@@ -58,5 +54,3 @@ const AdCard = ({ ad }: PropsType) => {
     </LinkBox>
   );
 };
-
-export default AdCard;

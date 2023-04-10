@@ -1,0 +1,7 @@
+.chakra-form-control {
+  margin-top: 3;
+}
+
+.chakra-form-control:first-child {
+  margin-top: 0;
+}

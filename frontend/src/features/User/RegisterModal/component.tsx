@@ -18,30 +18,15 @@ import { AxiosError } from 'axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import * as yup from 'yup';
-import { SignUpProps, userSignUp } from '../../api/userApi';
-import SuccessfulModal from './SuccessfulModal';
-
-type FormInput = {
-  userName: string;
-  password: string;
-  fullName: string;
-  email: string;
-  phoneNumber: string;
-};
-
-const style = {
-  '.chakra-form-control': {
-    marginTop: 3,
-  },
-  '.chakra-form-control:first-child': {
-    marginTop: 0,
-  },
-};
+import { SignUpProps, userSignUp } from '../../../api/userApi';
+import SuccessfulModal from '../../../components/Modals/SuccessfulModal';
+import './styles.css';
+import { RegisterFormInput, RegisterModalProps } from './types';
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-const registerSchema = yup.object<FormInput>({
+const registerSchema = yup.object<RegisterFormInput>({
   userName: yup.string().required(),
   password: yup.string().required(),
   fullName: yup.string().required(),
@@ -53,17 +38,12 @@ const registerSchema = yup.object<FormInput>({
   ),
 });
 
-type PropsType = {
-  isOpen: boolean;
-  onOpen: () => void;
-  onClose: () => void;
-};
-const RegisterModal = ({ isOpen, onOpen, onClose }: PropsType) => {
+export const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormInput>({
+  } = useForm<RegisterFormInput>({
     resolver: yupResolver(registerSchema),
   });
 
@@ -87,7 +67,9 @@ const RegisterModal = ({ isOpen, onOpen, onClose }: PropsType) => {
     },
   });
 
-  const onSubmit: SubmitHandler<FormInput> = (data: FormInput) => {
+  const onSubmit: SubmitHandler<RegisterFormInput> = (
+    data: RegisterFormInput,
+  ) => {
     mutate(data);
   };
 
@@ -96,7 +78,6 @@ const RegisterModal = ({ isOpen, onOpen, onClose }: PropsType) => {
       <SuccessfulModal
         isOpen={successIsOpen}
         onClose={successOnClose}
-        onOpen={successOnOpen}
         text="You signed up!"
       />
 
@@ -105,7 +86,7 @@ const RegisterModal = ({ isOpen, onOpen, onClose }: PropsType) => {
         <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
           <ModalHeader>Create your account</ModalHeader>
           <ModalCloseButton />
-          <ModalBody sx={style}>
+          <ModalBody>
             <FormControl variant="floating" isInvalid={!!errors.userName}>
               <Input placeholder=" " {...register('userName')} />
               <FormLabel>Username</FormLabel>
@@ -161,4 +142,3 @@ const RegisterModal = ({ isOpen, onOpen, onClose }: PropsType) => {
     </>
   );
 };
-export default RegisterModal;

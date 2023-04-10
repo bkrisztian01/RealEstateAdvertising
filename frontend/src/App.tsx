@@ -1,14 +1,14 @@
 import { RequireAuth } from 'react-auth-kit';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import AdList from './AdList';
-import AdPage from './AdPage';
-import CreateAd from './CreateAd';
-import EditAd from './EditAd';
-import { Layout } from './Layout';
-import Messages from './Messages';
-import NotFound from './NotFound';
-import Profile from './Profile';
-import ShowListings from './ShowListings/ShowListings';
+import { AdList } from './features/Ad/AdList';
+import { AdPage } from './features/Ad/AdPage';
+import { Profile } from './features/User/Profile/component';
+import { ShowListings } from './features/User/ShowListings';
+import { Layout } from './layouts/Layout';
+import CreateAd from './pages/CreateAd';
+import EditAd from './pages/EditAd';
+import Messages from './pages/Messages';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
