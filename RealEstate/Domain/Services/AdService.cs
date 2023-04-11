@@ -36,6 +36,7 @@ namespace Domain.Services
                     FullName = dbAd.Owner.FullName,
                     UserName = dbAd.Owner.UserName,
                     Email = dbAd.Owner.Email,
+                    PhoneNumber = dbAd.Owner.PhoneNumber,
                 }
             };
         }
