@@ -35,6 +35,35 @@ export const AdPage = () => {
     getAdById(parseInt(adId || '0')),
   );
 
+  const details = (ad: Ad) => (
+    <>
+      <Heading as="h2" size="md" mb="8px">
+        {ad.title}
+      </Heading>
+      <HStack className="detail">
+        <Icon as={ImLocation2}></Icon>
+        <Text>{ad.address}</Text>
+      </HStack>
+      <HStack className="detail">
+        <Icon as={ImPriceTag}></Icon>
+        <Text>{formatPrice(ad.price)}</Text>
+      </HStack>
+      <HStack className="detail">
+        <Icon as={FaRulerVertical}></Icon>
+        <Text>
+          {`${ad.area} m`}
+          <sup>2</sup>
+        </Text>
+      </HStack>
+      <HStack className="detail">
+        <Icon as={MdBed}></Icon>
+        <Text>
+          {ad.roomCount > 1 ? `${ad.roomCount} rooms` : `${ad.roomCount} room`}
+        </Text>
+      </HStack>
+    </>
+  );
+
   const contacts = (
     <>
       <Box className="contacts-container">
@@ -70,57 +99,35 @@ export const AdPage = () => {
       <>
         <Container maxW="container.lg">
           <Grid
-            w="100%"
-            templateRows="1fr"
-            templateColumns={{ xl: '70% 30%', lg: '70% 30%', base: '100%' }}
+            w={{ lg: 'calc(100% - 10px)', base: '100%' }}
+            templateRows="repeat(2, 1fr)"
+            templateColumns={{ lg: '70% 30%', base: '100%' }}
             gap="10px"
           >
             <GridItem
               colSpan={1}
+              rowSpan={2}
               height={{ lg: '450px', md: '450px', base: '300px' }}
               className="image-container"
             >
               <Image className="ad-image" src={ad.image} />
             </GridItem>
-            <GridItem colSpan={1}>
-              <Box className="details-container">
-                <Heading as="h2" size="md" mb="8px">
-                  {ad.title}
-                </Heading>
-                <HStack className="detail">
-                  <Icon as={ImLocation2}></Icon>
-                  <Text>{ad.address}</Text>
-                </HStack>
-                <HStack className="detail">
-                  <Icon as={ImPriceTag}></Icon>
-                  <Text>{formatPrice(ad.price)}</Text>
-                </HStack>
-                <HStack className="detail">
-                  <Icon as={FaRulerVertical}></Icon>
-                  <Text>
-                    {`${ad.area} m`}
-                    <sup>2</sup>
-                  </Text>
-                </HStack>
-                <HStack className="detail">
-                  <Icon as={MdBed}></Icon>
-                  <Text>
-                    {ad.roomCount > 1
-                      ? `${ad.roomCount} rooms`
-                      : `${ad.roomCount} room`}
-                  </Text>
-                </HStack>
-              </Box>
+            <GridItem className="panel details-container" colSpan={1}>
+              {details(ad)}
+            </GridItem>
+            <GridItem className="panel" colSpan={1}>
               {contacts}
             </GridItem>
           </Grid>
 
-          <Heading as="h2" mt="20px" size="md">
-            About This Home
-          </Heading>
-          <Text className="display-linebreak" mt="10px">
-            {ad.description}
-          </Text>
+          <Box className="panel" mt="30px">
+            <Heading as="h2" size="md">
+              About This Home
+            </Heading>
+            <Text className="display-linebreak" mt="10px">
+              {ad.description}
+            </Text>
+          </Box>
         </Container>
       </>
     );
