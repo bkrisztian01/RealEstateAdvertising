@@ -58,7 +58,7 @@ export const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
     AxiosError,
     SignUpProps
   >({
-    mutationFn: (data) => {
+    mutationFn: (data: SignUpProps) => {
       return userSignUp(data);
     },
     onSuccess: () => {
