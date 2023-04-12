@@ -94,7 +94,7 @@ const NavBar = () => {
       >
         <Link as={NavLink} to="/home">
           <Text fontSize="3xl" fontWeight="bold">
-            LOGO
+            RealEstate
           </Text>
         </Link>
 
@@ -105,16 +105,8 @@ const NavBar = () => {
         </HStack>
       </Flex>
 
-      <RegisterModal
-        isOpen={isRegisterOpen}
-        onOpen={onRegisterOpen}
-        onClose={onRegisterClose}
-      />
-      <LoginModal
-        isOpen={isLoginOpen}
-        onOpen={onLoginOpen}
-        onClose={onLoginClose}
-      />
+      <RegisterModal isOpen={isRegisterOpen} onClose={onRegisterClose} />
+      <LoginModal isOpen={isLoginOpen} onClose={onLoginClose} />
     </>
   );
 };

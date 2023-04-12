@@ -1,7 +1,7 @@
-.chakra-form-control {
-  margin-top: 3px;
+.login-form-control {
+  margin-top: 14px;
 }
 
-.chakra-form-control:first-child {
+.login-form-control:first-child {
   margin-top: 0;
 }

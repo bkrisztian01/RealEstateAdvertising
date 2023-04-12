@@ -72,13 +72,21 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
           <ModalHeader>Login</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl variant="floating" isInvalid={!!errors.userName}>
+            <FormControl
+              className="login-form-control"
+              variant="floating"
+              isInvalid={!!errors.userName}
+            >
               <Input placeholder=" " {...register('userName')} />
               <FormLabel>Username</FormLabel>
               <FormErrorMessage>{errors.userName?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl variant="floating" isInvalid={!!errors.password}>
+            <FormControl
+              className="login-form-control"
+              variant="floating"
+              isInvalid={!!errors.password}
+            >
               <Input
                 placeholder=" "
                 {...register('password')}

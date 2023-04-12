@@ -20,7 +20,7 @@ import { SuccessfulModal } from 'components/Modals/SuccessfulModal';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import * as yup from 'yup';
-import './styles.css';
+import './style.css';
 import { RegisterFormInput, RegisterModalProps } from './types';
 
 const phoneRegExp =
@@ -87,25 +87,41 @@ export const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
           <ModalHeader>Create your account</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl variant="floating" isInvalid={!!errors.userName}>
+            <FormControl
+              className="register-form-control"
+              variant="floating"
+              isInvalid={!!errors.userName}
+            >
               <Input placeholder=" " {...register('userName')} />
               <FormLabel>Username</FormLabel>
               <FormErrorMessage>{errors.userName?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl variant="floating" isInvalid={!!errors.email}>
+            <FormControl
+              className="register-form-control"
+              variant="floating"
+              isInvalid={!!errors.email}
+            >
               <Input placeholder=" " {...register('email')} />
               <FormLabel>Email address</FormLabel>
               <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl variant="floating" isInvalid={!!errors.fullName}>
+            <FormControl
+              className="register-form-control"
+              variant="floating"
+              isInvalid={!!errors.fullName}
+            >
               <Input placeholder=" " {...register('fullName')} />
               <FormLabel>Name</FormLabel>
               <FormErrorMessage>{errors.fullName?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl variant="floating" isInvalid={!!errors.password}>
+            <FormControl
+              className="register-form-control"
+              variant="floating"
+              isInvalid={!!errors.password}
+            >
               <Input
                 placeholder=" "
                 {...register('password')}
@@ -115,7 +131,11 @@ export const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
               <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl variant="floating" isInvalid={!!errors.phoneNumber}>
+            <FormControl
+              className="register-form-control"
+              variant="floating"
+              isInvalid={!!errors.phoneNumber}
+            >
               <Input placeholder=" " {...register('phoneNumber')} />
               <FormLabel>Phone number</FormLabel>
               <FormErrorMessage>{errors.phoneNumber?.message}</FormErrorMessage>

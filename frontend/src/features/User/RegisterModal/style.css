@@ -1,0 +1,7 @@
+.register-form-control {
+  margin-top: 14px;
+}
+
+.register-form-control:first-child {
+  margin-top: 0;
+}

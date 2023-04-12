@@ -103,9 +103,11 @@ export const ShowListings = () => {
           <PageButtons
             onPreviousClick={() => {
               setPageIndex((prev) => Math.max(1, prev - 1));
+              window.scrollTo(0, 0);
             }}
             onNextClick={() => {
               setPageIndex((prev) => prev + 1);
+              window.scrollTo(0, 0);
             }}
             prevDisabled={pageIndex === 1}
             nextDisabled={isPreviousData || !data?.hasMore}
