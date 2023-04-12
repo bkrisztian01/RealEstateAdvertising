@@ -16,9 +16,23 @@ export type AdProps = {
   createdAt: Date;
 };
 
-export const getAds = async (userName: string | null = null) => {
-  const route = '/api/ad' + (userName ? `?userName=${userName}` : '');
-  const response = await adsApi.get<Ad[]>(route);
+export type GetAdsOptions = {
+  userName?: string;
+  pageIndex?: number;
+};
+
+export type AdList = {
+  hasMore: boolean;
+  ads: Ad[];
+};
+
+export const getAds = async (options?: GetAdsOptions) => {
+  const response = await adsApi.get<AdList>('/api/ad', {
+    params: {
+      userName: options?.userName,
+      pageIndex: options?.pageIndex,
+    },
+  });
   return response.data;
 };
 

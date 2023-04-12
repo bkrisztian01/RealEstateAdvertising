@@ -31,7 +31,7 @@ export const AdPage = () => {
     isError,
     error,
     data: ad,
-  } = useQuery<Ad, AxiosError>(`ad${adId}`, () =>
+  } = useQuery<Ad, AxiosError>(['ad', adId], () =>
     getAdById(parseInt(adId || '0')),
   );
 

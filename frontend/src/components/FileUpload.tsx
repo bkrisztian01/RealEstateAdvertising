@@ -10,8 +10,12 @@ type FileUploadProps = {
   children?: ReactNode;
 };
 
-const FileUpload = (props: FileUploadProps) => {
-  const { register, accept, multiple, children } = props;
+const FileUpload = ({
+  register,
+  accept,
+  multiple,
+  children,
+}: FileUploadProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { ref, onChange, ...rest } = register as {
     ref: (instance: HTMLInputElement | null) => void;

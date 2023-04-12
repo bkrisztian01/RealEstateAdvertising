@@ -12,9 +12,13 @@ namespace Domain.Services
             _adRepository = repository;
         }
 
-        public IEnumerable<AdDTO> GetAds(string userName = null, int pageIndex = 0, int pageSize = 12)
+        public AdListDTO GetAds(string userName = null, int pageIndex = 0, int pageSize = 12)
         {
-            return _adRepository.GetAds(userName, pageIndex, pageSize);
+            return new AdListDTO()
+            {
+                Ads = _adRepository.GetAds(userName, pageIndex, pageSize),
+                HasMore = _adRepository.HasEntriesOnThatPage(userName, pageIndex, pageSize)
+            };
         }
 
         public AdWithOwnerDTO GetAdById(int adId)

@@ -24,7 +24,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<AdDTO> GetAds([FromQuery] string userName = "", [FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 12)
+        public AdListDTO GetAds([FromQuery] string userName = "", [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 12)
         {
             return _adService.GetAds(userName, pageIndex, pageSize);
         }

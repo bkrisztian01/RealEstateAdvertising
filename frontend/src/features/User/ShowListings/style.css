@@ -2,3 +2,14 @@ td {
   padding-top: 8px;
   padding-bottom: 8px;
 }
+
+.page-number-container {
+  height: var(--chakra-sizes-10);
+  vertical-align: center;
+  display: inline-flex;
+  background: var(--chakra-colors-gray-100);
+}
+
+.page-number {
+  margin: auto 18px;
+}

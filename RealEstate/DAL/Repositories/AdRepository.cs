@@ -31,12 +31,12 @@ namespace DAL.Repositories
             _context = context;
         }
 
-        public IEnumerable<AdDTO> GetAds(string userName = "", int pageIndex = 0, int pageSize = 12)
+        public IEnumerable<AdDTO> GetAds(string userName = "", int pageIndex = 1, int pageSize = 12)
         {
             if (string.IsNullOrEmpty(userName))
             {
                 return _context.Ads
-                    .Skip(pageIndex * pageSize)
+                    .Skip((pageIndex - 1) * pageSize)
                     .Take(pageSize)
                     .Select(mapAdToAdDTO)
                     .ToList();
@@ -46,7 +46,7 @@ namespace DAL.Repositories
                 return _context.Ads
                     .Include(ad => ad.Owner)
                     .Where(ad => ad.Owner.UserName == userName)
-                    .Skip(pageIndex * pageSize)
+                    .Skip((pageIndex - 1) * pageSize)
                     .Take(pageSize)
                     .Select(mapAdToAdDTO)
                     .ToList();
@@ -121,6 +121,28 @@ namespace DAL.Repositories
 
             _context.SaveChanges();
             return dbAd;
+        }
+
+        public bool HasEntriesOnThatPage(string userName = "", int pageIndex = 0, int pageSize = 12)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                return _context.Ads
+                    .Skip(pageIndex * pageSize)
+                    .Take(1)
+                    .Select(mapAdToAdDTO)
+                    .Any();
+            }
+            else
+            {
+                return _context.Ads
+                    .Include(ad => ad.Owner)
+                    .Where(ad => ad.Owner.UserName == userName)
+                    .Skip(pageIndex * pageSize)
+                    .Take(1)
+                    .Select(mapAdToAdDTO)
+                    .Any();
+            }
         }
     }
 }

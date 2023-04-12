@@ -12,28 +12,27 @@ import {
 import { useCallback, useState } from 'react';
 import { useAuthHeader, useAuthUser } from 'react-auth-kit';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { deleteAd, getAds } from '../../../api/adsApi';
+import { AdList, deleteAd, getAds } from '../../../api/adsApi';
 import Loading from '../../../components/Loading';
 import DeleteModal from '../../../components/Modals/DeleteModal';
-import { Ad } from '../../../model/Ad';
+import { PageButtons } from '../../../components/PageButtons';
 import { ListingRow } from './ListingRow/component';
 import './style.css';
-
 export const ShowListings = () => {
   const authUser = useAuthUser();
   const authHeader = useAuthHeader();
   const userName = authUser()?.userName;
 
   const [adId, setAdId] = useState<number | null>(null);
+  const [pageIndex, setPageIndex] = useState(1);
 
   const queryClient = useQueryClient();
 
-  const {
-    isLoading,
-    isError,
-    error,
-    data: ads,
-  } = useQuery<Ad[]>('ownListings', () => getAds(userName));
+  const { isLoading, isError, error, data, isPreviousData } = useQuery<AdList>({
+    queryKey: ['ownListings', pageIndex],
+    queryFn: () => getAds({ userName, pageIndex }),
+    keepPreviousData: true,
+  });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -50,7 +49,7 @@ export const ShowListings = () => {
     mutationFn,
     onSuccess: (_) => {
       queryClient.invalidateQueries('ownListings');
-      queryClient.invalidateQueries(`ad${adId}`);
+      queryClient.invalidateQueries(['ad', adId]);
     },
   });
 
@@ -62,42 +61,59 @@ export const ShowListings = () => {
   let content;
   if (isLoading) {
     content = <Loading />;
-  } else if (isError || !ads) {
+  } else if (isError || !data) {
     content = (
       <Heading size="md">{error instanceof Error ? error.message : ''}</Heading>
     );
   } else {
     content = (
-      <Table>
-        <col span={1} width="60%" />
-        <col span={1} width="20%" />
-        <col span={1} width="20%" />
+      <>
+        <Table>
+          <col span={1} width="60%" />
+          <col span={1} width="20%" />
+          <col span={1} width="20%" />
 
-        <Thead>
-          <Tr>
-            <Th>Listing</Th>
-            <Th>
-              <Center>Creation date</Center>
-            </Th>
-            <Th>
-              <Center>Actions</Center>
-            </Th>
-          </Tr>
-        </Thead>
+          <Thead>
+            <Tr>
+              <Th>Listing</Th>
+              <Th>
+                <Center>Creation date</Center>
+              </Th>
+              <Th>
+                <Center>Actions</Center>
+              </Th>
+            </Tr>
+          </Thead>
 
-        <Tbody>
-          {ads?.map((ad, i) => (
-            <ListingRow
-              ad={ad}
-              key={i}
-              onDeleteButtonClick={() => {
-                setAdId(ad.id);
-                onOpen();
-              }}
-            />
-          ))}
-        </Tbody>
-      </Table>
+          <Tbody>
+            {data?.ads.map((ad, i) => (
+              <ListingRow
+                ad={ad}
+                key={i}
+                onDeleteButtonClick={() => {
+                  setAdId(ad.id);
+                  onOpen();
+                }}
+              />
+            ))}
+          </Tbody>
+        </Table>
+
+        <Center>
+          <PageButtons
+            onPreviousClick={() => {
+              setPageIndex((prev) => Math.max(1, prev - 1));
+            }}
+            onNextClick={() => {
+              setPageIndex((prev) => prev + 1);
+            }}
+            prevDisabled={pageIndex === 1}
+            nextDisabled={isPreviousData || !data?.hasMore}
+          >
+            {pageIndex}
+          </PageButtons>
+        </Center>
+      </>
     );
   }
 

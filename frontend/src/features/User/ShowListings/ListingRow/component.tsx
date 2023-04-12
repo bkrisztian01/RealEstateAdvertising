@@ -63,7 +63,7 @@ export const ListingRow = ({ ad, onDeleteButtonClick }: ListingRowProps) => {
               colorScheme="red"
               aria-label="Remove listing"
               onClick={onDeleteButtonClick}
-              icon={<Icon as={MdDelete} />}
+              icon={<Icon as={MdDelete} color="#fff" />}
             />
           </ButtonGroup>
         </Center>
