@@ -1,1 +1,1 @@
-export { AdPage } from './component';
+export { AdPage } from './AdPage';

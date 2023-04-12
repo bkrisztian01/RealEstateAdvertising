@@ -1,5 +1,5 @@
+import { Ad } from 'model/Ad';
 import { MutationFunction } from 'react-query';
-import { Ad } from '../../../model/Ad';
 
 export type AdFormProps = {
   mutationFn: MutationFunction<Ad, AdFormInput>;

@@ -13,12 +13,12 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { LoginProps, Tokens, userLogin } from 'api/userApi';
 import { AxiosError } from 'axios';
 import { useSignIn } from 'react-auth-kit';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import * as yup from 'yup';
-import { LoginProps, Tokens, userLogin } from '../../../api/userApi';
 import './style.css';
 import { LoginFormInput, LoginModalProps } from './types';
 

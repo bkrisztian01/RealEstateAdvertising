@@ -13,10 +13,10 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
+import { LoginModal } from 'features/User/LoginModal';
+import { RegisterModal } from 'features/User/RegisterModal';
 import { useAuthUser, useIsAuthenticated, useSignOut } from 'react-auth-kit';
 import { NavLink } from 'react-router-dom';
-import { LoginModal } from '../features/User/LoginModal';
-import { RegisterModal } from '../features/User/RegisterModal';
 
 const NavBar = () => {
   const signOut = useSignOut();

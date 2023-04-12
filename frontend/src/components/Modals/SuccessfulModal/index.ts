@@ -1,0 +1,1 @@
+export { SuccessfulModal } from './SuccessfulModal';

@@ -17,13 +17,13 @@ import {
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AxiosError } from 'axios';
+import { FileUpload } from 'components/FileUpload';
+import { Ad } from 'model/Ad';
 import { useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import FileUpload from '../../../components/FileUpload';
-import { Ad } from '../../../model/Ad';
 import { AdFormInput, AdFormProps } from './types';
 
 function dataURLtoFile(dataurl: string, filename = 'image') {

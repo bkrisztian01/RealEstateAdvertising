@@ -1,2 +1,2 @@
-export { AdCard } from './component';
+export { AdCard } from './AdCard';
 export type { AdCardProps } from './types';

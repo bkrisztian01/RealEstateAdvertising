@@ -1,16 +1,9 @@
 import { Box, Button, Icon, Input, InputGroup, Text } from '@chakra-ui/react';
-import { ChangeEvent, ReactNode, useRef, useState } from 'react';
-import { UseFormRegisterReturn } from 'react-hook-form';
+import { ChangeEvent, useRef, useState } from 'react';
 import { AiOutlineUpload } from 'react-icons/ai';
+import { FileUploadProps } from './types';
 
-type FileUploadProps = {
-  register: UseFormRegisterReturn;
-  accept?: string;
-  multiple?: boolean;
-  children?: ReactNode;
-};
-
-const FileUpload = ({
+export const FileUpload = ({
   register,
   accept,
   multiple,
@@ -61,5 +54,3 @@ const FileUpload = ({
     </InputGroup>
   );
 };
-
-export default FileUpload;

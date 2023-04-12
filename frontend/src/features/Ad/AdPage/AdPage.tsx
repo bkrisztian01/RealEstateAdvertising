@@ -9,7 +9,10 @@ import {
   Image,
   Text,
 } from '@chakra-ui/react';
+import { getAdById } from 'api/adsApi';
 import { AxiosError } from 'axios';
+import Loading from 'components/Loading';
+import { Ad } from 'model/Ad';
 import { BsFillTelephoneFill } from 'react-icons/bs';
 import { FaRulerVertical } from 'react-icons/fa';
 import { GoPerson } from 'react-icons/go';
@@ -17,10 +20,7 @@ import { ImLocation2, ImPriceTag } from 'react-icons/im';
 import { MdBed, MdEmail } from 'react-icons/md';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { getAdById } from '../../../api/adsApi';
-import Loading from '../../../components/Loading';
-import { Ad } from '../../../model/Ad';
-import { formatPrice } from '../../../util/formatPrice';
+import { formatPrice } from 'util/formatPrice';
 import './style.css';
 
 export const AdPage = () => {

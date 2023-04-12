@@ -1,9 +1,9 @@
 import { Container, Heading } from '@chakra-ui/react';
+import { createAd } from 'api/adsApi';
+import { AdForm, AdFormInput } from 'features/Ad/AdForm';
 import { useCallback } from 'react';
 import { useAuthHeader } from 'react-auth-kit';
-import { createAd } from '../api/adsApi';
-import { AdForm, AdFormInput } from '../features/Ad/AdForm';
-import { toBase64 } from '../util/toBase64';
+import { toBase64 } from 'util/toBase64';
 
 const CreatingAd = () => {
   const authHeader = useAuthHeader();

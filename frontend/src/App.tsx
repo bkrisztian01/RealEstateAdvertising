@@ -2,7 +2,7 @@ import { RequireAuth } from 'react-auth-kit';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AdList } from './features/Ad/AdList';
 import { AdPage } from './features/Ad/AdPage';
-import { Profile } from './features/User/Profile/component';
+import { Profile } from './features/User/Profile/Profile';
 import { ShowListings } from './features/User/ShowListings';
 import { Layout } from './layouts/Layout';
 import CreateAd from './pages/CreateAd';

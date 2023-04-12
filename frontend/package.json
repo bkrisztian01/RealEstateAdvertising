@@ -25,7 +25,6 @@
     "react-hook-form": "^7.43.5",
     "react-icons": "^4.8.0",
     "react-query": "^3.39.3",
-    "react-query-devtools": "^2.6.3",
     "react-router-dom": "^6.8.2",
     "yup": "^1.0.2"
   },
@@ -37,13 +36,16 @@
     "@vitejs/plugin-react": "^3.1.0",
     "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
     "onchange": "^7.1.0",
     "prettier": "2.8.4",
     "prettier-plugin-organize-imports": "^3.2.2",
+    "react-query-devtools": "^2.6.3",
     "typescript": "^4.9.3",
     "vite": "^4.1.0",
-    "vite-plugin-eslint": "^1.8.1"
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-tsconfig-paths": "^4.1.0"
   }
 }

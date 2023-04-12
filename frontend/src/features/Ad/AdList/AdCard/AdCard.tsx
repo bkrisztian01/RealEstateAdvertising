@@ -10,7 +10,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
-import { formatPrice } from '../../../../util/formatPrice';
+import { formatPrice } from 'util/formatPrice';
 import { AdCardProps } from './types';
 
 export const AdCard = ({ ad }: AdCardProps) => {

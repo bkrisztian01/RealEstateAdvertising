@@ -27,5 +27,12 @@
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
     "prettier/prettier": 2
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "moduleDirectory": ["node_modules", "./src/"]
+      }
+    }
   }
 }

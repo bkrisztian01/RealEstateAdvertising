@@ -8,14 +8,9 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { useRef } from 'react';
+import { DeleteModalProps } from './types';
 
-export type DeleteModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  onDeleteConfirmed: () => void;
-};
-
-const DeleteModal = ({
+export const DeleteModal = ({
   isOpen,
   onClose,
   onDeleteConfirmed: onDelete,
@@ -51,4 +46,3 @@ const DeleteModal = ({
     </AlertDialog>
   );
 };
-export default DeleteModal;

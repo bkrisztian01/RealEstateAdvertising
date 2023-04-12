@@ -9,14 +9,14 @@ import {
   Tr,
   useDisclosure,
 } from '@chakra-ui/react';
+import { AdList, deleteAd, getAds } from 'api/adsApi';
+import Loading from 'components/Loading';
+import { DeleteModal } from 'components/Modals/DeleteModal';
+import { PageButtons } from 'components/PageButtons';
 import { useCallback, useState } from 'react';
 import { useAuthHeader, useAuthUser } from 'react-auth-kit';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { AdList, deleteAd, getAds } from '../../../api/adsApi';
-import Loading from '../../../components/Loading';
-import DeleteModal from '../../../components/Modals/DeleteModal';
-import { PageButtons } from '../../../components/PageButtons';
-import { ListingRow } from './ListingRow/component';
+import { ListingRow } from './ListingRow/ListingRow';
 import './style.css';
 export const ShowListings = () => {
   const authUser = useAuthUser();

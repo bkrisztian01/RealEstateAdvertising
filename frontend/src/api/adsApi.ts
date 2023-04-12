@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Ad } from '../model/Ad';
+import { Ad } from 'model/Ad';
 
 const adsApi = axios.create({
   baseURL: 'https://localhost:7202',

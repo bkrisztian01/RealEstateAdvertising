@@ -1,2 +1,2 @@
-export { RegisterModal } from './component';
+export { RegisterModal } from './RegisterModal';
 export type { RegisterFormInput, RegisterModalProps } from './types';

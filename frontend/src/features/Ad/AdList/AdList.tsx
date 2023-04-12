@@ -1,10 +1,10 @@
 import { Center, Container, Heading, SimpleGrid } from '@chakra-ui/react';
+import { AdList as AdListDto, getAds } from 'api/adsApi';
 import { AxiosError } from 'axios';
+import Loading from 'components/Loading';
+import { PageButtons } from 'components/PageButtons';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
-import { AdList as AdListDto, getAds } from '../../../api/adsApi';
-import Loading from '../../../components/Loading';
-import { PageButtons } from '../../../components/PageButtons';
 import { AdCard } from './AdCard';
 
 export const AdList = () => {

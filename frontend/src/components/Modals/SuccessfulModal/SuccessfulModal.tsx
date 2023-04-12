@@ -8,14 +8,13 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react';
+import { SuccesfulModalProps } from './types';
 
-type PropsType = {
-  isOpen: boolean;
-  onClose: () => void;
-  text: string;
-};
-
-const SuccessfulModal = ({ isOpen, onClose, text }: PropsType) => {
+export const SuccessfulModal = ({
+  isOpen,
+  onClose,
+  text,
+}: SuccesfulModalProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -33,5 +32,3 @@ const SuccessfulModal = ({ isOpen, onClose, text }: PropsType) => {
     </Modal>
   );
 };
-
-export default SuccessfulModal;

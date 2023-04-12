@@ -14,12 +14,12 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { SignUpProps, userSignUp } from 'api/userApi';
 import { AxiosError } from 'axios';
+import { SuccessfulModal } from 'components/Modals/SuccessfulModal';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import * as yup from 'yup';
-import { SignUpProps, userSignUp } from '../../../api/userApi';
-import SuccessfulModal from '../../../components/Modals/SuccessfulModal';
 import './styles.css';
 import { RegisterFormInput, RegisterModalProps } from './types';
 

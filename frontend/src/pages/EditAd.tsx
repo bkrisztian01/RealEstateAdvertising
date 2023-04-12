@@ -1,14 +1,14 @@
 import { Container, Heading } from '@chakra-ui/react';
+import { getAdById, updateAd } from 'api/adsApi';
 import { AxiosError } from 'axios';
+import Loading from 'components/Loading';
+import { AdForm, AdFormInput } from 'features/Ad/AdForm';
+import { Ad } from 'model/Ad';
 import { useCallback } from 'react';
 import { useAuthHeader, useAuthUser } from 'react-auth-kit';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
-import { getAdById, updateAd } from '../api/adsApi';
-import Loading from '../components/Loading';
-import { AdForm, AdFormInput } from '../features/Ad/AdForm';
-import { Ad } from '../model/Ad';
-import { toBase64 } from '../util/toBase64';
+import { toBase64 } from 'util/toBase64';
 import Forbidden from './Forbidden';
 import NotFound from './NotFound';
 
