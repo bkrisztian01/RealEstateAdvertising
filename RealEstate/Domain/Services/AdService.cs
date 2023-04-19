@@ -22,9 +22,13 @@ namespace Domain.Services
             };
         }
 
-        public AdWithOwnerDTO GetAdById(int adId)
+        public AdWithOwnerDTO? GetAdById(int adId)
         {
             var dbAd = _adRepository.GetAdById(adId);
+            if (dbAd == null)
+            {
+                return null;
+            }
             return new AdWithOwnerDTO
             {
                 Id = dbAd.Id,

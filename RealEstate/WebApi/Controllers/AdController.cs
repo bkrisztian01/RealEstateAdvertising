@@ -26,6 +26,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public AdListDTO GetAds([FromQuery] GetAdsParameters parameters)
         {
             return _adService.GetAds(parameters);
@@ -33,6 +34,8 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetById(int id)
         {
             var ad = _adService.GetAdById(id);
@@ -46,6 +49,9 @@ namespace WebApi.Controllers
         [HttpDelete]
         [Route("{id}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public IActionResult DeleteById(int id)
         {
             var userName = User.Identity!.Name;
@@ -64,15 +70,21 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult CreateAd([FromBody] CreateAdDTO ad)
         {
             var userName = User.Identity!.Name;
-            return Ok(_adService.CreateAd(ad, userName!));
+            var newAd = _adService.CreateAd(ad, userName!);
+            return CreatedAtAction(nameof(GetById), new { id = newAd.Id }, newAd);
         }
 
         [HttpPut]
         [Route("{id}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public IActionResult EditAd([FromBody] EditAdDTO ad, int id)
         {
             ad.Id = id;

@@ -18,6 +18,9 @@ namespace WebApi.Controllers
 
         [Route("register")]
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> SignUp([FromBody] SignUpDTO signUpDTO)
         {
             if (!ModelState.IsValid)
@@ -31,9 +34,12 @@ namespace WebApi.Controllers
 
                 if (!result.Succeeded)
                 {
-                    return BadRequest(result.Errors);
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(error.Description.Split(' ')[0], error.Description);
+                    }
+                    return ValidationProblem(statusCode: StatusCodes.Status409Conflict, modelStateDictionary: ModelState);
                 }
-
                 return Ok();
             }
             catch (Exception ex)
@@ -44,6 +50,9 @@ namespace WebApi.Controllers
 
         [Route("login")]
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
         {
             if (!ModelState.IsValid)
@@ -55,13 +64,13 @@ namespace WebApi.Controllers
             {
                 return Ok(await _userService.LoginAsync(loginDTO));
             }
-            catch (AuthenticationException ex)
+            catch (AuthenticationException)
             {
                 return Unauthorized();
             }
             catch (Exception ex)
             {
-                return Problem($"{ex.Message}", statusCode: 500);
+                return Problem(ex.Message, statusCode: 500);
             }
         }
     }

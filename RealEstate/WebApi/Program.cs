@@ -94,6 +94,8 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
 app.UseCors(frontendPolicy);
