@@ -23,12 +23,12 @@ export const AdList = () => {
 
   let content;
   if (isLoading) {
-    content = <Loading />;
+    return <Loading />;
   } else if (isError || !data) {
     content = <Heading>{error instanceof Error ? error.message : ''}</Heading>;
   } else {
     content = (
-      <Container maxW="container.lg" py="10px" w="fit-content">
+      <>
         <AdFilter onSubmit={(data) => setAdFilter(data)} />
         <Center w="fit-content">
           <Grid
@@ -67,8 +67,12 @@ export const AdList = () => {
             {pageIndex}
           </PageButtons>
         </Center>
-      </Container>
+      </>
     );
   }
-  return content;
+  return (
+    <Container maxW="container.lg" py="10px" w="fit-content">
+      {content}
+    </Container>
+  );
 };

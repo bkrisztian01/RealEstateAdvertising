@@ -91,46 +91,48 @@ export const AdPage = () => {
 
   let content;
   if (isLoading) {
-    content = <Loading />;
+    return <Loading />;
   } else if (isError || !ad) {
     content = <Heading>{error instanceof Error ? error.message : ''}</Heading>;
   } else {
     content = (
       <>
-        <Container maxW="container.lg">
-          <Grid
-            w={{ lg: 'calc(100% - 10px)', base: '100%' }}
-            templateRows="repeat(2, 1fr)"
-            templateColumns={{ lg: '70% 30%', base: '100%' }}
-            gap="10px"
+        <Grid
+          w={{ lg: 'calc(100% - 10px)', base: '100%' }}
+          templateRows="repeat(2, 1fr)"
+          templateColumns={{ lg: '70% 30%', base: '100%' }}
+          gap="10px"
+        >
+          <GridItem
+            colSpan={1}
+            rowSpan={2}
+            height={{ lg: '450px', md: '450px', base: '300px' }}
+            className="image-container"
           >
-            <GridItem
-              colSpan={1}
-              rowSpan={2}
-              height={{ lg: '450px', md: '450px', base: '300px' }}
-              className="image-container"
-            >
-              <Image className="ad-image" src={ad.image} />
-            </GridItem>
-            <GridItem className="panel details-container" colSpan={1}>
-              {details(ad)}
-            </GridItem>
-            <GridItem className="panel" colSpan={1}>
-              {contacts}
-            </GridItem>
-          </Grid>
+            <Image className="ad-image" src={ad.image} />
+          </GridItem>
+          <GridItem className="panel details-container" colSpan={1}>
+            {details(ad)}
+          </GridItem>
+          <GridItem className="panel" colSpan={1}>
+            {contacts}
+          </GridItem>
+        </Grid>
 
-          <Box className="panel" mt="30px">
-            <Heading as="h2" size="md">
-              About This Home
-            </Heading>
-            <Text className="display-linebreak" mt="10px">
-              {ad.description}
-            </Text>
-          </Box>
-        </Container>
+        <Box className="panel" mt="30px">
+          <Heading as="h2" size="md">
+            About This Home
+          </Heading>
+          <Text className="display-linebreak" mt="10px">
+            {ad.description}
+          </Text>
+        </Box>
       </>
     );
   }
-  return content;
+  return (
+    <Container maxW="container.lg" py="10px">
+      {content}
+    </Container>
+  );
 };

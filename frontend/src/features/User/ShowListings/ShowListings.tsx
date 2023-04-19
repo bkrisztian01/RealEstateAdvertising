@@ -60,7 +60,7 @@ export const ShowListings = () => {
 
   let content;
   if (isLoading) {
-    content = <Loading />;
+    return <Loading />;
   } else if (isError || !data) {
     content = (
       <Heading size="md">{error instanceof Error ? error.message : ''}</Heading>
@@ -121,7 +121,7 @@ export const ShowListings = () => {
 
   return (
     <>
-      <Container maxW="container.lg">
+      <Container maxW="container.lg" py="10px">
         <Heading as="h1" mb="5">
           Your listings
         </Heading>
