@@ -1,5 +1,6 @@
 ﻿using Domain.DTOs;
 using Domain.Repositories;
+using Domain.Services.Parameters;
 
 namespace Domain.Services
 {
@@ -12,12 +13,12 @@ namespace Domain.Services
             _adRepository = repository;
         }
 
-        public AdListDTO GetAds(string userName = null, int pageIndex = 0, int pageSize = 12)
+        public AdListDTO GetAds(GetAdsParameters parameters)
         {
             return new AdListDTO()
             {
-                Ads = _adRepository.GetAds(userName, pageIndex, pageSize),
-                HasMore = _adRepository.HasEntriesOnThatPage(userName, pageIndex, pageSize)
+                Ads = _adRepository.GetAds(parameters),
+                HasMore = _adRepository.HasEntriesOnThatPage(parameters)
             };
         }
 

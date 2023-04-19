@@ -2,10 +2,12 @@
 using Domain.Models;
 using Domain.Repositories;
 using Domain.Services;
+using Domain.Services.Parameters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Domain.Services.Parameters.GetAdsParameters;
 
 namespace WebApi.Controllers
 {
@@ -24,9 +26,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public AdListDTO GetAds([FromQuery] string userName = "", [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 12)
+        public AdListDTO GetAds([FromQuery] GetAdsParameters parameters)
         {
-            return _adService.GetAds(userName, pageIndex, pageSize);
+            return _adService.GetAds(parameters);
         }
 
         [HttpGet]

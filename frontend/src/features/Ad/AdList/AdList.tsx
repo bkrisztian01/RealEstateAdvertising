@@ -6,17 +6,18 @@ import { PageButtons } from 'components/PageButtons';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { AdCard } from './AdCard';
-import { AdFilter } from './AdFilter';
+import { AdFilter, AdFilterFormInput } from './AdFilter';
 
 export const AdList = () => {
   const [pageIndex, setPageIndex] = useState(1);
+  const [adFilter, setAdFilter] = useState<AdFilterFormInput>();
 
   const { isLoading, isError, error, data, isPreviousData } = useQuery<
     AdListDto,
     AxiosError
   >({
-    queryKey: ['ads', pageIndex],
-    queryFn: () => getAds({ pageIndex }),
+    queryKey: ['ads', pageIndex, adFilter],
+    queryFn: () => getAds({ pageIndex, ...adFilter }),
     keepPreviousData: true,
   });
 
@@ -28,7 +29,7 @@ export const AdList = () => {
   } else {
     content = (
       <Container maxW="container.lg" py="10px" w="fit-content">
-        <AdFilter />
+        <AdFilter onSubmit={(data) => setAdFilter(data)} />
         <Center w="fit-content">
           <Grid
             gap={5}
@@ -69,6 +70,5 @@ export const AdList = () => {
       </Container>
     );
   }
-
-  return <Container maxW="container.lg">{content}</Container>;
+  return content;
 };

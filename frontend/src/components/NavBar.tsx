@@ -86,7 +86,6 @@ const NavBar = () => {
         as="nav"
         alignItems="center"
         gap="20px"
-        marginBottom="40px"
         py="2"
         px="4"
         borderBottom="1px solid"

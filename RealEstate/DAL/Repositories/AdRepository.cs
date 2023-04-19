@@ -1,6 +1,7 @@
 ﻿using Domain.DTOs;
 using Domain.Models;
 using Domain.Repositories;
+using Domain.Services.Parameters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -31,26 +32,27 @@ namespace DAL.Repositories
             _context = context;
         }
 
-        public IEnumerable<AdDTO> GetAds(string userName = "", int pageIndex = 1, int pageSize = 12)
+        public IEnumerable<AdDTO> GetAds(GetAdsParameters parameters)
         {
-            if (string.IsNullOrEmpty(userName))
+            var query = _context.Ads
+                .Where(ad => parameters.MinPrice <= ad.Price && ad.Price <= parameters.MaxPrice)
+                .Where(ad => parameters.MinArea <= ad.Area && ad.Area <= parameters.MaxArea)
+                .Where(ad => parameters.MinRoomCount <= ad.RoomCount && ad.RoomCount <= parameters.MaxRoomCount);
+
+            if (!String.IsNullOrEmpty(parameters.UserName))
             {
-                return _context.Ads
-                    .Skip((pageIndex - 1) * pageSize)
-                    .Take(pageSize)
-                    .Select(mapAdToAdDTO)
-                    .ToList();
+                query = query.Where(ad => ad.Owner.UserName == parameters.UserName);
             }
-            else
+            if (!String.IsNullOrEmpty(parameters.Address))
             {
-                return _context.Ads
-                    .Include(ad => ad.Owner)
-                    .Where(ad => ad.Owner.UserName == userName)
-                    .Skip((pageIndex - 1) * pageSize)
-                    .Take(pageSize)
-                    .Select(mapAdToAdDTO)
-                    .ToList();
+                query = query.Where(ad => ad.Address.Contains(parameters.Address));
             }
+
+            return query
+                .Skip((parameters.PageIndex - 1) * parameters.PageSize)
+                .Take(parameters.PageSize)
+                .Select(mapAdToAdDTO)
+                .ToList();
         }
 
         public Ad? GetAdById(int id)
@@ -62,7 +64,7 @@ namespace DAL.Repositories
 
         public void DeleteAdById(int id)
         {
-            Ad ad = _context.Ads.Find(id);
+            Ad? ad = _context.Ads.Find(id);
             if (ad == null)
                 return;
 
@@ -123,26 +125,26 @@ namespace DAL.Repositories
             return dbAd;
         }
 
-        public bool HasEntriesOnThatPage(string userName = "", int pageIndex = 0, int pageSize = 12)
+        public bool HasEntriesOnThatPage(GetAdsParameters parameters)
         {
-            if (string.IsNullOrEmpty(userName))
+            var query = _context.Ads
+                .Where(ad => parameters.MinPrice <= ad.Price && ad.Price <= parameters.MaxPrice)
+                .Where(ad => parameters.MinArea <= ad.Area && ad.Area <= parameters.MaxArea)
+                .Where(ad => parameters.MinRoomCount <= ad.RoomCount && ad.RoomCount <= parameters.MaxRoomCount);
+
+            if (!String.IsNullOrEmpty(parameters.UserName))
             {
-                return _context.Ads
-                    .Skip(pageIndex * pageSize)
-                    .Take(1)
-                    .Select(mapAdToAdDTO)
-                    .Any();
+                query = query.Where(ad => ad.Owner.UserName == parameters.UserName);
             }
-            else
+            if (!String.IsNullOrEmpty(parameters.Address))
             {
-                return _context.Ads
-                    .Include(ad => ad.Owner)
-                    .Where(ad => ad.Owner.UserName == userName)
-                    .Skip(pageIndex * pageSize)
-                    .Take(1)
-                    .Select(mapAdToAdDTO)
-                    .Any();
+                query = query.Where(ad => ad.Address.Contains(parameters.Address));
             }
+
+            return query
+                .Skip(parameters.PageIndex * parameters.PageSize)
+                .Take(parameters.PageSize)
+                .Any();
         }
     }
 }

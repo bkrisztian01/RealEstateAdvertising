@@ -19,6 +19,13 @@ export type AdProps = {
 export type GetAdsOptions = {
   userName?: string;
   pageIndex?: number;
+  address?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minArea?: number;
+  maxArea?: number;
+  minRoomCount?: number;
+  maxRoomCount?: number;
 };
 
 export type AdList = {
@@ -28,10 +35,7 @@ export type AdList = {
 
 export const getAds = async (options?: GetAdsOptions) => {
   const response = await adsApi.get<AdList>('/api/ad', {
-    params: {
-      userName: options?.userName,
-      pageIndex: options?.pageIndex,
-    },
+    params: options,
   });
   return response.data;
 };
