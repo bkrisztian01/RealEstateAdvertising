@@ -25,10 +25,7 @@ namespace DAL.Migrations
                     Area = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Ads", x => x.Id);
-                });
+                constraints: table => table.PrimaryKey("PK_Ads", x => x.Id));
         }
 
         /// <inheritdoc />

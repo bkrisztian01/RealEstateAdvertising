@@ -84,7 +84,7 @@ builder.Services.AddAuthentication(options =>
     {
         option.SaveToken = true;
         option.RequireHttpsMetadata = true;
-        option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+        option.TokenValidationParameters = new TokenValidationParameters()
         {
             ValidateIssuer = true,
             ValidateAudience = true,

@@ -28,24 +28,17 @@ namespace WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-                var result = await _userService.SignUpAsync(signUpDTO);
+            var result = await _userService.SignUpAsync(signUpDTO);
 
-                if (!result.Succeeded)
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(error.Description.Split(' ')[0], error.Description);
-                    }
-                    return ValidationProblem(statusCode: StatusCodes.Status409Conflict, modelStateDictionary: ModelState);
-                }
-                return Ok();
-            }
-            catch (Exception ex)
+            if (!result.Succeeded)
             {
-                return Problem(ex.Message, statusCode: 500);
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(error.Description.Split(' ')[0], error.Description);
+                }
+                return ValidationProblem(statusCode: StatusCodes.Status409Conflict, modelStateDictionary: ModelState);
             }
+            return Ok();
         }
 
         [Route("login")]
@@ -67,10 +60,6 @@ namespace WebApi.Controllers
             catch (AuthenticationException)
             {
                 return Unauthorized();
-            }
-            catch (Exception ex)
-            {
-                return Problem(ex.Message, statusCode: 500);
             }
         }
     }

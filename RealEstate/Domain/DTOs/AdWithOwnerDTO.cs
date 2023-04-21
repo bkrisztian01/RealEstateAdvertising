@@ -1,6 +1,7 @@
-using Domain.DTOs;
-
-public class AdWithOwnerDTO : AdDTO
+namespace Domain.DTOs
 {
-    public OwnerDTO Owner { get; set; }
+    public class AdWithOwnerDTO : AdDTO
+    {
+        public OwnerDTO Owner { get; set; }
+    }
 }

@@ -9,7 +9,7 @@ namespace Domain.DTOs
     public class TokenDTO
     {
         public string AccessToken { get; set; }
-        public int ExpiresIn { get; set; } 
+        public int ExpiresIn { get; set; }
         public string UserName { get; set; }
     }
 }

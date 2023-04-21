@@ -11,7 +11,7 @@ namespace DAL.Repositories
     {
         private readonly RealEstateDbContext _context;
 
-        private AdDTO mapAdToAdDTO(Ad ad)
+        private AdDTO MapAdToAdDTO(Ad ad)
         {
             return new AdDTO
             {
@@ -51,7 +51,7 @@ namespace DAL.Repositories
             return query
                 .Skip((parameters.PageIndex - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
-                .Select(mapAdToAdDTO)
+                .Select(MapAdToAdDTO)
                 .ToList();
         }
 
