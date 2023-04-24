@@ -1,4 +1,5 @@
-﻿using Domain.DTOs;
+﻿using AutoMapper;
+using Domain.DTOs;
 using Domain.Models;
 using Domain.Repositories;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
@@ -21,11 +22,13 @@ namespace DAL.Repositories
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IMapper _mapper;
 
-        public UserRepository(UserManager<User> userManager, SignInManager<User> signInManager)
+        public UserRepository(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _mapper = mapper;
         }
 
         public async Task<User> GetByUserName(string userName)
@@ -35,15 +38,7 @@ namespace DAL.Repositories
 
         public async Task<IdentityResult> SignUpAsync(SignUpDTO signUpDTO)
         {
-            var user = new User()
-            {
-                UserName = signUpDTO.UserName,
-                FullName = signUpDTO.FullName,
-                Email = signUpDTO.Email,
-                PhoneNumber = signUpDTO.PhoneNumber,
-            };
-
-            return await _userManager.CreateAsync(user, signUpDTO.Password);
+            return await _userManager.CreateAsync(_mapper.Map<User>(signUpDTO), signUpDTO.Password);
         }
 
         public async Task<SignInResult> LoginAsync(LoginDTO loginDTO)

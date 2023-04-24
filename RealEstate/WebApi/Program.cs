@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Domain.MapperProfiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,7 +75,6 @@ builder.Services.AddScoped<AuthorizationService, AuthorizationService>();
 builder.Services.AddIdentity<User, IdentityRole>(options => options.User.RequireUniqueEmail = true)
     .AddEntityFrameworkStores<RealEstateDbContext>()
     .AddDefaultTokenProviders();
-
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -93,8 +93,8 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
         };
     });
-
 builder.Services.AddProblemDetails();
+builder.Services.AddAutoMapper(typeof(UserProfile), typeof(AdProfile));
 
 var app = builder.Build();
 

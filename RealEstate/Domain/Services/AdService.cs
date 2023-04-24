@@ -1,4 +1,5 @@
-﻿using Domain.DTOs;
+﻿using AutoMapper;
+using Domain.DTOs;
 using Domain.Repositories;
 using Domain.Services.Parameters;
 
@@ -7,10 +8,12 @@ namespace Domain.Services
     public class AdService
     {
         private readonly IAdRepository _adRepository;
+        private readonly IMapper _mapper;
 
-        public AdService(IAdRepository repository)
+        public AdService(IAdRepository repository, IMapper mapper)
         {
             _adRepository = repository;
+            _mapper = mapper;
         }
 
         public AdListDTO GetAds(GetAdsParameters parameters)
@@ -29,25 +32,7 @@ namespace Domain.Services
             {
                 return null;
             }
-            return new AdWithOwnerDTO
-            {
-                Id = dbAd.Id,
-                Title = dbAd.Title,
-                Address = dbAd.Address,
-                Description = dbAd.Description,
-                Area = dbAd.Area,
-                CreatedAt = dbAd.CreatedAt,
-                Image = dbAd.Image,
-                Price = dbAd.Price,
-                RoomCount = dbAd.RoomCount,
-                Owner = new OwnerDTO
-                {
-                    FullName = dbAd.Owner.FullName,
-                    UserName = dbAd.Owner.UserName,
-                    Email = dbAd.Owner.Email,
-                    PhoneNumber = dbAd.Owner.PhoneNumber,
-                }
-            };
+            return _mapper.Map<AdWithOwnerDTO>(dbAd);
         }
 
         public void DeleteAdById(int adId)
@@ -59,36 +44,14 @@ namespace Domain.Services
         {
             var dbAd = _adRepository.CreateAd(ad, userName);
 
-            return new AdDTO
-            {
-                Id = dbAd.Id,
-                Title = dbAd.Title,
-                Address = dbAd.Address,
-                Description = dbAd.Description,
-                Area = dbAd.Area,
-                CreatedAt = dbAd.CreatedAt,
-                Image = dbAd.Image,
-                Price = dbAd.Price,
-                RoomCount = dbAd.RoomCount,
-            };
+            return _mapper.Map<AdDTO>(dbAd);
         }
 
         public AdDTO EditAd(EditAdDTO ad)
         {
             var dbAd = _adRepository.EditAd(ad);
 
-            return new AdDTO
-            {
-                Id = dbAd.Id,
-                Title = dbAd.Title,
-                Address = dbAd.Address,
-                Description = dbAd.Description,
-                Area = dbAd.Area,
-                CreatedAt = dbAd.CreatedAt,
-                Image = dbAd.Image,
-                Price = dbAd.Price,
-                RoomCount = dbAd.RoomCount,
-            };
+            return _mapper.Map<AdDTO>(dbAd);
         }
     }
 }

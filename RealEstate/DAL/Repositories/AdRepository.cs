@@ -1,4 +1,5 @@
-﻿using Domain.DTOs;
+﻿using AutoMapper;
+using Domain.DTOs;
 using Domain.Models;
 using Domain.Repositories;
 using Domain.Services.Parameters;
@@ -10,6 +11,7 @@ namespace DAL.Repositories
     public class AdRepository : IAdRepository
     {
         private readonly RealEstateDbContext _context;
+        private readonly IMapper _mapper;
 
         private AdDTO MapAdToAdDTO(Ad ad)
         {
@@ -27,9 +29,10 @@ namespace DAL.Repositories
             };
         }
 
-        public AdRepository(RealEstateDbContext context)
+        public AdRepository(RealEstateDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public IEnumerable<AdDTO> GetAds(GetAdsParameters parameters)
@@ -39,20 +42,23 @@ namespace DAL.Repositories
                 .Where(ad => parameters.MinArea <= ad.Area && ad.Area <= parameters.MaxArea)
                 .Where(ad => parameters.MinRoomCount <= ad.RoomCount && ad.RoomCount <= parameters.MaxRoomCount);
 
-            if (!String.IsNullOrEmpty(parameters.UserName))
+            if (!string.IsNullOrEmpty(parameters.UserName))
             {
                 query = query.Where(ad => ad.Owner.UserName == parameters.UserName);
             }
-            if (!String.IsNullOrEmpty(parameters.Address))
+            if (!string.IsNullOrEmpty(parameters.Address))
             {
                 query = query.Where(ad => ad.Address.Contains(parameters.Address));
             }
 
-            return query
+            var asd = query
+                .OrderByDescending(ad => ad.CreatedAt.Date)
                 .Skip((parameters.PageIndex - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
                 .Select(MapAdToAdDTO)
-                .ToList();
+                .ToArray();
+
+            return asd;
         }
 
         public Ad? GetAdById(int id)
@@ -86,18 +92,9 @@ namespace DAL.Repositories
                 throw new KeyNotFoundException();
             }
 
-            var dbAd = new Ad
-            {
-                Title = ad.Title,
-                Description = ad.Description,
-                Price = ad.Price,
-                RoomCount = ad.RoomCount,
-                Address = ad.Address,
-                Area = ad.Area,
-                CreatedAt = DateTime.Now,
-                Image = ad.Image,
-                Owner = dbUser,
-            };
+            var dbAd = _mapper.Map<Ad>(ad);
+            dbAd.CreatedAt = DateTime.Now;
+            dbAd.Owner = dbUser;
 
             dbAd = _context.Ads.Add(dbAd).Entity;
             _context.SaveChanges();
@@ -132,16 +129,17 @@ namespace DAL.Repositories
                 .Where(ad => parameters.MinArea <= ad.Area && ad.Area <= parameters.MaxArea)
                 .Where(ad => parameters.MinRoomCount <= ad.RoomCount && ad.RoomCount <= parameters.MaxRoomCount);
 
-            if (!String.IsNullOrEmpty(parameters.UserName))
+            if (!string.IsNullOrEmpty(parameters.UserName))
             {
                 query = query.Where(ad => ad.Owner.UserName == parameters.UserName);
             }
-            if (!String.IsNullOrEmpty(parameters.Address))
+            if (!string.IsNullOrEmpty(parameters.Address))
             {
                 query = query.Where(ad => ad.Address.Contains(parameters.Address));
             }
 
             return query
+                .OrderByDescending(ad => ad.CreatedAt.Date)
                 .Skip(parameters.PageIndex * parameters.PageSize)
                 .Take(parameters.PageSize)
                 .Any();
