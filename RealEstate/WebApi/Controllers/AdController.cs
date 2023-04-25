@@ -1,4 +1,5 @@
-﻿using Domain.DTOs;
+﻿using Domain;
+using Domain.DTOs;
 using Domain.Models;
 using Domain.Repositories;
 using Domain.Services;
@@ -72,11 +73,19 @@ namespace WebApi.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult CreateAd([FromBody] CreateAdDTO ad)
         {
             var userName = User.Identity!.Name;
             var newAd = _adService.CreateAd(ad, userName!);
-            return CreatedAtAction(nameof(GetById), new { id = newAd.Id }, newAd);
+            try
+            {
+                return CreatedAtAction(nameof(GetById), new { id = newAd.Id }, newAd);
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpPut]
@@ -85,6 +94,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult EditAd([FromBody] EditAdDTO ad, int id)
         {
             ad.Id = id;
@@ -98,7 +108,14 @@ namespace WebApi.Controllers
                 return Forbid();
             }
 
-            return Ok(_adService.EditAd(ad));
+            try
+            {
+                return Ok(_adService.EditAd(ad));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
         }
     }
 }

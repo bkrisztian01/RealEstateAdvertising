@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain;
 using Domain.DTOs;
 using Domain.Models;
 using Domain.Repositories;
@@ -89,7 +90,7 @@ namespace DAL.Repositories
 
             if (dbUser == null)
             {
-                throw new KeyNotFoundException();
+                throw new NotFoundException("User was not found");
             }
 
             var dbAd = _mapper.Map<Ad>(ad);
@@ -107,7 +108,7 @@ namespace DAL.Repositories
 
             if (dbAd == null)
             {
-                throw new ArgumentException("Ad was not found");
+                throw new NotFoundException("Ad was not found");
             }
 
             dbAd.Title = ad.Title;

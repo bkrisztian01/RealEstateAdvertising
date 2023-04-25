@@ -69,8 +69,10 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 builder.Services.AddDbContext<RealEstateDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddScoped<IAdRepository, AdRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<AdService, AdService>();
 builder.Services.AddScoped<UserService, UserService>();
+builder.Services.AddScoped<MessageService, MessageService>();
 builder.Services.AddScoped<AuthorizationService, AuthorizationService>();
 builder.Services.AddIdentity<User, IdentityRole>(options => options.User.RequireUniqueEmail = true)
     .AddEntityFrameworkStores<RealEstateDbContext>()
