@@ -18,6 +18,7 @@ import { useAuthHeader, useAuthUser } from 'react-auth-kit';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { ListingRow } from './ListingRow/ListingRow';
 import './style.css';
+
 export const ShowListings = () => {
   const authUser = useAuthUser();
   const authHeader = useAuthHeader();

@@ -1,3 +1,4 @@
+import { MessagePage } from 'pages/MessagePage';
 import { RequireAuth } from 'react-auth-kit';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AdList } from './features/Ad/AdList';
@@ -52,6 +53,14 @@ function App() {
             }
           />
           <Route path="*" element={<NotFound />} />
+          <Route
+            path="messages/:userName"
+            element={
+              <RequireAuth loginPath="/home">
+                <MessagePage />
+              </RequireAuth>
+            }
+          />
         </Route>
       </Routes>
     </>

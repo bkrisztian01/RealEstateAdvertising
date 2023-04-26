@@ -6,7 +6,7 @@ import { MessageContact } from 'model/MessageContact';
 import { useState } from 'react';
 import { useAuthHeader } from 'react-auth-kit';
 import { useQuery } from 'react-query';
-import { MessageListRow } from './MessageListRow.tsx';
+import { MessageListRow } from '../../Message/MessageListRow.tsx';
 
 export const MessageList = () => {
   const authHeader = useAuthHeader();

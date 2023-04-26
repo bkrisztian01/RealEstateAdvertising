@@ -1,4 +1,5 @@
 import { Center, Td, Text, Tr } from '@chakra-ui/react';
+import { NavLink } from 'react-router-dom';
 import { MessageListRowProps } from './types';
 
 export const MessageListRow = ({
@@ -7,8 +8,10 @@ export const MessageListRow = ({
   return (
     <Tr>
       <Td>
-        <Text>{user.fullName}</Text>
-        <Text color="gray">{user.userName}</Text>
+        <NavLink to={`./${user.userName}`}>
+          <Text>{user.fullName}</Text>
+          <Text color="gray">{user.userName}</Text>
+        </NavLink>
       </Td>
       <Td>
         <Center>{unreadCount}</Center>
