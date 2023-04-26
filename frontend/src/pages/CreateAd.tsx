@@ -1,5 +1,5 @@
 import { Container, Heading } from '@chakra-ui/react';
-import { createAd } from 'api/adsApi';
+import { createAd } from 'api/adApi';
 import { AdForm, AdFormInput } from 'features/Ad/AdForm';
 import { useCallback } from 'react';
 import { useAuthHeader } from 'react-auth-kit';

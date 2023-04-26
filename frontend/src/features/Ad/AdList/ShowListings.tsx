@@ -1,5 +1,5 @@
 import { Center, Container, Grid, GridItem, Heading } from '@chakra-ui/react';
-import { AdList as AdListDto, getAds } from 'api/adsApi';
+import { AdList as AdListDto, getAds } from 'api/adApi';
 import { AxiosError } from 'axios';
 import Loading from 'components/Loading';
 import { PageButtons } from 'components/PageButtons';

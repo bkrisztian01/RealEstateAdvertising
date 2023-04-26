@@ -57,6 +57,7 @@ namespace DAL.Repositories
                 .Where(msg => msg.FromUser.UserName == withUserName || msg.ToUser.UserName == withUserName)
                 .Where(msg => msg.FromUser.UserName == loggedInUserName || msg.ToUser.UserName == loggedInUserName)
                 .Select(msg => _mapper.Map<MessageDTO>(msg))
+                .OrderBy(msg => msg.Date)
                 .ToArray();
 
             foreach (var msg in messages)
@@ -100,16 +101,15 @@ namespace DAL.Repositories
                     msg.Date,
                 });
 
-            var union = querySentMessages.Union(queryReceivedMessages);
-
-            return union
+            return querySentMessages.Union(queryReceivedMessages)
                 .GroupBy(msg => msg.User)
-                .Select(msgs => new MessageContactDTO
+                .Select(contact => new MessageContactDTO
                 {
-                    User = _mapper.Map<UserDTO>(msgs.Key),
-                    LastMessageDate = msgs.Max(msg => msg.Date),
-                    UnreadCount = msgs.Count(msg => msg.IsUnread),
+                    User = _mapper.Map<UserDTO>(contact.Key),
+                    LastMessageDate = contact.Max(msg => msg.Date),
+                    UnreadCount = contact.Count(msg => msg.IsUnread),
                 })
+                .OrderByDescending(contact => contact.LastMessageDate)
                 .ToArray();
         }
     }

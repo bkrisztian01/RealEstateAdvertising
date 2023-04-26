@@ -1,8 +1,14 @@
 import axios from 'axios';
 import { Ad } from 'model/Ad';
+import { handleDates } from 'util/handleDates';
 
-const adsApi = axios.create({
+const adApi = axios.create({
   baseURL: 'https://localhost:7202',
+});
+
+adApi.interceptors.response.use((originalResponse) => {
+  handleDates(originalResponse.data);
+  return originalResponse;
 });
 
 export type AdProps = {
@@ -34,19 +40,19 @@ export type AdList = {
 };
 
 export const getAds = async (options?: GetAdsOptions) => {
-  const response = await adsApi.get<AdList>('/api/ad', {
+  const response = await adApi.get<AdList>('/api/ad', {
     params: options,
   });
   return response.data;
 };
 
 export const getAdById = async (id: number) => {
-  const response = await adsApi.get<Ad>(`/api/ad/${id}`);
+  const response = await adApi.get<Ad>(`/api/ad/${id}`);
   return response.data;
 };
 
 export const createAd = async (data: AdProps, accessToken: string) => {
-  const response = await adsApi.post<Ad>('/api/ad', data, {
+  const response = await adApi.post<Ad>('/api/ad', data, {
     withCredentials: true,
     headers: {
       Authorization: accessToken,
@@ -60,7 +66,7 @@ export const updateAd = async (
   data: AdProps,
   accessToken: string,
 ) => {
-  const response = await adsApi.put<Ad>(`/api/ad/${id}`, data, {
+  const response = await adApi.put<Ad>(`/api/ad/${id}`, data, {
     withCredentials: true,
     headers: {
       Authorization: accessToken,
@@ -70,7 +76,7 @@ export const updateAd = async (
 };
 
 export const deleteAd = async (id: number, accessToken: string) => {
-  await adsApi.delete(`/api/ad/${id}`, {
+  await adApi.delete(`/api/ad/${id}`, {
     withCredentials: true,
     headers: {
       Authorization: accessToken,

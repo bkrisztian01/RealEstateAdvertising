@@ -9,7 +9,7 @@ import {
   Tr,
   useDisclosure,
 } from '@chakra-ui/react';
-import { AdList, deleteAd, getAds } from 'api/adsApi';
+import { AdList, deleteAd, getAds } from 'api/adApi';
 import Loading from 'components/Loading';
 import { DeleteModal } from 'components/Modals/DeleteModal';
 import { PageButtons } from 'components/PageButtons';

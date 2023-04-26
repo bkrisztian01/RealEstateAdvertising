@@ -1,5 +1,5 @@
 import { Container, Heading } from '@chakra-ui/react';
-import { getAdById, updateAd } from 'api/adsApi';
+import { getAdById, updateAd } from 'api/adApi';
 import { AxiosError } from 'axios';
 import Loading from 'components/Loading';
 import { AdForm, AdFormInput } from 'features/Ad/AdForm';

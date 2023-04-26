@@ -9,7 +9,7 @@ import {
   Image,
   Text,
 } from '@chakra-ui/react';
-import { getAdById } from 'api/adsApi';
+import { getAdById } from 'api/adApi';
 import { AxiosError } from 'axios';
 import Loading from 'components/Loading';
 import { Ad } from 'model/Ad';

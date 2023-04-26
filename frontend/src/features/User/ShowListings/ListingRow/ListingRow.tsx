@@ -17,7 +17,7 @@ import { ListingRowProps } from './types';
 export const ListingRow = ({ ad, onDeleteButtonClick }: ListingRowProps) => {
   const { id, title, address, image, createdAt } = ad;
 
-  const createdAtString = new Date(createdAt).toLocaleDateString();
+  const createdAtString = createdAt.toLocaleDateString();
 
   const navigate = useNavigate();
 

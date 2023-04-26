@@ -13,9 +13,16 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
+import { getNewMessageCount } from 'api/messageApi';
 import { LoginModal } from 'features/User/LoginModal';
 import { RegisterModal } from 'features/User/RegisterModal';
-import { useAuthUser, useIsAuthenticated, useSignOut } from 'react-auth-kit';
+import {
+  useAuthHeader,
+  useAuthUser,
+  useIsAuthenticated,
+  useSignOut,
+} from 'react-auth-kit';
+import { useQuery } from 'react-query';
 import { NavLink } from 'react-router-dom';
 
 const NavBar = () => {
@@ -34,8 +41,14 @@ const NavBar = () => {
   } = useDisclosure();
 
   const isAuthenticated = useIsAuthenticated();
-
   const auth = useAuthUser();
+  const authHeader = useAuthHeader();
+
+  const { data } = useQuery({
+    queryKey: ['newMessageCount'],
+    queryFn: () => getNewMessageCount(authHeader()),
+    enabled: isAuthenticated(),
+  });
 
   const SignedOutButtons = () => (
     <>
@@ -49,7 +62,7 @@ const NavBar = () => {
   const SignedInButtons = () => (
     <>
       <Link as={NavLink} to="/messages">
-        <Button>Messages</Button>
+        <Button>Messages {data?.count > 0 ? `(${data?.count})` : ''}</Button>
       </Link>
 
       <Menu direction="rtl">

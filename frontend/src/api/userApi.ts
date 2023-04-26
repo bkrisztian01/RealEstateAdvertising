@@ -1,7 +1,13 @@
 import axios from 'axios';
+import { handleDates } from 'util/handleDates';
 
 const userApi = axios.create({
   baseURL: 'https://localhost:7202',
+});
+
+userApi.interceptors.response.use((originalResponse) => {
+  handleDates(originalResponse.data);
+  return originalResponse;
 });
 
 export type LoginProps = {

@@ -62,10 +62,10 @@ namespace WebApi.Controllers
         [Route("newCount")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public ActionResult<int> GetNewMessageCount()
+        public ActionResult GetNewMessageCount()
         {
             var loggedInUserName = User.Identity!.Name!;
-            return _messageService.GetNewMessageCount(loggedInUserName);
+            return Ok(new { Count = _messageService.GetNewMessageCount(loggedInUserName) });
         }
 
         [HttpGet]

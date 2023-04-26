@@ -1,1 +1,1 @@
-export { AdList } from './AdList';
+export { AdList } from './ShowListings';
