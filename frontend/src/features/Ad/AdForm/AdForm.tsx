@@ -41,12 +41,12 @@ function dataURLtoFile(dataurl: string, filename = 'image') {
 }
 
 const adSchema = yup.object<AdFormInput>({
-  title: yup.string().required('Title is required.'),
+  title: yup.string().label('Title').required(),
   description: yup.string(),
-  address: yup.string().required('Address is required.'),
-  price: yup.number().required('Price is required.'),
-  roomCount: yup.number().required('Room count is required.'),
-  area: yup.number().required('Area is required.'),
+  address: yup.string().label('Address').required(),
+  price: yup.number().label('Price').required(),
+  roomCount: yup.number().label('Room count').required(),
+  area: yup.number().label('Area').required(),
   image: yup
     .mixed<FileList>()
     .test(
