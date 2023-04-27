@@ -52,14 +52,12 @@ namespace DAL.Repositories
                 query = query.Where(ad => ad.Address.Contains(parameters.Address));
             }
 
-            var asd = query
+            return query
                 .OrderByDescending(ad => ad.CreatedAt.Date)
                 .Skip((parameters.PageIndex - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
                 .Select(MapAdToAdDTO)
                 .ToArray();
-
-            return asd;
         }
 
         public Ad? GetAdById(int id)

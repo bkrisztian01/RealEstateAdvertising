@@ -115,6 +115,7 @@ export const AdForm = ({ mutationFn, ad }: AdFormProps) => {
               {...register('description')}
               size="sm"
               rounded="md"
+              isInvalid={!!errors.description}
             />
             <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
           </FormControl>

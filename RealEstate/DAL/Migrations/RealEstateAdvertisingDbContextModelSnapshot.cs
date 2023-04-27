@@ -65,7 +65,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Ads");
+                    b.ToTable("Ads", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.Message", b =>
@@ -98,7 +98,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ToUserId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.User", b =>

@@ -1,4 +1,4 @@
-import { MessagePage } from 'pages/MessagePage';
+import { MessagePage } from 'features/Message/MessagePage/MessagePage';
 import { RequireAuth } from 'react-auth-kit';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AdList } from './features/Ad/AdList';
@@ -61,6 +61,7 @@ function App() {
               </RequireAuth>
             }
           />
+          <Route path="404" element={<NotFound />} />
         </Route>
       </Routes>
     </>

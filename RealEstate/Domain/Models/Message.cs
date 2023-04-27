@@ -7,8 +7,8 @@ namespace Domain.Models
         public int Id { get; set; }
         public bool IsUnread { get; set; }
         public string Content { get; set; }
-        public DateTime Date { get; set; }
         public User FromUser { get; set; }
         public User ToUser { get; set; }
+        public DateTime Date { get; set; }
     }
 }

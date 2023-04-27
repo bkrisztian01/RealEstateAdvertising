@@ -1,10 +1,14 @@
 import { Center, Td, Text, Tr } from '@chakra-ui/react';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { NavLink } from 'react-router-dom';
 import { MessageListRowProps } from './types';
 
 export const MessageListRow = ({
   messageContact: { user, lastMessageDate, unreadCount },
 }: MessageListRowProps) => {
+  dayjs.extend(relativeTime);
+
   return (
     <Tr>
       <Td>
@@ -17,7 +21,7 @@ export const MessageListRow = ({
         <Center>{unreadCount}</Center>
       </Td>
       <Td>
-        <Center>{lastMessageDate.toDateString()}</Center>
+        <Center>{dayjs(lastMessageDate).fromNow()}</Center>
       </Td>
     </Tr>
   );

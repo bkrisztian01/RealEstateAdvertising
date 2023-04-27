@@ -1,0 +1,32 @@
+#messages {
+    background: var(--chakra-colors-gray-100);
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: var(--chakra-radii-md);
+}
+
+#messages .message {
+    margin: 0 0 8px 18px;
+    text-indent: -18px;
+}
+
+#messages .message:last-child {
+    margin-bottom: 0;
+}
+
+.message p {
+    width: fit-content;
+}
+
+#text-field {
+    font-size: var(--chakra-fontSizes-md);
+    background: var(--chakra-colors-gray-100);
+}
+
+.text-field-form-control {
+    margin-bottom: 10px;
+}
+
+form {
+    position: relative;
+}

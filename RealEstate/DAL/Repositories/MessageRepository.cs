@@ -56,15 +56,17 @@ namespace DAL.Repositories
                 .Include(msg => msg.ToUser)
                 .Where(msg => msg.FromUser.UserName == withUserName || msg.ToUser.UserName == withUserName)
                 .Where(msg => msg.FromUser.UserName == loggedInUserName || msg.ToUser.UserName == loggedInUserName)
-                .Select(msg => _mapper.Map<MessageDTO>(msg))
                 .OrderBy(msg => msg.Date)
                 .ToArray();
 
             foreach (var msg in messages)
-                msg.IsUnread = false;
+            {
+                if (msg.ToUser.UserName == loggedInUserName)
+                    msg.IsUnread = false;
+            }
 
             _context.SaveChanges();
-            return messages;
+            return messages.Select(msg => _mapper.Map<MessageDTO>(msg));
         }
 
         public int GetNewMessageCount(string loggedInUserName)

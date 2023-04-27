@@ -45,7 +45,7 @@ const NavBar = () => {
   const authHeader = useAuthHeader();
 
   const { data } = useQuery({
-    queryKey: ['newMessageCount'],
+    queryKey: 'newMessageCount',
     queryFn: () => getNewMessageCount(authHeader()),
     enabled: isAuthenticated(),
   });
