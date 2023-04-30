@@ -25,7 +25,7 @@ import {
 import { useQuery } from 'react-query';
 import { NavLink } from 'react-router-dom';
 
-const NavBar = () => {
+export const NavBar = () => {
   const signOut = useSignOut();
 
   const {
@@ -122,5 +122,3 @@ const NavBar = () => {
     </>
   );
 };
-
-export default NavBar;

@@ -1,13 +1,15 @@
 import { Footer } from 'components/Footer';
-import NavBar from 'features/NavBar/NavBar';
+import { NavBar } from 'features/NavBar';
 import { Outlet } from 'react-router-dom';
 
 export const Layout = () => {
   return (
     <>
-      <div className="page-container">
+      <div className="box">
         <NavBar />
-        <Outlet />
+        <div className="content">
+          <Outlet />
+        </div>
         <Footer />
       </div>
     </>

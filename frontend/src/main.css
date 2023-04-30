@@ -1,9 +1,29 @@
-.content-wrap {
-    padding-top: 1rem;
-    padding-bottom: 8.5rem;
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
 }
 
-.page-container {
-    position: relative;
-    min-height: 100vh;
+.box {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+.box nav {
+    flex: 0 1 auto;
+    /* The above is shorthand for:
+    flex-grow: 0,
+    flex-shrink: 1,
+    flex-basis: auto
+*/
+}
+
+.box .content {
+    flex: 1 1 auto;
+}
+
+.box footer {
+    flex: 0 1 40px;
 }

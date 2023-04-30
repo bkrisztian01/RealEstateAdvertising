@@ -131,7 +131,7 @@ export const AdPage = () => {
     );
   }
   return (
-    <Container className="content-wrap" maxW="container.lg">
+    <Container maxW="container.lg">
       {content}
     </Container>
   );

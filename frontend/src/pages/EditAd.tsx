@@ -64,7 +64,7 @@ const EditAd = () => {
 
   return (
     <>
-      <Container className="content-wrap" maxW="container.sm">
+      <Container maxW="container.sm">
         <Heading as="h1" mb="4">
           Edit advertisement
         </Heading>

@@ -93,7 +93,7 @@ export const MessagePage = () => {
   }
 
   return (
-    <Container className="content-wrap" maxW="container.md">
+    <Container maxW="container.md">
       <Box id="messages">
         {data?.map((msg, i) => {
           return (
