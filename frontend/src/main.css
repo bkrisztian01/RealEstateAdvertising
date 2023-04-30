@@ -1,0 +1,9 @@
+.content-wrap {
+    padding-top: 1rem;
+    padding-bottom: 8.5rem;
+}
+
+.page-container {
+    position: relative;
+    min-height: 100vh;
+}

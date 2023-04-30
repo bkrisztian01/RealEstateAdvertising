@@ -3,6 +3,7 @@ import {
   Container,
   FormControl,
   FormErrorMessage,
+  HStack,
   Icon,
   IconButton,
   Text,
@@ -17,7 +18,7 @@ import { Message } from 'model/Message';
 import { useEffect } from 'react';
 import { useAuthHeader } from 'react-auth-kit';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { BsSend } from 'react-icons/bs';
+import { BsFillSendFill } from 'react-icons/bs';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
@@ -92,7 +93,7 @@ export const MessagePage = () => {
   }
 
   return (
-    <Container maxW="container.md" py="10px">
+    <Container className="content-wrap" maxW="container.md">
       <Box id="messages">
         {data?.map((msg, i) => {
           return (
@@ -107,7 +108,9 @@ export const MessagePage = () => {
                   <b
                     style={{
                       color:
-                        msg.fromUser.userName === userName ? 'black' : 'green',
+                        msg.fromUser.userName === userName
+                          ? 'black'
+                          : 'var(--chakra-colors-green-400)',
                     }}
                   >
                     {msg.fromUser.fullName}
@@ -119,39 +122,29 @@ export const MessagePage = () => {
           );
         })}
       </Box>
-      <Box position="relative">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl
-            position="absolute"
-            zIndex="100"
-            w="fit-content"
-            right="2px"
-            top="2px"
-          >
-            <IconButton
-              type="submit"
-              background="none"
-              isLoading={isSubmitLoading}
-              aria-label={'Send'}
-              icon={<Icon as={BsSend} />}
-            >
-              Send
-            </IconButton>
-          </FormControl>
-          <FormControl
-            className="text-field-form-control"
-            isInvalid={!!errors.content}
-          >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <FormControl isInvalid={!!errors.content}>
+          <HStack spacing="5px">
             <Textarea
               id="text-field"
               isInvalid={!!errors.content}
               placeholder={`Message to ${userName}...`}
               {...register('content')}
             />
-            <FormErrorMessage>{errors.content?.message}</FormErrorMessage>
-          </FormControl>
-        </form>
-      </Box>
+            <IconButton
+              id="message-submit-button"
+              type="submit"
+              background="none"
+              isLoading={isSubmitLoading}
+              aria-label={'Send'}
+              icon={<Icon as={BsFillSendFill} />}
+            >
+              Send
+            </IconButton>
+          </HStack>
+          <FormErrorMessage>{errors.content?.message}</FormErrorMessage>
+        </FormControl>
+      </form>
     </Container>
   );
 };

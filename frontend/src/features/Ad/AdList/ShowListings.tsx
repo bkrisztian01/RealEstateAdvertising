@@ -71,7 +71,7 @@ export const AdList = () => {
     );
   }
   return (
-    <Container maxW="container.lg" py="10px" w="fit-content">
+    <Container className="content-wrap" maxW="container.lg" w="fit-content">
       {content}
     </Container>
   );

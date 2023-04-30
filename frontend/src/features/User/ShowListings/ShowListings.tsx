@@ -122,7 +122,7 @@ export const ShowListings = () => {
 
   return (
     <>
-      <Container maxW="container.lg" py="10px">
+      <Container className="content-wrap" maxW="container.lg">
         <Heading as="h1" mb="5">
           Your listings
         </Heading>

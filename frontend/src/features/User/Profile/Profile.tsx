@@ -6,7 +6,7 @@ export const Profile = () => {
 
   return (
     <>
-      <Container maxW="container.lg" py="10px">
+      <Container className="content-wrap" maxW="container.lg">
         <Heading as="h2" size="md">
           Profile
         </Heading>

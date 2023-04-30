@@ -21,7 +21,7 @@ const CreatingAd = () => {
 
   return (
     <>
-      <Container maxW="container.sm" py="10px">
+      <Container className="content-wrap" maxW="container.sm">
         <Heading as="h1" mb="4">
           Create advertisement
         </Heading>

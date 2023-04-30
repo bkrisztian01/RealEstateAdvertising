@@ -23,10 +23,12 @@
     background: var(--chakra-colors-gray-100);
 }
 
-.text-field-form-control {
-    margin-bottom: 10px;
+#message-submit-button {
+    background: none;
+    color: var(--chakra-colors-gray-500)
 }
 
-form {
-    position: relative;
+#message-submit-button:hover {
+    background: var(--chakra-colors-green-400);
+    color: white;
 }
