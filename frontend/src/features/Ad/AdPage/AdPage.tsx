@@ -14,18 +14,24 @@ import { getAdById } from 'api/adApi';
 import { AxiosError } from 'axios';
 import { Loading } from 'components/Loading';
 import { Ad } from 'model/Ad';
+import { useAuthUser, useIsAuthenticated } from 'react-auth-kit';
 import { BsFillTelephoneFill } from 'react-icons/bs';
 import { FaRulerVertical } from 'react-icons/fa';
 import { GoPerson } from 'react-icons/go';
 import { ImLocation2, ImPriceTag } from 'react-icons/im';
 import { MdBed, MdEmail } from 'react-icons/md';
 import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { formatPrice } from 'util/formatPrice';
 import './style.css';
 
 export const AdPage = () => {
   const { adId } = useParams();
+
+  const isAuthenticated = useIsAuthenticated();
+  const auth = useAuthUser();
+
+  const navigate = useNavigate();
 
   const {
     isLoading,
@@ -86,9 +92,16 @@ export const AdPage = () => {
           <Icon as={BsFillTelephoneFill}></Icon>
           <Text>{ad?.owner.phoneNumber}</Text>
         </HStack>
-        <Button className="contact-button" colorScheme="green" size="md">
-          Message advertiser
-        </Button>
+        {isAuthenticated() && auth()?.userName !== ad?.owner.userName && (
+          <Button
+            className="contact-button"
+            colorScheme="green"
+            size="md"
+            onClick={() => navigate(`/messages/${ad?.owner.userName}`)}
+          >
+            Message advertiser
+          </Button>
+        )}
       </Box>
     </>
   );

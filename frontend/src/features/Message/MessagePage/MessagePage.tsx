@@ -3,6 +3,7 @@ import {
   Container,
   FormControl,
   FormErrorMessage,
+  Heading,
   HStack,
   Icon,
   IconButton,
@@ -94,6 +95,72 @@ export const MessagePage = () => {
     return <Loading />;
   }
 
+  let content;
+
+  if (isError || !data) {
+    content = (
+      <Heading size="md">{error instanceof Error ? error.message : ''}</Heading>
+    );
+  } else {
+    content = (
+      <>
+        <Box className="messages">
+          {data?.map((msg, i) => {
+            return (
+              <Box className="message" key={i}>
+                <Tooltip
+                  placement="bottom-start"
+                  openDelay={500}
+                  hasArrow
+                  label={msg.date.toLocaleDateString()}
+                >
+                  <Text>
+                    <b
+                      style={{
+                        color:
+                          msg.fromUser.userName === userName
+                            ? 'black'
+                            : 'var(--chakra-colors-green-400)',
+                      }}
+                    >
+                      {msg.fromUser.fullName}
+                    </b>{' '}
+                    {msg.content}
+                  </Text>
+                </Tooltip>
+              </Box>
+            );
+          })}
+        </Box>
+        <Box className="message-area">
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <FormControl isInvalid={!!errors.content}>
+              <HStack spacing="5px">
+                <Textarea
+                  id="text-field"
+                  isInvalid={!!errors.content}
+                  placeholder={`Message to ${userName}...`}
+                  {...register('content')}
+                />
+                <IconButton
+                  id="message-submit-button"
+                  type="submit"
+                  background="none"
+                  isLoading={isSubmitLoading}
+                  aria-label={'Send'}
+                  icon={<Icon as={BsFillSendFill} />}
+                >
+                  Send
+                </IconButton>
+              </HStack>
+              <FormErrorMessage>{errors.content?.message}</FormErrorMessage>
+            </FormControl>
+          </form>
+        </Box>
+      </>
+    );
+  }
+
   return (
     <Container
       className="message-page"
@@ -101,59 +168,7 @@ export const MessagePage = () => {
       maxW="container.md"
       height="100%"
     >
-      <Box className="messages">
-        {data?.map((msg, i) => {
-          return (
-            <Box className="message" key={i}>
-              <Tooltip
-                placement="bottom-start"
-                openDelay={500}
-                hasArrow
-                label={msg.date.toLocaleDateString()}
-              >
-                <Text>
-                  <b
-                    style={{
-                      color:
-                        msg.fromUser.userName === userName
-                          ? 'black'
-                          : 'var(--chakra-colors-green-400)',
-                    }}
-                  >
-                    {msg.fromUser.fullName}
-                  </b>{' '}
-                  {msg.content}
-                </Text>
-              </Tooltip>
-            </Box>
-          );
-        })}
-      </Box>
-      <Box className="message-area">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl isInvalid={!!errors.content}>
-            <HStack spacing="5px">
-              <Textarea
-                id="text-field"
-                isInvalid={!!errors.content}
-                placeholder={`Message to ${userName}...`}
-                {...register('content')}
-              />
-              <IconButton
-                id="message-submit-button"
-                type="submit"
-                background="none"
-                isLoading={isSubmitLoading}
-                aria-label={'Send'}
-                icon={<Icon as={BsFillSendFill} />}
-              >
-                Send
-              </IconButton>
-            </HStack>
-            <FormErrorMessage>{errors.content?.message}</FormErrorMessage>
-          </FormControl>
-        </form>
-      </Box>
+      {content}
     </Container>
   );
 };
