@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Container,
   Grid,
   GridItem,
@@ -11,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { getAdById } from 'api/adApi';
 import { AxiosError } from 'axios';
-import Loading from 'components/Loading';
+import { Loading } from 'components/Loading';
 import { Ad } from 'model/Ad';
 import { BsFillTelephoneFill } from 'react-icons/bs';
 import { FaRulerVertical } from 'react-icons/fa';
@@ -85,6 +86,9 @@ export const AdPage = () => {
           <Icon as={BsFillTelephoneFill}></Icon>
           <Text>{ad?.owner.phoneNumber}</Text>
         </HStack>
+        <Button className="contact-button" colorScheme="green" size="md">
+          Message advertiser
+        </Button>
       </Box>
     </>
   );
@@ -106,7 +110,7 @@ export const AdPage = () => {
           <GridItem
             colSpan={1}
             rowSpan={2}
-            height={{ lg: '450px', md: '450px', base: '300px' }}
+            height={{ lg: '500px', md: '500px', base: '300px' }}
             className="image-container"
           >
             <Image className="ad-image" src={ad.image} />
@@ -131,7 +135,7 @@ export const AdPage = () => {
     );
   }
   return (
-    <Container maxW="container.lg">
+    <Container py="20px" maxW="container.lg">
       {content}
     </Container>
   );

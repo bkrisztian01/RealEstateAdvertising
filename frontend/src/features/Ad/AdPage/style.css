@@ -25,3 +25,8 @@ img.ad-image {
   border-radius: 8px;
   padding: 8px;
 }
+
+.contact-button {
+  margin-top: 10px;
+  width: 100%;
+}

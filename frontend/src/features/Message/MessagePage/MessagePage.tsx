@@ -13,10 +13,10 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { getMessagesWith, sendMessage } from 'api/messageApi';
 import { AxiosError } from 'axios';
-import Loading from 'components/Loading';
+import { Loading } from 'components/Loading';
 import { Message } from 'model/Message';
 import { useEffect } from 'react';
-import { useAuthHeader } from 'react-auth-kit';
+import { useAuthHeader, useAuthUser } from 'react-auth-kit';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { BsFillSendFill } from 'react-icons/bs';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -35,14 +35,12 @@ export type MessageFormInput = {
 export const MessagePage = () => {
   const { userName } = useParams();
   const authHeader = useAuthHeader();
+  const auth = useAuthUser();
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { isLoading, isError, error, data, isPreviousData } = useQuery<
-    Message[],
-    AxiosError
-  >({
+  const { isLoading, isError, error, data } = useQuery<Message[], AxiosError>({
     queryKey: [userName, 'messages'],
     queryFn: () => {
       return getMessagesWith(authHeader(), userName!);
@@ -67,6 +65,10 @@ export const MessagePage = () => {
   });
 
   useEffect(() => {
+    if (auth()?.userName === userName) {
+      navigate('/home');
+    }
+
     return () => {
       queryClient.invalidateQueries('newMessageCount');
     };
@@ -93,8 +95,13 @@ export const MessagePage = () => {
   }
 
   return (
-    <Container maxW="container.md">
-      <Box id="messages">
+    <Container
+      className="message-page"
+      py="20px"
+      maxW="container.md"
+      height="100%"
+    >
+      <Box className="messages">
         {data?.map((msg, i) => {
           return (
             <Box className="message" key={i}>
@@ -122,29 +129,31 @@ export const MessagePage = () => {
           );
         })}
       </Box>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl isInvalid={!!errors.content}>
-          <HStack spacing="5px">
-            <Textarea
-              id="text-field"
-              isInvalid={!!errors.content}
-              placeholder={`Message to ${userName}...`}
-              {...register('content')}
-            />
-            <IconButton
-              id="message-submit-button"
-              type="submit"
-              background="none"
-              isLoading={isSubmitLoading}
-              aria-label={'Send'}
-              icon={<Icon as={BsFillSendFill} />}
-            >
-              Send
-            </IconButton>
-          </HStack>
-          <FormErrorMessage>{errors.content?.message}</FormErrorMessage>
-        </FormControl>
-      </form>
+      <Box className="message-area">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormControl isInvalid={!!errors.content}>
+            <HStack spacing="5px">
+              <Textarea
+                id="text-field"
+                isInvalid={!!errors.content}
+                placeholder={`Message to ${userName}...`}
+                {...register('content')}
+              />
+              <IconButton
+                id="message-submit-button"
+                type="submit"
+                background="none"
+                isLoading={isSubmitLoading}
+                aria-label={'Send'}
+                icon={<Icon as={BsFillSendFill} />}
+              >
+                Send
+              </IconButton>
+            </HStack>
+            <FormErrorMessage>{errors.content?.message}</FormErrorMessage>
+          </FormControl>
+        </form>
+      </Box>
     </Container>
   );
 };

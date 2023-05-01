@@ -10,7 +10,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { AdList, deleteAd, getAds } from 'api/adApi';
-import Loading from 'components/Loading';
+import { Loading } from 'components/Loading';
 import { DeleteModal } from 'components/Modals/DeleteModal';
 import { PageButtons } from 'components/PageButtons';
 import { useCallback, useState } from 'react';
@@ -122,7 +122,7 @@ export const ShowListings = () => {
 
   return (
     <>
-      <Container maxW="container.lg">
+      <Container py="20px" maxW="container.lg">
         <Heading as="h1" mb="5">
           Your listings
         </Heading>

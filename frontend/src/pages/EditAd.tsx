@@ -1,7 +1,7 @@
 import { Container, Heading } from '@chakra-ui/react';
 import { getAdById, updateAd } from 'api/adApi';
 import { AxiosError } from 'axios';
-import Loading from 'components/Loading';
+import { Loading } from 'components/Loading';
 import { AdForm, AdFormInput } from 'features/Ad/AdForm';
 import { Ad } from 'model/Ad';
 import { useCallback } from 'react';
@@ -64,7 +64,7 @@ const EditAd = () => {
 
   return (
     <>
-      <Container maxW="container.sm">
+      <Container py="20px" maxW="container.sm">
         <Heading as="h1" mb="4">
           Edit advertisement
         </Heading>

@@ -5,13 +5,13 @@ body,
   margin: 0;
 }
 
-.box {
+.page-container {
     display: flex;
     flex-flow: column;
     height: 100%;
 }
 
-.box nav {
+.page-container nav {
     flex: 0 1 auto;
     /* The above is shorthand for:
     flex-grow: 0,
@@ -20,10 +20,10 @@ body,
 */
 }
 
-.box .content {
+.page-container main {
     flex: 1 1 auto;
 }
 
-.box footer {
+.page-container footer {
     flex: 0 1 40px;
 }

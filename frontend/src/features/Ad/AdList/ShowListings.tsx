@@ -1,7 +1,7 @@
 import { Center, Container, Grid, GridItem, Heading } from '@chakra-ui/react';
 import { AdList as AdListDto, getAds } from 'api/adApi';
 import { AxiosError } from 'axios';
-import Loading from 'components/Loading';
+import { Loading } from 'components/Loading';
 import { PageButtons } from 'components/PageButtons';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
@@ -71,7 +71,7 @@ export const AdList = () => {
     );
   }
   return (
-    <Container maxW="container.lg" w="fit-content">
+    <Container py="20px" maxW="container.lg" w="fit-content">
       {content}
     </Container>
   );

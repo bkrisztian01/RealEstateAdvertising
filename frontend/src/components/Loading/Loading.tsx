@@ -1,8 +1,9 @@
 import { Center, Spinner } from '@chakra-ui/react';
+import './style.css';
 
-const Loading = () => {
+export const Loading = () => {
   return (
-    <Center position="absolute" w="100vw" h="100vh">
+    <Center height="100%">
       <Spinner
         thickness="4px"
         speed="0.65s"
@@ -13,4 +14,3 @@ const Loading = () => {
     </Center>
   );
 };
-export default Loading;
