@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Message } from 'model/Message';
+import { User } from 'model/User';
 import { handleDates } from 'util/handleDates';
 
 const messageApi = axios.create({
@@ -48,11 +49,16 @@ export async function sendMessage(
   return response.data;
 }
 
+export type MessagesDTO = {
+  messages: Message[];
+  user: User;
+};
+
 export async function getMessagesWith(
   accessToken: string,
   withUserName: string,
 ) {
-  const response = await messageApi.get<Message[]>(
+  const response = await messageApi.get<MessagesDTO>(
     `/api/Message/${withUserName}`,
     {
       headers: {

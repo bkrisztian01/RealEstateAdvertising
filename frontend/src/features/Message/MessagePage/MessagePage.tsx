@@ -12,10 +12,9 @@ import {
   Tooltip,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { getMessagesWith, sendMessage } from 'api/messageApi';
+import { getMessagesWith, MessagesDTO, sendMessage } from 'api/messageApi';
 import { AxiosError } from 'axios';
 import { Loading } from 'components/Loading';
-import { Message } from 'model/Message';
 import { useEffect } from 'react';
 import { useAuthHeader, useAuthUser } from 'react-auth-kit';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -41,18 +40,20 @@ export const MessagePage = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { isLoading, isError, error, data } = useQuery<Message[], AxiosError>({
-    queryKey: [userName, 'messages'],
-    queryFn: () => {
-      return getMessagesWith(authHeader(), userName!);
+  const { isLoading, isError, error, data } = useQuery<MessagesDTO, AxiosError>(
+    {
+      queryKey: [userName, 'messages'],
+      queryFn: () => {
+        return getMessagesWith(authHeader(), userName!);
+      },
+      onError: (err) => {
+        if (err.response?.status === 404) {
+          console.log('404');
+          navigate('/404');
+        }
+      },
     },
-    onError: (err) => {
-      if (err.response?.status === 404) {
-        console.log('404');
-        navigate('/404');
-      }
-    },
-  });
+  );
 
   const { mutate, isLoading: isSubmitLoading } = useMutation<
     unknown,
@@ -104,30 +105,39 @@ export const MessagePage = () => {
   } else {
     content = (
       <>
+        <Box className="messages-header">
+          <Heading as="h3" size="md">
+            {data?.user.fullName}
+          </Heading>
+        </Box>
         <Box className="messages">
-          {data?.map((msg, i) => {
+          {data?.messages.map((msg, i) => {
             return (
               <Box className="message" key={i}>
-                <Tooltip
-                  placement="bottom-start"
-                  openDelay={500}
-                  hasArrow
-                  label={msg.date.toLocaleDateString()}
-                >
-                  <Text>
-                    <b
-                      style={{
-                        color:
-                          msg.fromUser.userName === userName
-                            ? 'black'
-                            : 'var(--chakra-colors-green-400)',
-                      }}
-                    >
-                      {msg.fromUser.fullName}
-                    </b>{' '}
-                    {msg.content}
-                  </Text>
-                </Tooltip>
+                <Text>
+                  <Tooltip
+                    placement="bottom-start"
+                    openDelay={500}
+                    hasArrow
+                    label={msg.date.toLocaleDateString()}
+                  >
+                    <Text as="span" color="gray.500" fontSize="sm">
+                      {msg.date.getHours() + ':' + msg.date.getMinutes()}
+                    </Text>
+                  </Tooltip>
+                  {' • '}
+                  <b
+                    style={{
+                      color:
+                        msg.fromUser.userName === userName
+                          ? 'black'
+                          : 'var(--chakra-colors-green-400)',
+                    }}
+                  >
+                    {msg.fromUser.fullName}
+                  </b>{' '}
+                  {msg.content}
+                </Text>
               </Box>
             );
           })}
@@ -135,7 +145,7 @@ export const MessagePage = () => {
         <Box className="message-area">
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl isInvalid={!!errors.content}>
-              <HStack spacing="5px">
+              <HStack spacing="5px" alignItems="normal">
                 <Textarea
                   id="text-field"
                   isInvalid={!!errors.content}

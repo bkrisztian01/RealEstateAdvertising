@@ -196,6 +196,7 @@ export const AdForm = ({ mutationFn, ad }: AdFormProps) => {
           >
             Submit
           </Button>
+          <input type="submit" hidden />
         </GridItem>
 
         <GridItem>

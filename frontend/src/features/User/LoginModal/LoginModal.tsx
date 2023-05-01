@@ -114,6 +114,7 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
             >
               Login
             </Button>
+            <input type="submit" hidden />
             <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>

@@ -155,6 +155,7 @@ export const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
             >
               Sign up
             </Button>
+            <input type="submit" hidden />
             <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>

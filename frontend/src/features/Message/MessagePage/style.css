@@ -9,14 +9,27 @@
     margin-bottom: 10px;
     padding: 15px;
     border-radius: var(--chakra-radii-md);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 
     flex: 1 1 auto;
     display: flex;
-    flex-flow: column-reverse;
+    flex-direction: column;
+    justify-content: end;
 }
 
 .message-page .message-area {
     flex: 0 1 auto;
+}
+
+.message-page .messages-header {
+    flex: 0 1 auto;
+    background: var(--chakra-colors-gray-200);
+    border-radius: var(--chakra-radii-md);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+
+    padding: 15px;
 }
 
 .messages .message {

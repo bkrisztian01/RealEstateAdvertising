@@ -250,6 +250,7 @@ export const AdFilter = ({ onSubmit }: AdFilterFormProps) => {
           >
             Search
           </Button>
+          <input type="submit" hidden />
         </GridItem>
       </Grid>
     </form>
