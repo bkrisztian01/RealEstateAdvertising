@@ -42,11 +42,11 @@ namespace DAL.Repositories
             return dbMessage;
         }
 
-        public IEnumerable<MessageDTO> GetMessagesWith(string withUserName, string loggedInUserName)
+        public MessagesDTO GetMessagesWith(string withUserName, string loggedInUserName)
         {
-            var toUser = _context.Users.Where(user => user.UserName == withUserName).SingleOrDefault();
+            var withUser = _context.Users.Where(user => user.UserName == withUserName).SingleOrDefault();
 
-            if (toUser == null)
+            if (withUser == null)
             {
                 throw new NotFoundException("Recipient was not found");
             }
@@ -66,7 +66,11 @@ namespace DAL.Repositories
             }
 
             _context.SaveChanges();
-            return messages.Select(msg => _mapper.Map<MessageDTO>(msg));
+            return new MessagesDTO
+            {
+                Messages = messages.Select(msg => _mapper.Map<MessageDTO>(msg)),
+                User = _mapper.Map<UserDTO>(withUser),
+            };
         }
 
         public int GetNewMessageCount(string loggedInUserName)

@@ -124,8 +124,7 @@ export const MessagePage = () => {
                     <Text as="span" color="gray.500" fontSize="sm">
                       {msg.date.getHours() + ':' + msg.date.getMinutes()}
                     </Text>
-                  </Tooltip>
-                  {' • '}
+                  </Tooltip>{' '}
                   <b
                     style={{
                       color:

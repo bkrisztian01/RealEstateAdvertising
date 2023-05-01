@@ -15,7 +15,7 @@ namespace Domain.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<MessageDTO> GetMessagesWith(string withUserName, string loggedInUserName)
+        public MessagesDTO GetMessagesWith(string withUserName, string loggedInUserName)
         {
             return _messageRepository.GetMessagesWith(withUserName, loggedInUserName);
         }

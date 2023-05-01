@@ -24,7 +24,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<IEnumerable<MessageDTO>> GetMessagesWith(string withUserName)
+        public ActionResult<MessagesDTO> GetMessagesWith(string withUserName)
         {
             var loggedInUserName = User.Identity!.Name!;
             try
