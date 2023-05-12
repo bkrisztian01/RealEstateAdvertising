@@ -32,17 +32,8 @@
     padding: 15px;
 }
 
-.messages .message {
-    margin: 0 0 8px 18px;
-    text-indent: -18px;
-}
-
 .messages .message:last-child {
     margin-bottom: 0;
-}
-
-.message p {
-    width: fit-content;
 }
 
 #text-field {

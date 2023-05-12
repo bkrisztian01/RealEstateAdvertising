@@ -7,9 +7,7 @@ import {
   HStack,
   Icon,
   IconButton,
-  Text,
   Textarea,
-  Tooltip,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { getMessagesWith, MessagesDTO, sendMessage } from 'api/messageApi';
@@ -22,6 +20,7 @@ import { BsFillSendFill } from 'react-icons/bs';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
+import { MessageLine } from './MessageLine';
 import './style.css';
 
 const messageSchema = yup.object<MessageFormInput>({
@@ -113,33 +112,7 @@ export const MessagePage = () => {
         </Box>
         <Box className="messages">
           {data?.messages.map((msg, i) => {
-            return (
-              <Box className="message" key={i}>
-                <Text>
-                  <Tooltip
-                    placement="bottom-start"
-                    openDelay={500}
-                    hasArrow
-                    label={msg.date.toLocaleDateString()}
-                  >
-                    <Text as="span" color="gray.500" fontSize="sm">
-                      {msg.date.getHours() + ':' + msg.date.getMinutes()}
-                    </Text>
-                  </Tooltip>{' '}
-                  <b
-                    style={{
-                      color:
-                        msg.fromUser.userName === userName
-                          ? 'black'
-                          : 'var(--chakra-colors-green-400)',
-                    }}
-                  >
-                    {msg.fromUser.fullName}
-                  </b>{' '}
-                  {msg.content}
-                </Text>
-              </Box>
-            );
+            return <MessageLine message={msg} key={i} />;
           })}
         </Box>
         <Box className="message-area">

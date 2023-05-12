@@ -1,0 +1,44 @@
+
+.message .content {
+    background-color: white;
+    border-radius: 22px;
+    padding: 10px 14px;
+    max-width: 500px;
+    width: fit-content;
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.message .content p {
+    margin-bottom: var(--chakra-space-3);
+}
+
+.message .content p:last-child {
+    margin: 0;
+}
+
+.message .content a {
+    text-decoration: underline;
+}
+
+.message {
+    margin: 5px 0;
+}
+
+.message .time {
+    padding: 0 10px;
+}
+
+.message.own-message * {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.message.own-message .content {
+    background-color: var(--chakra-colors-green-400);
+    color: white;
+}
