@@ -2,7 +2,7 @@ import { Center, Table, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
 import { getMessageContactList } from 'api/messageApi';
 import { AxiosError } from 'axios';
 import { PageButtons } from 'components/PageButtons';
-import { MessageContact } from 'model/MessageContact';
+import { MessageContactList } from 'model/MessageContactList';
 import { useState } from 'react';
 import { useAuthHeader } from 'react-auth-kit';
 import { useQuery } from 'react-query';
@@ -14,11 +14,11 @@ export const MessageList = () => {
   const [pageIndex, setPageIndex] = useState(1);
 
   const { isLoading, isError, error, data, isPreviousData } = useQuery<
-    MessageContact[],
+    MessageContactList,
     AxiosError
   >({
-    queryKey: ['messages'],
-    queryFn: () => getMessageContactList(authHeader()),
+    queryKey: ['messages', pageIndex],
+    queryFn: () => getMessageContactList(authHeader(), pageIndex),
     keepPreviousData: true,
   });
 
@@ -42,7 +42,7 @@ export const MessageList = () => {
         </Thead>
 
         <Tbody>
-          {data?.map((messageContact, i) => (
+          {data?.messageContacts.map((messageContact, i) => (
             <MessageListRow messageContact={messageContact} key={i} />
           ))}
         </Tbody>
@@ -58,7 +58,7 @@ export const MessageList = () => {
             window.scrollTo(0, 0);
           }}
           prevDisabled={pageIndex === 1}
-          nextDisabled={isPreviousData} // || !data?.hasMore
+          nextDisabled={isPreviousData || !data?.hasMore}
         >
           {pageIndex}
         </PageButtons>

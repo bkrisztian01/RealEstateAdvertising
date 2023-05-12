@@ -30,9 +30,13 @@ namespace Domain.Services
             return _messageRepository.GetNewMessageCount(loggedInUserName);
         }
 
-        public IEnumerable<MessageContactDTO> GetMessageContactList(string loggedInUserName)
+        public MessageContactListDTO GetMessageContactList(string loggedInUserName, int pageIndex, int pageSize)
         {
-            return _messageRepository.GetMessageContactList(loggedInUserName);
+            return new MessageContactListDTO
+            {
+                MessageContacts = _messageRepository.GetMessageContactList(loggedInUserName, pageIndex, pageSize),
+                HasMore = _messageRepository.HasMoreEntries(loggedInUserName, pageIndex, pageSize),
+            };
         }
     }
 }

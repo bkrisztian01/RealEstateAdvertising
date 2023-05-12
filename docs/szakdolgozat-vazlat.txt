@@ -1,0 +1,61 @@
+kb 55 oldal szakdolgozat 45 keves 75 sok
+
+bevezeto
+	ket oldalas
+	kontextusba helyezni a munkat
+	magasabb celok
+
+(2.1.7) irodalomkutatas, technologiak... (nem a real cim)
+felhasznalt technologiak bemutatasa (cim) *onlab
+	7-8 oldal
+	backend-en...
+	frontend-en...
+	par sajat gondolat (pl. miért az választottam)
+
+irodalomjegyzek
+	fontos
+	formatum fontos
+	ahogy irom, ugy bovitem
+	be is kell hivatkozni a torzsszovegben
+
+(2.1.8) kovetelmenyek ismertetese *onlab
+	usecase diagram
+	szereplok(actorok)
+		bejelentkezett, nem bejelentkezett
+	funkcionalis kovetelmenyek
+	nem screenshotok!
+	par nem funkcionalis kov
+		ergonomikus
+		valosideju fontos
+		stb.
+	2-3-4 oldal
+
+architektura (kulon fejezet) *onlab
+	magasszinten (frontend, backend... egyutt)
+	backend fejezet
+		domain driven megkozelites
+		miert
+		komponensek szerepe
+		fuggosegek iranya
+		patternek
+	adatbazis fejezet
+		tablak
+		kapcsolatok
+	frontend fejezet
+		mappak szerkezete
+		alap szervezesi elv
+
+megvalositas
+	par usecase kiemelese
+		hogy valosul meg minden retegen (backend-en belul is reszletesen, frontend-en belul is reszletesen)
+		kepernyokepek
+	tobbit feluletesen
+	jogosultsagok fejezet, biztonsag
+		jwt token
+	ui keret bemutatas
+
+osszefoglalo
+	1.5-2 oldal
+	munka ertekelese
+	fobb nehezsegek
+	tovabbfejlesztesi lehetosegek

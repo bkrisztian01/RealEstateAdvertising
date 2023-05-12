@@ -72,10 +72,10 @@ namespace WebApi.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public IEnumerable<MessageContactDTO> GetMessageContactList()
+        public MessageContactListDTO GetMessageContactList([FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 12)
         {
             var loggedInUserName = User.Identity!.Name!;
-            return _messageService.GetMessageContactList(loggedInUserName);
+            return _messageService.GetMessageContactList(loggedInUserName, pageIndex, pageSize);
         }
     }
 }

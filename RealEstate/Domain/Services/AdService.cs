@@ -21,7 +21,7 @@ namespace Domain.Services
             return new AdListDTO()
             {
                 Ads = _adRepository.GetAds(parameters),
-                HasMore = _adRepository.HasEntriesOnThatPage(parameters)
+                HasMore = _adRepository.HasMoreEntries(parameters)
             };
         }
 

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Message } from 'model/Message';
+import { MessageContactList } from 'model/MessageContactList';
 import { User } from 'model/User';
 import { handleDates } from 'util/handleDates';
 
@@ -22,11 +23,17 @@ export async function getNewMessageCount(accessToken: string) {
   return response.data;
 }
 
-export async function getMessageContactList(accessToken: string) {
-  const response = await messageApi.get('/api/Message', {
+export async function getMessageContactList(
+  accessToken: string,
+  pageNumber = 1,
+) {
+  const response = await messageApi.get<MessageContactList>('/api/Message', {
     withCredentials: true,
     headers: {
       Authorization: accessToken,
+    },
+    params: {
+      pageIndex: pageNumber,
     },
   });
   return response.data;

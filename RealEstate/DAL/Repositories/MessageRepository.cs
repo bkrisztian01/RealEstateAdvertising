@@ -81,7 +81,7 @@ namespace DAL.Repositories
                 .Count();
         }
 
-        public IEnumerable<MessageContactDTO> GetMessageContactList(string loggedInUserName)
+        public IEnumerable<MessageContactDTO> GetMessageContactList(string loggedInUserName, int pageIndex = 1, int pageSize = 12)
         {
             var querySentMessages = _context.Messages
                 .Include(msg => msg.FromUser)
@@ -116,7 +116,49 @@ namespace DAL.Repositories
                     UnreadCount = contact.Count(msg => msg.IsUnread),
                 })
                 .OrderByDescending(contact => contact.LastMessageDate)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
                 .ToArray();
+        }
+
+        public bool HasMoreEntries(string loggedInUserName, int pageIndex = 1, int pageSize = 12)
+        {
+            var querySentMessages = _context.Messages
+                .Include(msg => msg.FromUser)
+                .Include(msg => msg.ToUser)
+                .Where(msg => msg.FromUser.UserName == loggedInUserName)
+                .Select(msg => new
+                {
+                    msg.Id,
+                    User = msg.ToUser,
+                    IsUnread = false,
+                    msg.Date,
+                });
+
+            var queryReceivedMessages = _context.Messages
+                .Include(msg => msg.FromUser)
+                .Include(msg => msg.ToUser)
+                .Where(msg => msg.ToUser.UserName == loggedInUserName)
+                .Select(msg => new
+                {
+                    msg.Id,
+                    User = msg.FromUser,
+                    msg.IsUnread,
+                    msg.Date,
+                });
+
+            return querySentMessages.Union(queryReceivedMessages)
+                .GroupBy(msg => msg.User)
+                .Select(contact => new MessageContactDTO
+                {
+                    User = _mapper.Map<UserDTO>(contact.Key),
+                    LastMessageDate = contact.Max(msg => msg.Date),
+                    UnreadCount = contact.Count(msg => msg.IsUnread),
+                })
+                .OrderByDescending(contact => contact.LastMessageDate)
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize)
+                .Any();
         }
     }
 }

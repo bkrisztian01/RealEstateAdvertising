@@ -16,6 +16,6 @@ namespace Domain.Repositories
         void DeleteAdById(int id);
         Ad CreateAd(CreateAdDTO ad, string userName);
         Ad EditAd(EditAdDTO ad);
-        bool HasEntriesOnThatPage(GetAdsParameters parameters);
+        bool HasMoreEntries(GetAdsParameters parameters);
     }
 }

@@ -121,7 +121,7 @@ namespace DAL.Repositories
             return dbAd;
         }
 
-        public bool HasEntriesOnThatPage(GetAdsParameters parameters)
+        public bool HasMoreEntries(GetAdsParameters parameters)
         {
             var query = _context.Ads
                 .Where(ad => parameters.MinPrice <= ad.Price && ad.Price <= parameters.MaxPrice)
