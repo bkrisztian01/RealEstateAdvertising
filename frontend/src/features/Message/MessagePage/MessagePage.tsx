@@ -13,7 +13,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { getMessagesWith, MessagesDTO, sendMessage } from 'api/messageApi';
 import { AxiosError } from 'axios';
 import { Loading } from 'components/Loading';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAuthHeader, useAuthUser } from 'react-auth-kit';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { BsFillSendFill } from 'react-icons/bs';
@@ -36,7 +36,6 @@ export const MessagePage = () => {
   const authHeader = useAuthHeader();
   const auth = useAuthUser();
 
-  const [pageNumber, setPageNumber] = useState(1);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -115,6 +114,7 @@ export const MessagePage = () => {
             return <MessageLine message={msg} key={i} />;
           })}
         </Box>
+
         <Box className="message-area">
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl isInvalid={!!errors.content}>

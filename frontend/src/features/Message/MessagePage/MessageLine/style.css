@@ -14,7 +14,7 @@
 }
 
 .message .content p {
-    margin-bottom: var(--chakra-space-3);
+    margin-bottom: var(--chakra-space-5);
 }
 
 .message .content p:last-child {

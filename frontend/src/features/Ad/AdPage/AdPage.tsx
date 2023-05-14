@@ -9,18 +9,23 @@ import {
   Icon,
   Image,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { getAdById } from 'api/adApi';
+import { sendMessage } from 'api/messageApi';
 import { AxiosError } from 'axios';
 import { Loading } from 'components/Loading';
+import { MessageModal } from 'components/MessageModal';
+import { MessageFormInput } from 'components/MessageModal/MessageModal';
 import { Ad } from 'model/Ad';
-import { useAuthUser, useIsAuthenticated } from 'react-auth-kit';
+import { useAuthHeader, useAuthUser, useIsAuthenticated } from 'react-auth-kit';
+import { SubmitHandler } from 'react-hook-form';
 import { BsFillTelephoneFill } from 'react-icons/bs';
 import { FaRulerVertical } from 'react-icons/fa';
 import { GoPerson } from 'react-icons/go';
 import { ImLocation2, ImPriceTag } from 'react-icons/im';
 import { MdBed, MdEmail } from 'react-icons/md';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { formatPrice } from 'util/formatPrice';
 import './style.css';
@@ -30,8 +35,12 @@ export const AdPage = () => {
 
   const isAuthenticated = useIsAuthenticated();
   const auth = useAuthUser();
+  const authHeader = useAuthHeader();
+
+  const queryClient = useQueryClient();
 
   const navigate = useNavigate();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const {
     isLoading,
@@ -41,6 +50,21 @@ export const AdPage = () => {
   } = useQuery<Ad, AxiosError>(['ad', adId], () =>
     getAdById(parseInt(adId || '0')),
   );
+
+  const messageHeader = `__Advertisement:__ [__${ad?.title}__](/ad/${adId})\n\n\n`;
+
+  const onSubmit: SubmitHandler<MessageFormInput> = async (
+    data: MessageFormInput,
+  ) => {
+    if (!ad) {
+      return;
+    }
+
+    sendMessage(authHeader(), ad.owner.userName, messageHeader + data.content);
+    await queryClient.invalidateQueries([ad.owner.userName, 'messages']);
+    navigate(`/messages/${ad?.owner.userName}`);
+    onClose();
+  };
 
   const details = (ad: Ad) => (
     <>
@@ -97,7 +121,7 @@ export const AdPage = () => {
             className="contact-button"
             colorScheme="green"
             size="md"
-            onClick={() => navigate(`/messages/${ad?.owner.userName}`)}
+            onClick={onOpen}
           >
             Message advertiser
           </Button>
@@ -144,6 +168,8 @@ export const AdPage = () => {
             {ad.description}
           </Text>
         </Box>
+
+        <MessageModal isOpen={isOpen} onClose={onClose} onSubmit={onSubmit} />
       </>
     );
   }

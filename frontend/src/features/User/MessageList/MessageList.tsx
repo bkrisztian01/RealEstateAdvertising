@@ -1,6 +1,7 @@
-import { Center, Table, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
+import { Center, Heading, Table, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
 import { getMessageContactList } from 'api/messageApi';
 import { AxiosError } from 'axios';
+import { Loading } from 'components/Loading';
 import { PageButtons } from 'components/PageButtons';
 import { MessageContactList } from 'model/MessageContactList';
 import { useState } from 'react';
@@ -21,6 +22,16 @@ export const MessageList = () => {
     queryFn: () => getMessageContactList(authHeader(), pageIndex),
     keepPreviousData: true,
   });
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (isError || !data) {
+    return (
+      <Heading size="md">{error instanceof Error ? error.message : ''}</Heading>
+    );
+  }
 
   return (
     <>
