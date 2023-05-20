@@ -20,13 +20,9 @@ namespace DAL.Repositories
 
         public Message CreateMessage(string withUserName, string loggedInUserName, string content)
         {
+            var toUser = _context.Users.Where(user => user.UserName == withUserName).SingleOrDefault()
+                ?? throw new NotFoundException("Recipient was not found");
             var fromUser = _context.Users.Where(user => user.UserName == loggedInUserName).Single();
-            var toUser = _context.Users.Where(user => user.UserName == withUserName).SingleOrDefault();
-
-            if (toUser == null)
-            {
-                throw new NotFoundException("Recipient was not found");
-            }
 
             var dbMessage = new Message
             {
@@ -44,12 +40,8 @@ namespace DAL.Repositories
 
         public MessagesDTO GetMessagesWith(string withUserName, string loggedInUserName)
         {
-            var withUser = _context.Users.Where(user => user.UserName == withUserName).SingleOrDefault();
-
-            if (withUser == null)
-            {
-                throw new NotFoundException("Recipient was not found");
-            }
+            var withUser = _context.Users.Where(user => user.UserName == withUserName).SingleOrDefault()
+                ?? throw new NotFoundException("Recipient was not found");
 
             var messages = _context.Messages
                 .Include(msg => msg.FromUser)

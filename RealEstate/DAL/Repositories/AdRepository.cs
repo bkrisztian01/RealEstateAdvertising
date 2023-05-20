@@ -84,12 +84,8 @@ namespace DAL.Repositories
 
         public Ad CreateAd(CreateAdDTO ad, string userName)
         {
-            var dbUser = _context.Users.Where(u => u.UserName == userName).FirstOrDefault();
-
-            if (dbUser == null)
-            {
-                throw new NotFoundException("User was not found");
-            }
+            var dbUser = _context.Users.Where(u => u.UserName == userName).FirstOrDefault()
+                ?? throw new NotFoundException("User was not found");
 
             var dbAd = _mapper.Map<Ad>(ad);
             dbAd.CreatedAt = DateTime.Now;
@@ -102,12 +98,8 @@ namespace DAL.Repositories
 
         public Ad EditAd(EditAdDTO ad)
         {
-            var dbAd = _context.Ads.Find(ad.Id);
-
-            if (dbAd == null)
-            {
-                throw new NotFoundException("Ad was not found");
-            }
+            var dbAd = _context.Ads.Find(ad.Id)
+                ?? throw new NotFoundException("Ad was not found");
 
             dbAd.Title = ad.Title;
             dbAd.Description = ad.Description;

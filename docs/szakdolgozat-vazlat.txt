@@ -10,6 +10,7 @@ felhasznalt technologiak bemutatasa (cim) *onlab
 	7-8 oldal
 	backend-en...
 	frontend-en...
+	(elonyok hatranyok)
 	par sajat gondolat (pl. miért az választottam)
 
 irodalomjegyzek

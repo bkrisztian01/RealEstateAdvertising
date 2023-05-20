@@ -1,0 +1,12 @@
+rendszerarchi
+	milyen archi
+	felepites
+	backend felepites
+		domain driven
+	frontend felepites
+		react
+		chakra ui
+funkciok bemutatasa
+kepernyomentesek
+egyeb bovitmenyek szakdogara
+kerdesek
