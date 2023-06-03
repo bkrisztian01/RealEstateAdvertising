@@ -3,11 +3,11 @@ import { getMessageContactList } from 'api/messageApi';
 import { AxiosError } from 'axios';
 import { Loading } from 'components/Loading';
 import { PageButtons } from 'components/PageButtons';
+import { MessageListRow } from 'features/Message/MessageListRow';
 import { MessageContactList } from 'model/MessageContactList';
 import { useState } from 'react';
 import { useAuthHeader } from 'react-auth-kit';
 import { useQuery } from 'react-query';
-import { MessageListRow } from '../../Message/MessageListRow.tsx';
 
 export const MessageList = () => {
   const authHeader = useAuthHeader();

@@ -48,6 +48,7 @@ export async function sendMessage(
     `/api/Message/${toUserName}`,
     { content },
     {
+      withCredentials: true,
       headers: {
         Authorization: accessToken,
       },
@@ -68,6 +69,7 @@ export async function getMessagesWith(
   const response = await messageApi.get<MessagesDTO>(
     `/api/Message/${withUserName}`,
     {
+      withCredentials: true,
       headers: {
         Authorization: accessToken,
       },
