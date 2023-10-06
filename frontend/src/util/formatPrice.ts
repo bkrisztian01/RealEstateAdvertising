@@ -1,7 +1,7 @@
 export function formatPrice(price: number) {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('hu-HU', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'HUF',
     maximumFractionDigits: 0,
   }).format(price);
 }

@@ -43,8 +43,8 @@ export const AdList = () => {
             {data.ads.map((ad, i) => {
               return (
                 <>
-                  <GridItem>
-                    <AdCard ad={ad} key={i} />
+                  <GridItem key={i}>
+                    <AdCard ad={ad} />
                   </GridItem>
                 </>
               );

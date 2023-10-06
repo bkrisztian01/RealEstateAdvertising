@@ -53,7 +53,7 @@ namespace DAL.Repositories
             }
 
             return query
-                .OrderByDescending(ad => ad.CreatedAt.Date)
+                .OrderByDescending(ad => ad.CreatedAt)
                 .Skip((parameters.PageIndex - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
                 .Select(MapAdToAdDTO)

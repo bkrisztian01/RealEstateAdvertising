@@ -10,5 +10,6 @@ namespace Domain.Repositories
         public int GetNewMessageCount(string loggedInUserName);
         public IEnumerable<MessageContactDTO> GetMessageContactList(string loggedInUserName, int pageIndex, int pageSize);
         public bool HasMoreEntries(string loggedInUserName, int pageIndex = 1, int pageSize = 12);
+        public int MarkMessagesAsRead(string loggedInUserName, string withUser);
     }
 }

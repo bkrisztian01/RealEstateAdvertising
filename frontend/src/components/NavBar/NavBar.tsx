@@ -13,16 +13,10 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { getNewMessageCount } from 'api/messageApi';
 import { LoginModal } from 'features/User/LoginModal';
 import { RegisterModal } from 'features/User/RegisterModal';
-import {
-  useAuthHeader,
-  useAuthUser,
-  useIsAuthenticated,
-  useSignOut,
-} from 'react-auth-kit';
-import { useQuery } from 'react-query';
+import { useNewMessageCount } from 'hooks/useNewMessageCount';
+import { useIsAuthenticated, useSignOut } from 'react-auth-kit';
 import { NavLink } from 'react-router-dom';
 
 export const NavBar = () => {
@@ -40,15 +34,9 @@ export const NavBar = () => {
     onClose: onLoginClose,
   } = useDisclosure();
 
-  const isAuthenticated = useIsAuthenticated();
-  const auth = useAuthUser();
-  const authHeader = useAuthHeader();
+  const { newMessagesCount } = useNewMessageCount();
 
-  const { data } = useQuery({
-    queryKey: 'newMessageCount',
-    queryFn: () => getNewMessageCount(authHeader()),
-    enabled: isAuthenticated(),
-  });
+  const isAuthenticated = useIsAuthenticated();
 
   const SignedOutButtons = () => (
     <>
@@ -62,7 +50,9 @@ export const NavBar = () => {
   const SignedInButtons = () => (
     <>
       <Link as={NavLink} to="/messages">
-        <Button>Messages {data?.count > 0 ? `(${data?.count})` : ''}</Button>
+        <Button>
+          Messages {newMessagesCount > 0 ? `(${newMessagesCount})` : ''}
+        </Button>
       </Link>
 
       <Menu direction="rtl">
@@ -77,10 +67,6 @@ export const NavBar = () => {
 
           <MenuItem as={NavLink} to={'/listings'}>
             Show listings
-          </MenuItem>
-
-          <MenuItem as={NavLink} to={`/profile/${auth()?.userName}`}>
-            Show Profile
           </MenuItem>
 
           <MenuDivider />

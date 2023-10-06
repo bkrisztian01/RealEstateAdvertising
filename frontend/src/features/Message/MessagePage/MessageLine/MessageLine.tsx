@@ -12,6 +12,8 @@ function padTo2Digits(num: number) {
 export const MessageLine = ({ message }: MessageLineProps) => {
   const auth = useAuthUser();
 
+  const date = new Date(message.date);
+
   return (
     <Box
       className={
@@ -26,10 +28,8 @@ export const MessageLine = ({ message }: MessageLineProps) => {
         </ReactMarkdown>
       </Box>
       <Text as="span" color="gray.500" fontSize="sm" className="time">
-        {padTo2Digits(message.date.getHours()) +
-          ':' +
-          padTo2Digits(message.date.getMinutes())}{' '}
-        {message.date.toLocaleDateString()}
+        {padTo2Digits(date.getHours()) + ':' + padTo2Digits(date.getMinutes())}{' '}
+        {date.toLocaleDateString()}
       </Text>
     </Box>
   );
