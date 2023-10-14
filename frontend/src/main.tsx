@@ -1,4 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react';
+import { MessageHubProvider } from 'context/MessagesHubContext';
 import React from 'react';
 import { AuthProvider } from 'react-auth-kit';
 import ReactDOM from 'react-dom/client';
@@ -18,13 +19,15 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       cookieDomain={window.location.hostname}
       cookieSecure={false}
     >
-      <QueryClientProvider client={queryClient}>
-        <ChakraProvider theme={theme}>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </ChakraProvider>
-      </QueryClientProvider>
+      <MessageHubProvider>
+        <QueryClientProvider client={queryClient}>
+          <ChakraProvider theme={theme}>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </ChakraProvider>
+        </QueryClientProvider>
+      </MessageHubProvider>
     </AuthProvider>
   </React.StrictMode>,
 );

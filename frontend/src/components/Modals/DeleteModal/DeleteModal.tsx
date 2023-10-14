@@ -26,7 +26,7 @@ export const DeleteModal = ({
       <AlertDialogOverlay>
         <AlertDialogContent>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            Delete Customer
+            Delete Advertisement
           </AlertDialogHeader>
 
           <AlertDialogBody>

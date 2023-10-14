@@ -14,7 +14,7 @@ import { formatPrice } from 'util/formatPrice';
 import { AdCardProps } from './types';
 
 export const AdCard = ({ ad }: AdCardProps) => {
-  const { id, price, roomCount, area, image } = ad;
+  const { id, price, roomCount, area, image, address } = ad;
 
   const priceString = formatPrice(price);
 
@@ -33,10 +33,19 @@ export const AdCard = ({ ad }: AdCardProps) => {
               objectFit="cover"
             />
           </LinkOverlay>
-          <Heading mt="5" as="h3" size="md">
-            {priceString}
+          <Heading
+            mt="5"
+            as="h3"
+            size="sm"
+            whiteSpace="nowrap"
+            overflow="hidden"
+            textOverflow="ellipsis"
+          >
+            {address}
           </Heading>
-
+          <Text mt="5px" colorScheme="green">
+            {priceString}
+          </Text>
           <HStack
             marginTop="5px"
             divider={<StackDivider borderColor="gray.300" />}

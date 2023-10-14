@@ -25,7 +25,7 @@ import { FaRulerVertical } from 'react-icons/fa';
 import { GoPerson } from 'react-icons/go';
 import { ImLocation2, ImPriceTag } from 'react-icons/im';
 import { MdBed, MdEmail } from 'react-icons/md';
-import { useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { formatPrice } from 'util/formatPrice';
 import './style.css';
@@ -51,6 +51,27 @@ export const AdPage = () => {
     getAdById(parseInt(adId || '0')),
   );
 
+  const mutationFn = async (data: MessageFormInput) => {
+    if (!ad) {
+      return;
+    }
+
+    return sendMessage(
+      authHeader(),
+      ad.owner.userName,
+      messageHeader + data.content,
+    );
+  };
+
+  const { isLoading: isSendLoading, mutate } = useMutation({
+    mutationFn,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries([ad?.owner.userName, 'messages']);
+      navigate(`/messages/${ad?.owner.userName}`);
+      onClose();
+    },
+  });
+
   const messageHeader = `__Advertisement:__ [__${ad?.title}__](/ad/${adId})\n\n\n`;
 
   const onSubmit: SubmitHandler<MessageFormInput> = async (
@@ -59,11 +80,7 @@ export const AdPage = () => {
     if (!ad) {
       return;
     }
-
-    sendMessage(authHeader(), ad.owner.userName, messageHeader + data.content);
-    await queryClient.invalidateQueries([ad.owner.userName, 'messages']);
-    navigate(`/messages/${ad?.owner.userName}`);
-    onClose();
+    mutate(data);
   };
 
   const details = (ad: Ad) => (
@@ -169,7 +186,12 @@ export const AdPage = () => {
           </Text>
         </Box>
 
-        <MessageModal isOpen={isOpen} onClose={onClose} onSubmit={onSubmit} />
+        <MessageModal
+          isOpen={isOpen}
+          onClose={onClose}
+          onSubmit={onSubmit}
+          isLoading={isSendLoading}
+        />
       </>
     );
   }

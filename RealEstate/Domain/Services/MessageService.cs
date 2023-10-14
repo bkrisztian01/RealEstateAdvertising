@@ -38,5 +38,10 @@ namespace Domain.Services
                 HasMore = _messageRepository.HasMoreEntries(loggedInUserName, pageIndex, pageSize),
             };
         }
+
+        public int MarkMessagesAsRead(string loggedInUserName, string withUser)
+        {
+            return _messageRepository.MarkMessagesAsRead(loggedInUserName, withUser);
+        }
     }
 }

@@ -25,6 +25,7 @@ export type MessageFormInput = {
 
 export type MessageModalProps = {
   isOpen: boolean;
+  isLoading: boolean;
   onClose: () => void;
   onSubmit: SubmitHandler<MessageFormInput>;
 };
@@ -33,6 +34,7 @@ export const MessageModal = ({
   isOpen,
   onClose,
   onSubmit,
+  isLoading,
 }: MessageModalProps) => {
   const {
     register,
@@ -62,7 +64,12 @@ export const MessageModal = ({
           </FormControl>
         </ModalBody>
         <ModalFooter>
-          <Button type="submit" colorScheme="green" mr={3}>
+          <Button
+            type="submit"
+            colorScheme="green"
+            mr={3}
+            isLoading={isLoading}
+          >
             Send
           </Button>
           <Button onClick={onClose}>Cancel</Button>

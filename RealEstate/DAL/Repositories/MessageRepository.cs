@@ -1,3 +1,4 @@
+using System.Linq;
 using AutoMapper;
 using Domain;
 using Domain.DTOs;
@@ -51,13 +52,6 @@ namespace DAL.Repositories
                 .OrderBy(msg => msg.Date)
                 .ToArray();
 
-            foreach (var msg in messages)
-            {
-                if (msg.ToUser.UserName == loggedInUserName)
-                    msg.IsUnread = false;
-            }
-
-            _context.SaveChanges();
             return new MessagesDTO
             {
                 Messages = messages.Select(msg => _mapper.Map<MessageDTO>(msg)),
@@ -151,6 +145,27 @@ namespace DAL.Repositories
                 .Skip(pageIndex * pageSize)
                 .Take(pageSize)
                 .Any();
+        }
+
+        public int MarkMessagesAsRead(string loggedInUserName, string withUser)
+        {
+            var queryMessages = _context.Messages
+                .Include(msg => msg.ToUser)
+                .Include(msg => msg.FromUser)
+                .Where(msg => msg.FromUser.UserName == withUser &&
+                       msg.ToUser.UserName == loggedInUserName &&
+                       msg.IsUnread)
+                .ToArray();
+
+
+            foreach (var msg in queryMessages)
+            {
+                msg.IsUnread = false;
+            }
+
+            _context.SaveChanges();
+
+            return queryMessages.Length;
         }
     }
 }

@@ -10,14 +10,16 @@ import {
   Textarea,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { getMessagesWith, MessagesDTO, sendMessage } from 'api/messageApi';
-import { AxiosError } from 'axios';
+import { getMessagesWith } from 'api/messageApi';
 import { Loading } from 'components/Loading';
-import { useEffect } from 'react';
+import useMessageHub from 'hooks/useMessageHub';
+import { Message } from 'model/Message';
+import { User } from 'model/User';
+import { useEffect, useState } from 'react';
 import { useAuthHeader, useAuthUser } from 'react-auth-kit';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { BsFillSendFill } from 'react-icons/bs';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as yup from 'yup';
 import { MessageLine } from './MessageLine';
@@ -32,47 +34,75 @@ export type MessageFormInput = {
 };
 
 export const MessagePage = () => {
+  const {
+    sendMessage,
+    addOnNewMessageHandler,
+    removeOnNewMessageHandler,
+    markMessagesAsRead,
+  } = useMessageHub();
   const { userName } = useParams();
   const authHeader = useAuthHeader();
   const auth = useAuthUser();
 
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [user, setUser] = useState<User | undefined>(undefined);
+  const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
 
-  const { isLoading, isError, error, data } = useQuery<MessagesDTO, AxiosError>(
-    {
-      queryKey: [userName, 'messages'],
-      queryFn: () => {
-        return getMessagesWith(authHeader(), userName!);
-      },
-      onError: (err) => {
-        if (err.response?.status === 404) {
-          console.log('404');
-          navigate('/404');
-        }
-      },
-    },
-  );
+  const onNewMessage = (message: Message) => {
+    if (message.fromUser.userName === userName) {
+      setMessages((prev) => [...prev, message]);
+    }
+  };
 
-  const { mutate, isLoading: isSubmitLoading } = useMutation<
-    unknown,
-    AxiosError,
-    MessageFormInput
-  >({
-    mutationFn: (data) => sendMessage(authHeader(), userName!, data.content),
-    onSuccess: (_) => {
-      queryClient.invalidateQueries([userName, 'messages']);
+  const {
+    mutate: getMessages,
+    isLoading,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: () => getMessagesWith(authHeader(), userName!),
+    onSuccess: (data) => {
+      setMessages(data.messages);
+      setUser(data.user);
     },
   });
+
+  const onFocus = () => {
+    if (document.hasFocus()) {
+      console.log('MessagePage is visible.');
+
+      const user = auth();
+      if (!user) return;
+
+      markMessagesAsRead(userName!);
+    } else {
+      console.log('MessagePage is hidden.');
+    }
+  };
 
   useEffect(() => {
     if (auth()?.userName === userName) {
       navigate('/home');
     }
 
+    addOnNewMessageHandler(onNewMessage);
+    getMessages();
+
+    window.addEventListener('focus', onFocus);
+
     return () => {
-      queryClient.invalidateQueries('newMessageCount');
+      console.log('MessagePage dismounted?');
+      removeOnNewMessageHandler(onNewMessage);
+      window.removeEventListener('focus', onFocus);
     };
+  }, []);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (auth()?.userName === userName) {
+      navigate('/home');
+    }
   });
 
   const {
@@ -87,7 +117,12 @@ export const MessagePage = () => {
   const onSubmit: SubmitHandler<MessageFormInput> = (
     data: MessageFormInput,
   ) => {
-    mutate(data);
+    setIsSubmitLoading(true);
+    sendMessage(data.content, userName!)
+      .then((message) => {
+        setMessages((prev) => [...prev, message]);
+      })
+      .finally(() => setIsSubmitLoading(false));
     reset();
   };
 
@@ -97,7 +132,7 @@ export const MessagePage = () => {
 
   let content;
 
-  if (isError || !data) {
+  if (isError) {
     content = (
       <Heading size="md">{error instanceof Error ? error.message : ''}</Heading>
     );
@@ -106,11 +141,11 @@ export const MessagePage = () => {
       <>
         <Box className="messages-header">
           <Heading as="h3" size="md">
-            {data?.user.fullName}
+            {user?.fullName}
           </Heading>
         </Box>
         <Box className="messages">
-          {data?.messages.map((msg, i) => {
+          {messages.map((msg, i) => {
             return <MessageLine message={msg} key={i} />;
           })}
         </Box>
