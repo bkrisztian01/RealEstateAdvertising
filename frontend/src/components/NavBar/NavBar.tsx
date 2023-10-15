@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { LoginModal } from 'features/User/LoginModal';
 import { RegisterModal } from 'features/User/RegisterModal';
+import { SubscriptionModal } from 'features/User/Subscription/SubscriptionModal';
 import { useNewMessageCount } from 'hooks/useNewMessageCount';
 import { useIsAuthenticated, useSignOut } from 'react-auth-kit';
 import { NavLink } from 'react-router-dom';
@@ -32,6 +33,12 @@ export const NavBar = () => {
     isOpen: isLoginOpen,
     onOpen: onLoginOpen,
     onClose: onLoginClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isSubscriptionOpen,
+    onOpen: onSubscriptionOpen,
+    onClose: onSubscriptionClose,
   } = useDisclosure();
 
   const { newMessagesCount } = useNewMessageCount();
@@ -61,12 +68,16 @@ export const NavBar = () => {
         </MenuButton>
 
         <MenuList>
-          <MenuItem as={NavLink} to="/create">
+          <MenuItem as={NavLink} to={'/create'}>
             Create listing
           </MenuItem>
 
           <MenuItem as={NavLink} to={'/listings'}>
             Show listings
+          </MenuItem>
+
+          <MenuItem as={NavLink} onClick={onSubscriptionOpen}>
+            Manage subscription
           </MenuItem>
 
           <MenuDivider />
@@ -105,6 +116,10 @@ export const NavBar = () => {
 
       <RegisterModal isOpen={isRegisterOpen} onClose={onRegisterClose} />
       <LoginModal isOpen={isLoginOpen} onClose={onLoginClose} />
+      <SubscriptionModal
+        isOpen={isSubscriptionOpen}
+        onClose={onSubscriptionClose}
+      ></SubscriptionModal>
     </>
   );
 };

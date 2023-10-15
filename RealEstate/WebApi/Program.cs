@@ -67,21 +67,26 @@ builder.Configuration.AddEnvironmentVariables();
 // Repositories
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<RealEstateDbContext>(options => options.UseSqlServer(connectionString));
+
 builder.Services.AddScoped<IAdRepository, AdRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+
 builder.Services.AddScoped<AdService, AdService>();
 builder.Services.AddScoped<UserService, UserService>();
 builder.Services.AddScoped<MessageService, MessageService>();
 builder.Services.AddScoped<AuthorizationService, AuthorizationService>();
+builder.Services.AddScoped<SubscriptionService, SubscriptionService>();
+
 builder.Services.AddIdentity<User, IdentityRole>(options => options.User.RequireUniqueEmail = true)
     .AddEntityFrameworkStores<RealEstateDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer(option =>
     {
         option.SaveToken = true;
@@ -96,7 +101,11 @@ builder.Services.AddAuthentication(options =>
         };
     });
 builder.Services.AddProblemDetails();
-builder.Services.AddAutoMapper(typeof(UserProfile), typeof(AdProfile));
+builder.Services.AddAutoMapper(
+    typeof(UserProfile),
+    typeof(AdProfile),
+    typeof(SubscriptionProfile)
+);
 
 var app = builder.Build();
 
