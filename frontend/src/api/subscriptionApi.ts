@@ -9,3 +9,16 @@ export const getAllTiers = async () => {
 
   return response.data;
 };
+
+export const subscribeToTier = async (tierId: number, accessToken: string) => {
+  await subscriptionApi.post(
+    '/api/Subscription/subscribe',
+    { tierId: tierId },
+    {
+      withCredentials: true,
+      headers: {
+        Authorization: accessToken,
+      },
+    },
+  );
+};

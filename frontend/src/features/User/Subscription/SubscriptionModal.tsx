@@ -21,7 +21,13 @@ import {
   useSteps,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { getAllTiers, subscribeToTier } from 'api/subscriptionApi';
+import { AxiosError } from 'axios';
+import { SubscriptionTier } from 'model/SubscriptionTier';
+import { useAuthHeader } from 'react-auth-kit';
 import { useForm } from 'react-hook-form';
+import { useMutation, useQuery } from 'react-query';
+import { Overview } from './Overview';
 import { CreditCardInformation, Payment, paymentSchema } from './Payment';
 import {
   TierAdForm,
@@ -39,11 +45,28 @@ const steps = [
 export const SubscriptionModal = ({
   isOpen,
   onClose,
+  onSubscriptionSuccess,
 }: SubscriptionModalProps) => {
   const { activeStep, setActiveStep } = useSteps({
     index: 0,
     count: steps.length,
   });
+
+  const { data } = useQuery<SubscriptionTier[], AxiosError>({
+    queryKey: ['tiers'],
+    queryFn: getAllTiers,
+  });
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: () =>
+      subscribeToTier(tierSelectionForm.getValues().tierId, authHeader()),
+    onSuccess: () => {
+      onSubscriptionSuccess();
+      resetModal();
+    },
+  });
+
+  const authHeader = useAuthHeader();
 
   const tierSelectionForm = useForm<TierAdForm>({
     resolver: yupResolver(tierSelectionSchema),
@@ -52,7 +75,7 @@ export const SubscriptionModal = ({
     resolver: yupResolver(paymentSchema),
   });
 
-  const onPrimaryButtonClicked = () => {
+  const onPrimaryButtonClicked = async () => {
     switch (activeStep) {
       case 0:
         tierSelectionForm.handleSubmit(() => {
@@ -67,9 +90,17 @@ export const SubscriptionModal = ({
         })();
         break;
       case 2:
+        mutate();
         break;
     }
   };
+
+  const resetModal = () => {
+    tierSelectionForm.reset();
+    paymentForm.reset();
+    setActiveStep(0);
+  };
+
   let activeComponent;
   const disablePrimaryButton = false;
   switch (activeStep) {
@@ -82,6 +113,14 @@ export const SubscriptionModal = ({
       activeComponent = <Payment form={paymentForm}></Payment>;
       break;
     case 2:
+      activeComponent = (
+        <Overview
+          tier={data?.find(
+            (t) => t.id === tierSelectionForm.getValues().tierId,
+          )}
+          creditCard={paymentForm.getValues()}
+        ></Overview>
+      );
       break;
   }
 
@@ -97,7 +136,10 @@ export const SubscriptionModal = ({
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        onClose();
+        resetModal();
+      }}
       size="2xl"
       lockFocusAcrossFrames={false}
     >
@@ -136,8 +178,9 @@ export const SubscriptionModal = ({
             colorScheme="green"
             isDisabled={disablePrimaryButton}
             onClick={onPrimaryButtonClicked}
+            isLoading={isLoading}
           >
-            Next
+            {activeStep === 2 ? 'Subscribe' : 'Next'}
           </Button>
         </ModalFooter>
       </ModalContent>

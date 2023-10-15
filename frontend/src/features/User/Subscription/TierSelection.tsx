@@ -16,11 +16,14 @@ type TierSelectionProps = {
 };
 
 export const tierSelectionSchema = yup.object<{ tierId: number }>({
-  tierId: yup.string().required('You must select a tier'),
+  tierId: yup
+    .number()
+    .required('You must select a tier')
+    .typeError('You must select a tier'),
 });
 
 export type TierAdForm = {
-  tierId: string;
+  tierId: number;
 };
 
 export const TierSelection = ({ form }: TierSelectionProps) => {
@@ -37,10 +40,13 @@ export const TierSelection = ({ form }: TierSelectionProps) => {
   return (
     <Skeleton height="60px" isLoaded={!isLoading}>
       <FormControl isInvalid={!!errors.tierId}>
-        <Select placeholder="Select tier" {...register('tierId')}>
+        <Select
+          placeholder="Select tier"
+          {...register('tierId', { valueAsNumber: true })}
+        >
           {data?.map((tier) => {
             return (
-              <option key={tier.id} value={tier.id.toString()}>
+              <option key={tier.id} value={tier.id}>
                 {tier.name}
               </option>
             );

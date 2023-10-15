@@ -11,6 +11,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Domain.MapperProfiles;
+using System.Runtime.Serialization;
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +27,7 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod()
             .AllowCredentials();
         }
-        );
+    );
 });
 
 builder.Services.AddSignalR();
@@ -127,4 +129,11 @@ app.MapControllers();
 
 app.MapHub<MessageHub>("chathub");
 
+var quartz = Host.CreateDefaultBuilder().ConfigureServices((cxt, services) =>
+{
+    services.AddQuartz();
+}).Build();
+
+
 app.Run();
+quartz.Run();

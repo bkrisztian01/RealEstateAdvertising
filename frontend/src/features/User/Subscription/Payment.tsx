@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { UseFormReturn } from 'react-hook-form';
 import {
-  BsFillCalendar2DateFill,
+  BsFillCalendarEventFill,
   BsFillCreditCardFill,
   BsFillKeyFill,
 } from 'react-icons/bs';
@@ -91,7 +91,7 @@ export const Payment = ({ form }: PaymentProps) => {
           <FormControl isInvalid={!!errors.expirationDate}>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
-                <Icon as={BsFillCalendar2DateFill}></Icon>
+                <Icon as={BsFillCalendarEventFill}></Icon>
               </InputLeftElement>
               <Input
                 placeholder="Exp. date (mm/yy)"

@@ -13,6 +13,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
+import { SuccessfulModal } from 'components/Modals/SuccessfulModal';
 import { LoginModal } from 'features/User/LoginModal';
 import { RegisterModal } from 'features/User/RegisterModal';
 import { SubscriptionModal } from 'features/User/Subscription/SubscriptionModal';
@@ -40,6 +41,17 @@ export const NavBar = () => {
     onOpen: onSubscriptionOpen,
     onClose: onSubscriptionClose,
   } = useDisclosure();
+
+  const {
+    isOpen: isSubscriptionSuccessOpen,
+    onOpen: onSubscriptionSuccessOpen,
+    onClose: onSubscriptionSuccessClose,
+  } = useDisclosure();
+
+  const onSubscriptionSuccess = () => {
+    onSubscriptionClose();
+    onSubscriptionSuccessOpen();
+  };
 
   const { newMessagesCount } = useNewMessageCount();
 
@@ -119,7 +131,13 @@ export const NavBar = () => {
       <SubscriptionModal
         isOpen={isSubscriptionOpen}
         onClose={onSubscriptionClose}
+        onSubscriptionSuccess={onSubscriptionSuccess}
       ></SubscriptionModal>
+      <SuccessfulModal
+        isOpen={isSubscriptionSuccessOpen}
+        text="You subscribed!"
+        onClose={onSubscriptionSuccessClose}
+      ></SuccessfulModal>
     </>
   );
 };
