@@ -21,11 +21,13 @@ import {
   useSteps,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
 import { CreditCardInformation, Payment, paymentSchema } from './Payment';
-import { TierSelection } from './TierSelection';
+import {
+  TierAdForm,
+  TierSelection,
+  tierSelectionSchema,
+} from './TierSelection';
 import { SubscriptionModalProps } from './types';
 
 const steps = [
@@ -33,10 +35,6 @@ const steps = [
   { title: 'Payment', description: 'Enter payment method' },
   { title: 'Overview', description: 'Check your details' },
 ];
-
-const tierSelectionSchema = yup.object<{ tierId: number }>({
-  tierId: yup.string().required('You must select a tier.'),
-});
 
 export const SubscriptionModal = ({
   isOpen,
@@ -47,8 +45,9 @@ export const SubscriptionModal = ({
     count: steps.length,
   });
 
-  const [tierId, setTierId] = useState<number | null>(null);
-
+  const tierSelectionForm = useForm<TierAdForm>({
+    resolver: yupResolver(tierSelectionSchema),
+  });
   const paymentForm = useForm<CreditCardInformation>({
     resolver: yupResolver(paymentSchema),
   });
@@ -56,11 +55,15 @@ export const SubscriptionModal = ({
   const onPrimaryButtonClicked = () => {
     switch (activeStep) {
       case 0:
-        setActiveStep(1);
+        tierSelectionForm.handleSubmit(() => {
+          setActiveStep(1);
+          console.log(tierSelectionForm.getValues());
+        })();
         break;
       case 1:
-        paymentForm.handleSubmit((value) => {
+        paymentForm.handleSubmit(() => {
           setActiveStep(2);
+          console.log(paymentForm.getValues());
         })();
         break;
       case 2:
@@ -68,20 +71,15 @@ export const SubscriptionModal = ({
     }
   };
   let activeComponent;
-  let disablePrimaryButton = false;
+  const disablePrimaryButton = false;
   switch (activeStep) {
     case 0:
       activeComponent = (
-        <TierSelection
-          onTierChange={setTierId}
-          tier={tierId ? tierId.toString() : ''}
-        ></TierSelection>
+        <TierSelection form={tierSelectionForm}></TierSelection>
       );
-      disablePrimaryButton = tierId === null;
       break;
     case 1:
       activeComponent = <Payment form={paymentForm}></Payment>;
-      disablePrimaryButton = tierId === null;
       break;
     case 2:
       break;
