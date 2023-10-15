@@ -1,6 +1,7 @@
 using DAL.Repositories;
 using Domain.DTOs;
 using Domain.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -22,6 +23,23 @@ namespace WebApi.Controllers
         public IEnumerable<SubscriptionTierDTO> GetAllTiers()
         {
             return _subscriptionService.GetAllTiers();
+        }
+
+        [Authorize]
+        [Route("subscribe")]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult SubscribeToTier([FromBody] SubscribeToTierDTO sub)
+        {
+            var userName = User.Identity!.Name;
+            if (userName == null)
+            {
+                return Unauthorized();
+            }
+
+            _subscriptionService.SubscribeToTier(sub.TierId, userName);
+
+            return Ok();
         }
     }
 }

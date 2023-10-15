@@ -16,5 +16,10 @@ namespace Domain.Services
         {
             return _subscriptionRepository.GetAllTiers();
         }
+
+        public void SubscribeToTier(int tierId, string userName)
+        {
+            _subscriptionRepository.SubscribeToTier(tierId, userName);
+        }
     }
 }
