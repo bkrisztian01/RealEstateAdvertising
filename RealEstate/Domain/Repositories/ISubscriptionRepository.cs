@@ -7,5 +7,6 @@ namespace Domain.Repositories
     {
         public IEnumerable<SubscriptionTierDTO> GetAllTiers();
         public void SubscribeToTier(int tierId, string userName);
+        public SubscriptionDTO? GetUsersSubscription(string userName);
     }
 }

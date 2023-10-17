@@ -26,7 +26,13 @@ namespace DAL.Repositories
 
         public void SubscribeToTier(int tierId, string userName)
         {
-            SubscriptionTier tier = _context.SubscriptionTiers.Find(tierId);
+            bool alreadySubscribed = _context.Subscriptions.Any(s => s.User.UserName == userName);
+            if (alreadySubscribed)
+            {
+                throw new ArgumentException("User is already subscribed");
+            }
+
+            SubscriptionTier? tier = _context.SubscriptionTiers.Find(tierId);
             if (tier == null)
             {
                 throw new NotFoundException("Tier was not found");
@@ -34,12 +40,23 @@ namespace DAL.Repositories
 
             User user = _context.Users.Where(u => u.UserName == userName).First();
 
-            Subscription sub = new Subscription();
-            sub.Tier = tier;
-            sub.User = user;
-            sub.ValidUntil = DateTime.Now.AddMonths(1);
+            Subscription sub = new Subscription
+            {
+                Tier = tier,
+                User = user,
+                ValidUntil = DateTime.Now.AddMonths(1)
+            };
             _context.Subscriptions.Add(sub);
             _context.SaveChanges();
+        }
+
+        public SubscriptionDTO? GetUsersSubscription(string userName)
+        {
+            return _context.Subscriptions.Include(s => s.User)
+                            .Include(s => s.Tier)
+                            .Where(s => s.User.UserName == userName)
+                            .Select(s => _mapper.Map<SubscriptionDTO>(s))
+                            .FirstOrDefault();
         }
     }
 }

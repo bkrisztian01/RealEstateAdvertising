@@ -9,6 +9,7 @@ namespace Domain.MapperProfiles
         public SubscriptionProfile()
         {
             CreateMap<SubscriptionTier, SubscriptionTierDTO>();
+            CreateMap<Subscription, SubscriptionDTO>();
         }
     }
 }

@@ -29,6 +29,7 @@ namespace WebApi.Controllers
         [Route("subscribe")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult SubscribeToTier([FromBody] SubscribeToTierDTO sub)
         {
             var userName = User.Identity!.Name;
@@ -40,6 +41,22 @@ namespace WebApi.Controllers
             _subscriptionService.SubscribeToTier(sub.TierId, userName);
 
             return Ok();
+        }
+
+        [Authorize]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public IActionResult GetUsersSubscription()
+        {
+
+            var userName = User.Identity!.Name;
+            if (userName == null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(_subscriptionService.GetUsersSubscription(userName));
         }
     }
 }

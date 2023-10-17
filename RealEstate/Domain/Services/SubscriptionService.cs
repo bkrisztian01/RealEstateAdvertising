@@ -21,5 +21,10 @@ namespace Domain.Services
         {
             _subscriptionRepository.SubscribeToTier(tierId, userName);
         }
+
+        public SubscriptionDTO? GetUsersSubscription(string userName)
+        {
+            return _subscriptionRepository.GetUsersSubscription(userName);
+        }
     }
 }
