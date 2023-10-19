@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   FormControl,
   FormErrorMessage,
@@ -13,15 +14,19 @@ import {
   NumberInputField,
   NumberInputStepper,
   SimpleGrid,
+  Switch,
   Textarea,
+  Tooltip,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { canHighlightAds } from 'api/adApi';
 import { AxiosError } from 'axios';
 import { FileUpload } from 'components/FileUpload';
 import { Ad } from 'model/Ad';
 import { useMemo } from 'react';
+import { useAuthHeader } from 'react-auth-kit';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { AdFormInput, AdFormProps } from './types';
@@ -47,6 +52,7 @@ const adSchema = yup.object<AdFormInput>({
   price: yup.number().label('Price').required(),
   roomCount: yup.number().label('Room count').required(),
   area: yup.number().label('Area').required(),
+  highlighted: yup.boolean(),
   image: yup
     .mixed<FileList>()
     .test(
@@ -78,6 +84,14 @@ export const AdForm = ({ mutationFn, ad }: AdFormProps) => {
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
+  const authHeader = useAuthHeader();
+
+  const { data: canHighlight } = useQuery<boolean>({
+    queryFn: () => canHighlightAds(authHeader()),
+    queryKey: ['highlight'],
+  });
+
+  const highlightDisabled = !canHighlight && !ad?.highlighted;
 
   const { mutate, isError, error, isLoading } = useMutation<
     Ad,
@@ -173,6 +187,26 @@ export const AdForm = ({ mutationFn, ad }: AdFormProps) => {
               </InputRightAddon>
             </InputGroup>
             <FormErrorMessage>{errors.area?.message}</FormErrorMessage>
+          </FormControl>
+        </GridItem>
+
+        <GridItem colSpan={2}>
+          <FormControl isInvalid={!!errors.area}>
+            <Tooltip
+              // eslint-disable-next-line prettier/prettier
+              label={highlightDisabled && 'You can\'t highlight this ad.'}
+            >
+              <Box display="flex" alignItems="center" w="fit-content">
+                <Switch
+                  colorScheme="green"
+                  isDisabled={highlightDisabled}
+                  {...register('highlighted')}
+                ></Switch>
+                <FormLabel mb="0" ml="10px">
+                  Highlighted
+                </FormLabel>
+              </Box>
+            </Tooltip>
           </FormControl>
         </GridItem>
 

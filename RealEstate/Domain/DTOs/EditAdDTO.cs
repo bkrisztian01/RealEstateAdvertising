@@ -20,5 +20,7 @@ namespace Domain.DTOs
         public int Area { get; set; }
         [Required]
         public string Image { get; set; }    // Use Base64 representation
+        [Required]
+        public bool Highlighted { get; set; }
     }
 }

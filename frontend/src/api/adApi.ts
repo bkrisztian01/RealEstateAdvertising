@@ -83,3 +83,14 @@ export const deleteAd = async (id: number, accessToken: string) => {
     },
   });
 };
+
+export const canHighlightAds = async (accessToken: string) => {
+  const result = await adApi.get('api/ad/highlight', {
+    withCredentials: true,
+    headers: {
+      Authorization: accessToken,
+    },
+  });
+
+  return result.data;
+};

@@ -153,6 +153,7 @@ export const SubscriptionModal = ({
   return (
     <Modal
       isOpen={isOpen}
+      isCentered={true}
       onClose={() => {
         onClose();
         resetModal();

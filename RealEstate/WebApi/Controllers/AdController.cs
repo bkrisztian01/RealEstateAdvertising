@@ -117,5 +117,21 @@ namespace WebApi.Controllers
                 return NotFound(e.Message);
             }
         }
+
+        [HttpGet]
+        [Route("highlight")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public IActionResult CanHighlightAd()
+        {
+            var userName = User.Identity!.Name;
+            if (userName == null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(_adService.CanHighlightAd(userName));
+        }
     }
 }

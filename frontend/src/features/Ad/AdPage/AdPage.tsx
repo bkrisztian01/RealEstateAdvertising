@@ -129,10 +129,12 @@ export const AdPage = () => {
           <Icon as={MdEmail}></Icon>
           <Text>{ad?.owner.email}</Text>
         </HStack>
-        <HStack className="detail">
-          <Icon as={BsFillTelephoneFill}></Icon>
-          <Text>{ad?.owner.phoneNumber}</Text>
-        </HStack>
+        {ad?.owner.phoneNumber && (
+          <HStack className="detail">
+            <Icon as={BsFillTelephoneFill}></Icon>
+            <Text>{ad?.owner.phoneNumber}</Text>
+          </HStack>
+        )}
         {isAuthenticated() && auth()?.userName !== ad?.owner.userName && (
           <Button
             className="contact-button"

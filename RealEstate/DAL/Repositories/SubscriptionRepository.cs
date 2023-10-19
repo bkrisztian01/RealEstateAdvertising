@@ -58,5 +58,28 @@ namespace DAL.Repositories
                             .Select(s => _mapper.Map<SubscriptionDTO>(s))
                             .FirstOrDefault();
         }
+
+        public void CheckSubscriptions()
+        {
+            var subs = _context.Subscriptions
+                .Include(s => s.User)
+                .Where(s => s.ValidUntil < DateTime.Now)
+                .ToArray();
+
+            foreach (var sub in subs)
+            {
+                var ads = _context.Ads
+                    .Where(a => a.Highlighted)
+                    .Where(a => a.Owner.UserName == sub.User.UserName)
+                    .ToArray();
+
+                foreach (var ad in ads)
+                {
+                    ad.Highlighted = false;
+                }
+                _context.Subscriptions.Remove(sub);
+            }
+            _context.SaveChanges();
+        }
     }
 }

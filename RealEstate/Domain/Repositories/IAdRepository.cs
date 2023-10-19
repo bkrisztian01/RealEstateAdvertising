@@ -17,5 +17,6 @@ namespace Domain.Repositories
         Ad CreateAd(CreateAdDTO ad, string userName);
         Ad EditAd(EditAdDTO ad);
         bool HasMoreEntries(GetAdsParameters parameters);
+        bool CanHighlightAd(string userName);
     }
 }

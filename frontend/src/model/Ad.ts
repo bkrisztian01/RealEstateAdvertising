@@ -14,4 +14,5 @@ export type Ad = {
     phoneNumber: string;
   };
   image: string; // Base64
+  highlighted: boolean;
 };

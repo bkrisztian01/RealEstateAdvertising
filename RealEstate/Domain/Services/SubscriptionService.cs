@@ -26,5 +26,10 @@ namespace Domain.Services
         {
             return _subscriptionRepository.GetUsersSubscription(userName);
         }
+
+        public void CheckSubscriptions()
+        {
+            _subscriptionRepository.CheckSubscriptions();
+        }
     }
 }
