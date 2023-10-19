@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using Domain.MapperProfiles;
 using System.Runtime.Serialization;
 using Quartz;
+using WebApi.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -109,6 +110,24 @@ builder.Services.AddAutoMapper(
     typeof(SubscriptionProfile)
 );
 
+builder.Services.AddQuartz(q =>
+{
+    JobKey jobKey = new JobKey(nameof(CheckSubscriptionsJob));
+    q.AddJob<CheckSubscriptionsJob>(opts => opts.WithIdentity(jobKey));
+
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        // Run job on startup
+        .StartNow());
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity($"{nameof(CheckSubscriptionsJob)}-trigger")
+        // Run job every minute
+        .WithCronSchedule("0 * * ? * *")
+    );
+});
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+
 var app = builder.Build();
 
 app.UseCors(frontendPolicy);
@@ -129,11 +148,4 @@ app.MapControllers();
 
 app.MapHub<MessageHub>("chathub");
 
-var quartz = Host.CreateDefaultBuilder().ConfigureServices((cxt, services) =>
-{
-    services.AddQuartz();
-}).Build();
-
-
 app.Run();
-quartz.Run();
