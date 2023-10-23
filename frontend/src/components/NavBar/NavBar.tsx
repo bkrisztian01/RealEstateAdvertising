@@ -3,6 +3,7 @@ import {
   Button,
   Flex,
   HStack,
+  Image,
   Link,
   Menu,
   MenuButton,
@@ -110,13 +111,24 @@ export const NavBar = () => {
         gap="20px"
         py="2"
         px="4"
+        height="62px"
         borderBottom="1px solid"
         borderColor="gray.200"
+        background="white"
       >
         <Link as={NavLink} to="/home">
-          <Text fontSize="3xl" fontWeight="bold">
-            RealEstate
-          </Text>
+          <Flex>
+            <Image src="/logo.jpg" height="42px"></Image>{' '}
+            <Text
+              fontSize="3xl"
+              fontFamily="Mohave"
+              fontWeight="500"
+              ml="5px"
+              textAlign="center"
+            >
+              RealEstate
+            </Text>
+          </Flex>
         </Link>
 
         <Spacer />

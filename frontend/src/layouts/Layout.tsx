@@ -1,3 +1,4 @@
+import { Box } from '@chakra-ui/react';
 import { Footer } from 'components/Footer';
 import { NavBar } from 'components/NavBar';
 import { Outlet } from 'react-router-dom';
@@ -5,13 +6,14 @@ import { Outlet } from 'react-router-dom';
 export const Layout = () => {
   return (
     <>
-      <div className="page-container">
+      <Box className="background"> </Box>
+      <Box className="page-container">
         <NavBar />
-        <main className="content">
+        <main>
           <Outlet />
         </main>
         <Footer />
-      </div>
+      </Box>
     </>
   );
 };

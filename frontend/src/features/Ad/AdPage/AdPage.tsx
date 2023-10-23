@@ -198,7 +198,7 @@ export const AdPage = () => {
     );
   }
   return (
-    <Container py="20px" maxW="container.lg">
+    <Container className="page-content" p="30" maxW="container.lg">
       {content}
     </Container>
   );
