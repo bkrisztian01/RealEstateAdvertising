@@ -53,5 +53,10 @@ namespace Domain.Services
 
             return _mapper.Map<AdDTO>(dbAd);
         }
+
+        public bool CanHighlightAd(string userName)
+        {
+            return _adRepository.CanHighlightAd(userName);
+        }
     }
 }

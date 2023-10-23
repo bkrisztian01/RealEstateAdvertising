@@ -20,7 +20,11 @@ export const AdCard = ({ ad }: AdCardProps) => {
 
   return (
     <LinkBox>
-      <Card width="300px">
+      <Card
+        width="300px"
+        background={ad.highlighted ? 'green.100' : undefined}
+        borderColor="green.700"
+      >
         <CardBody>
           <LinkOverlay as={NavLink} to={`/ad/${id}`}>
             <Image

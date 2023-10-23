@@ -53,10 +53,11 @@ namespace DAL.Repositories
             }
 
             return query
-                .OrderByDescending(ad => ad.CreatedAt)
+                .OrderByDescending(ad => ad.Highlighted)
+                .ThenByDescending(ad => ad.CreatedAt)
                 .Skip((parameters.PageIndex - 1) * parameters.PageSize)
                 .Take(parameters.PageSize)
-                .Select(MapAdToAdDTO)
+                .Select(a => _mapper.Map<AdDTO>(a))
                 .ToArray();
         }
 
@@ -87,6 +88,11 @@ namespace DAL.Repositories
             var dbUser = _context.Users.Where(u => u.UserName == userName).FirstOrDefault()
                 ?? throw new NotFoundException("User was not found");
 
+            if (ad.Highlighted && !CanHighlightAd(userName))
+            {
+                throw new ArgumentException("Can't highlight ad");
+            }
+
             var dbAd = _mapper.Map<Ad>(ad);
             dbAd.CreatedAt = DateTime.Now;
             dbAd.Owner = dbUser;
@@ -98,8 +104,13 @@ namespace DAL.Repositories
 
         public Ad EditAd(EditAdDTO ad)
         {
-            var dbAd = _context.Ads.Find(ad.Id)
+            var dbAd = _context.Ads.Include(a => a.Owner).Where(a => a.Id == ad.Id).FirstOrDefault()
                 ?? throw new NotFoundException("Ad was not found");
+
+            if (ad.Highlighted && !dbAd.Highlighted && !CanHighlightAd(dbAd.Owner.UserName!))
+            {
+                throw new ArgumentException("Can't highlight ad");
+            }
 
             dbAd.Title = ad.Title;
             dbAd.Description = ad.Description;
@@ -108,6 +119,7 @@ namespace DAL.Repositories
             dbAd.Address = ad.Address;
             dbAd.Area = ad.Area;
             dbAd.Image = ad.Image;
+            dbAd.Highlighted = ad.Highlighted;
 
             _context.SaveChanges();
             return dbAd;
@@ -134,6 +146,23 @@ namespace DAL.Repositories
                 .Skip(parameters.PageIndex * parameters.PageSize)
                 .Take(parameters.PageSize)
                 .Any();
+        }
+
+        public bool CanHighlightAd(string userName)
+        {
+            int hightlightedAdsCount = _context.Ads
+                .Where(a => a.Highlighted && a.Owner.UserName == userName)
+                .Count();
+
+            int maxHighlightedAds = _context.Subscriptions
+                .Include(s => s.Tier)
+                .Include(s => s.User)
+                .Where(s => s.User.UserName == userName)
+                .Select(s => s.Tier.MaxHighlightedAds)
+                .ToArray()
+                .FirstOrDefault(0);
+
+            return hightlightedAdsCount < maxHighlightedAds;
         }
     }
 }

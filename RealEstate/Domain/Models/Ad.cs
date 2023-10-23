@@ -14,5 +14,6 @@ namespace Domain.Models
         public DateTime CreatedAt { get; set; }
         public string Image { get; set; }    // Use Base64 representation
         public User Owner { get; set; }
+        public bool Highlighted { get; set; }
     }
 }

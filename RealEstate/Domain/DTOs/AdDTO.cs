@@ -11,5 +11,6 @@
         public int Area { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Image { get; set; }    // Use Base64 representation
+        public bool Highlighted { get; set; }
     }
 }

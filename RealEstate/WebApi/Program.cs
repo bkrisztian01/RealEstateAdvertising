@@ -11,6 +11,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Domain.MapperProfiles;
+using System.Runtime.Serialization;
+using Quartz;
+using WebApi.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +28,7 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod()
             .AllowCredentials();
         }
-        );
+    );
 });
 
 builder.Services.AddSignalR();
@@ -67,21 +70,26 @@ builder.Configuration.AddEnvironmentVariables();
 // Repositories
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<RealEstateDbContext>(options => options.UseSqlServer(connectionString));
+
 builder.Services.AddScoped<IAdRepository, AdRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+
 builder.Services.AddScoped<AdService, AdService>();
 builder.Services.AddScoped<UserService, UserService>();
 builder.Services.AddScoped<MessageService, MessageService>();
 builder.Services.AddScoped<AuthorizationService, AuthorizationService>();
+builder.Services.AddScoped<SubscriptionService, SubscriptionService>();
+
 builder.Services.AddIdentity<User, IdentityRole>(options => options.User.RequireUniqueEmail = true)
     .AddEntityFrameworkStores<RealEstateDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer(option =>
     {
         option.SaveToken = true;
@@ -96,7 +104,29 @@ builder.Services.AddAuthentication(options =>
         };
     });
 builder.Services.AddProblemDetails();
-builder.Services.AddAutoMapper(typeof(UserProfile), typeof(AdProfile));
+builder.Services.AddAutoMapper(
+    typeof(UserProfile),
+    typeof(AdProfile),
+    typeof(SubscriptionProfile)
+);
+
+builder.Services.AddQuartz(q =>
+{
+    JobKey jobKey = new JobKey(nameof(CheckSubscriptionsJob));
+    q.AddJob<CheckSubscriptionsJob>(opts => opts.WithIdentity(jobKey));
+
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        // Run job on startup
+        .StartNow());
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity($"{nameof(CheckSubscriptionsJob)}-trigger")
+        // Run job every minute
+        .WithCronSchedule("0 * * ? * *")
+    );
+});
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 var app = builder.Build();
 

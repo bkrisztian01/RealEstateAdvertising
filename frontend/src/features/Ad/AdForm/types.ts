@@ -14,4 +14,5 @@ export type AdFormInput = {
   roomCount: number;
   area: number;
   image: FileList;
+  highlighted: boolean;
 };
