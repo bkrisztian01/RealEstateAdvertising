@@ -180,13 +180,8 @@ export const MessagePage = () => {
   }
 
   return (
-    <Container
-      className="message-page"
-      py="20px"
-      maxW="container.md"
-      height="100%"
-    >
-      {content}
+    <Container className="page-content" p="30" maxW="container.md">
+      <Box className="message-page">{content}</Box>
     </Container>
   );
 };

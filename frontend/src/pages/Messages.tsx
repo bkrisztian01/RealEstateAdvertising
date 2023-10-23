@@ -4,7 +4,7 @@ import { MessageList } from 'features/User/MessageList';
 const Messages = () => {
   return (
     <>
-      <Container py="20px" maxW="container.lg">
+      <Container className="page-content" p="30px" maxW="container.lg">
         <Heading as="h1" mb="5">
           Messages
         </Heading>

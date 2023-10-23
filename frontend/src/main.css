@@ -13,11 +13,6 @@ body,
 
 .page-container nav {
     flex: 0 1 auto;
-    /* The above is shorthand for:
-    flex-grow: 0,
-    flex-shrink: 1,
-    flex-basis: auto
-*/
 }
 
 .page-container main {
@@ -26,4 +21,23 @@ body,
 
 .page-container footer {
     flex: 0 1 40px;
+}
+
+.page-content {
+    background: white;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.background {
+    background-image: url("/realestate-background.jpg");
+    filter: blur(8px);
+    height: 100%;
+    background-size: cover;
+    width: 100%;
+    z-index: -2;
+    position: fixed;
+    transform: scale(1.22);
+    overflow: hidden;
 }

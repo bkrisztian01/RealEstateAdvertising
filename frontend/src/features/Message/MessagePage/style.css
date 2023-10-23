@@ -19,7 +19,8 @@
 }
 
 .message-page .message-area {
-    flex: 0 1 auto;
+    flex: 1 1 auto;
+    
 }
 
 .message-page .messages-header {
