@@ -11,7 +11,6 @@ import {
   MenuItem,
   MenuList,
   Spacer,
-  Text,
   useDisclosure,
 } from '@chakra-ui/react';
 import { SuccessfulModal } from 'components/Modals/SuccessfulModal';
@@ -20,7 +19,7 @@ import { RegisterModal } from 'features/User/RegisterModal';
 import { SubscriptionModal } from 'features/User/Subscription/SubscriptionModal';
 import { useNewMessageCount } from 'hooks/useNewMessageCount';
 import { useIsAuthenticated, useSignOut } from 'react-auth-kit';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 export const NavBar = () => {
   const signOut = useSignOut();
@@ -58,9 +57,26 @@ export const NavBar = () => {
 
   const isAuthenticated = useIsAuthenticated();
 
+  const location = useLocation();
+  const isHomePage = location.pathname === '/home';
+
+  const border = !isHomePage
+    ? {
+        borderBottom: '1px solid',
+        borderColor: 'gray.200',
+        background: 'white',
+      }
+    : {};
+
+  const loginButtonStyle = isHomePage
+    ? { color: 'white', variant: 'link' }
+    : {};
+
   const SignedOutButtons = () => (
     <>
-      <Button onClick={onLoginOpen}>Sign in</Button>
+      <Button onClick={onLoginOpen} {...loginButtonStyle}>
+        Sign in
+      </Button>
       <Button onClick={onRegisterOpen} colorScheme="green">
         Sign up
       </Button>
@@ -112,23 +128,33 @@ export const NavBar = () => {
         py="2"
         px="4"
         height="62px"
-        borderBottom="1px solid"
-        borderColor="gray.200"
-        background="white"
+        {...border}
       >
-        <Link as={NavLink} to="/home">
-          <Flex>
-            <Image src="/logo.jpg" height="42px"></Image>{' '}
-            <Text
-              fontSize="3xl"
-              fontFamily="Mohave"
-              fontWeight="500"
-              ml="5px"
-              textAlign="center"
-            >
-              RealEstate
-            </Text>
-          </Flex>
+        <Link as={NavLink} style={{ textDecoration: 'none' }} to="/home">
+          {!isHomePage && (
+            <Flex>
+              <Image src="/logo.png" height="42px"></Image>{' '}
+              {/* <Text
+                fontSize="3xl"
+                fontFamily="Mohave"
+                fontWeight="500"
+                ml="5px"
+                textAlign="center"
+              >
+                RealEstate
+              </Text> */}
+            </Flex>
+          )}
+        </Link>
+
+        <Link
+          as={NavLink}
+          style={{ textDecoration: 'none' }}
+          to="/browse"
+          fontWeight="semibold"
+          color={isHomePage ? 'white' : 'black'}
+        >
+          Browse
         </Link>
 
         <Spacer />
@@ -140,11 +166,13 @@ export const NavBar = () => {
 
       <RegisterModal isOpen={isRegisterOpen} onClose={onRegisterClose} />
       <LoginModal isOpen={isLoginOpen} onClose={onLoginClose} />
-      <SubscriptionModal
-        isOpen={isSubscriptionOpen}
-        onClose={onSubscriptionClose}
-        onSubscriptionSuccess={onSubscriptionSuccess}
-      ></SubscriptionModal>
+      {isAuthenticated() && (
+        <SubscriptionModal
+          isOpen={isSubscriptionOpen}
+          onClose={onSubscriptionClose}
+          onSubscriptionSuccess={onSubscriptionSuccess}
+        ></SubscriptionModal>
+      )}
       <SuccessfulModal
         isOpen={isSubscriptionSuccessOpen}
         text="You subscribed!"
