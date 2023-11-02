@@ -3,14 +3,31 @@ import { AdList as AdListDto, getAds } from 'api/adApi';
 import { AxiosError } from 'axios';
 import { Loading } from 'components/Loading';
 import { PageButtons } from 'components/PageButtons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
+import { useSearchParams } from 'react-router-dom';
 import { AdCard } from './AdCard';
 import { AdFilter, AdFilterFormInput } from './AdFilter';
 
 export const AdList = () => {
   const [pageIndex, setPageIndex] = useState(1);
   const [adFilter, setAdFilter] = useState<AdFilterFormInput>();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    setAdFilter((prev) => ({
+      address: searchParams.get('address') ?? '',
+      minPrice: parseInt(searchParams.get('minPrice') ?? '') || undefined,
+      maxPrice: parseInt(searchParams.get('maxPrice') ?? '') || undefined,
+      minArea: parseInt(searchParams.get('minArea') ?? '') || undefined,
+      maxArea: parseInt(searchParams.get('maxArea') ?? '') || undefined,
+      minRoomCount:
+        parseInt(searchParams.get('minRoomCount') ?? '') || undefined,
+      maxRoomCount:
+        parseInt(searchParams.get('maxRoomCount') ?? '') || undefined,
+    }));
+  }, [searchParams]);
 
   const { isLoading, isError, error, data, isPreviousData } = useQuery<
     AdListDto,
@@ -21,6 +38,11 @@ export const AdList = () => {
     keepPreviousData: true,
   });
 
+  const onAdFilterSubmit = (filter: AdFilterFormInput) => {
+    setSearchParams(filter);
+    setAdFilter(filter);
+  };
+
   let content;
   if (isLoading) {
     return <Loading />;
@@ -29,7 +51,7 @@ export const AdList = () => {
   } else {
     content = (
       <>
-        <AdFilter onSubmit={(data) => setAdFilter(data)} />
+        <AdFilter onSubmit={onAdFilterSubmit} />
         <Center w="fit-content">
           <Grid
             gap={5}

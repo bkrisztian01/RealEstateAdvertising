@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { MessagePage } from 'features/Message/MessagePage/MessagePage';
+import { HomePage } from 'pages/HomePage';
 import { RequireAuth } from 'react-auth-kit';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AdList } from './features/Ad/AdList';
@@ -24,7 +25,8 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Navigate to="/home" />} />
-          <Route path="home" element={<AdList />} />
+          <Route path="home" element={<HomePage />} />
+          <Route path="browse" element={<AdList />} />
           <Route
             path="messages"
             element={
