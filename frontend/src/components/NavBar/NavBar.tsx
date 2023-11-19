@@ -134,15 +134,6 @@ export const NavBar = () => {
           {!isHomePage && (
             <Flex>
               <Image src="/logo.png" height="42px"></Image>{' '}
-              {/* <Text
-                fontSize="3xl"
-                fontFamily="Mohave"
-                fontWeight="500"
-                ml="5px"
-                textAlign="center"
-              >
-                RealEstate
-              </Text> */}
             </Flex>
           )}
         </Link>
@@ -176,6 +167,7 @@ export const NavBar = () => {
       <SuccessfulModal
         isOpen={isSubscriptionSuccessOpen}
         text="You subscribed!"
+        isCentered={true}
         onClose={onSubscriptionSuccessClose}
       ></SuccessfulModal>
     </>

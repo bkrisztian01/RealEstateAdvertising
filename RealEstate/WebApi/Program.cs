@@ -122,8 +122,8 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
         .ForJob(jobKey)
         .WithIdentity($"{nameof(CheckSubscriptionsJob)}-trigger")
-        // Run job every minute
-        .WithCronSchedule("0 * * ? * *")
+        // Run job every day
+        .WithCronSchedule("0 0 0 ? * *")
     );
 });
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);

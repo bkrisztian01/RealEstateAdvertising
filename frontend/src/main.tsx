@@ -1,5 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import { MessageHubProvider } from 'context/MessagesHubContext';
+import { MessageHubProvider } from 'context/MessageHubContext';
 import React from 'react';
 import { AuthProvider } from 'react-auth-kit';
 import ReactDOM from 'react-dom/client';

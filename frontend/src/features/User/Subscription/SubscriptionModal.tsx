@@ -56,7 +56,7 @@ export const SubscriptionModal = ({
 }: SubscriptionModalProps) => {
   const { activeStep, setActiveStep } = useSteps({
     index: 0,
-    count: steps.length,
+    count: steps.length + 1,
   });
 
   const authHeader = useAuthHeader();
@@ -67,7 +67,7 @@ export const SubscriptionModal = ({
   });
 
   const { data: subscription } = useQuery<Subscription | null, AxiosError>({
-    queryKey: ['subsription'],
+    queryKey: ['subscription'],
     queryFn: () => getUsersSubscription(authHeader()),
   });
 

@@ -40,6 +40,24 @@ export const paymentSchema = yup.object<CreditCardInformation>({
     .string()
     .label('Expiration date')
     .length(5, 'Not a valid date')
+    .test(
+      'Expiration date',
+      () => 'Not a valid date',
+      (value, testContext) => {
+        if (!value) return false;
+
+        const split = value.split('/');
+        const month = parseInt(split[0]);
+        const year = parseInt(`20${split[1]}`);
+        if (!month || !year) return false;
+
+        const currentYear = new Date().getUTCFullYear();
+        const currentMonth = new Date().getMonth();
+        return (
+          year > currentYear || (year === currentYear && month >= currentMonth)
+        );
+      },
+    )
     .required(),
 });
 

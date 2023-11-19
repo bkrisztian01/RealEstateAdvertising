@@ -1,14 +1,15 @@
-import { HubConnectionState } from '@microsoft/signalr';
-import { MessageHubContext } from 'context/MessagesHubContext';
+import { MessageHubContext } from 'context/MessageHubContext';
 import { useContext, useEffect, useState } from 'react';
+import { useAuthHeader, useIsAuthenticated } from 'react-auth-kit';
 
 export const useNewMessageCount = () => {
-  const context = useContext(MessageHubContext);
-  if (!context) {
+  const connection = useContext(MessageHubContext);
+  if (!connection) {
     throw new Error('MessageHubProvider is missing.');
   }
-  const { connection } = context;
   const [newMessagesCount, setNewMessagesCount] = useState(0);
+  const isAuthenticated = useIsAuthenticated();
+  const authHeader = useAuthHeader();
 
   const onNewMessageCountChanged = (count: number) => {
     setNewMessagesCount(count);
@@ -18,14 +19,11 @@ export const useNewMessageCount = () => {
     if (!connection) return;
 
     connection.on('NewMessageCountChanged', onNewMessageCountChanged);
-  }, [connection]);
 
-  useEffect(() => {
-    console.log(connection?.state);
-    if (connection && connection.state === HubConnectionState.Connected) {
+    if (isAuthenticated()) {
       connection.invoke('GetNewMessageCount').then(onNewMessageCountChanged);
     }
-  }, [connection]);
+  }, [connection, isAuthenticated]);
 
   return {
     newMessagesCount: newMessagesCount,

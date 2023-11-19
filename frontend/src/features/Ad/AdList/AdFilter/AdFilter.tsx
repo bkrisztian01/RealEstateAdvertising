@@ -21,7 +21,7 @@ import { useForm } from 'react-hook-form';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { BiChevronDown, BiMinus } from 'react-icons/bi';
 import * as yup from 'yup';
-import { AdFilterFormInput, AdFilterFormProps } from './types';
+import { AdFilterFormInput, AdFilterProps } from './types';
 
 const adFilterSchema = yup.object<AdFilterFormInput>({
   address: yup.string().nullable(),
@@ -69,7 +69,7 @@ const adFilterSchema = yup.object<AdFilterFormInput>({
     .transform((_, val) => (Number(val) ? Number(val) : undefined)),
 });
 
-export const AdFilter = ({ onSubmit }: AdFilterFormProps) => {
+export const AdFilter = ({ onSubmit }: AdFilterProps) => {
   const {
     register,
     handleSubmit,

@@ -10,6 +10,6 @@ export type AdFilterFormInput = {
   maxRoomCount?: number;
 };
 
-export type AdFilterFormProps = {
+export type AdFilterProps = {
   onSubmit: SubmitHandler<AdFilterFormInput>;
 };

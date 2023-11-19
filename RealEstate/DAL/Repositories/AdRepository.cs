@@ -14,22 +14,6 @@ namespace DAL.Repositories
         private readonly RealEstateDbContext _context;
         private readonly IMapper _mapper;
 
-        private AdDTO MapAdToAdDTO(Ad ad)
-        {
-            return new AdDTO
-            {
-                Id = ad.Id,
-                Title = ad.Title,
-                Description = ad.Description,
-                Address = ad.Address,
-                Price = ad.Price,
-                RoomCount = ad.RoomCount,
-                Area = ad.Area,
-                CreatedAt = ad.CreatedAt,
-                Image = ad.Image,
-            };
-        }
-
         public AdRepository(RealEstateDbContext context, IMapper mapper)
         {
             _context = context;

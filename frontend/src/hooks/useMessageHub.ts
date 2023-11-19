@@ -1,13 +1,12 @@
-import { MessageHubContext } from 'context/MessagesHubContext';
+import { MessageHubContext } from 'context/MessageHubContext';
 import { Message } from 'model/Message';
 import { useContext } from 'react';
 
 export default function useMessageHub() {
-  const messageHub = useContext(MessageHubContext);
-  if (!messageHub) {
+  const connection = useContext(MessageHubContext);
+  if (!connection) {
     throw new Error('MessageHubProvider is missing.');
   }
-  const { connection } = messageHub;
 
   const sendMessage = async (message: string, userName: string) => {
     if (!connection) return;
@@ -31,7 +30,7 @@ export default function useMessageHub() {
   const markMessagesAsRead = async (userName: string) => {
     if (!connection) return;
 
-    return connection.invoke('markMessagesWithUserAsRead', userName);
+    return await connection.invoke('markMessagesWithUserAsRead', userName);
   };
 
   return {
