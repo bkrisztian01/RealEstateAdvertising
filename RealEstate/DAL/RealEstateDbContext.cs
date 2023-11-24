@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using System.Runtime.CompilerServices;
 
 namespace DAL
 {
@@ -35,16 +33,6 @@ namespace DAL
                 .WithOne()
                 .HasForeignKey<Subscription>();
             });
-
-            if (environment.IsDevelopment())
-            {
-                if (Database.GetPendingMigrations().Count() > 0)
-                {
-                    Database.EnsureDeleted();
-                    Database.Migrate();
-                    Database.ExecuteSql(FormattableStringFactory.Create(TestDataConstant.SqlString));
-                }
-            }
         }
     }
 }
