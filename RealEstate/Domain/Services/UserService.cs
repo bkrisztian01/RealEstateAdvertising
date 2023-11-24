@@ -41,10 +41,10 @@ namespace Domain.Services
             }
 
             var authClaims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.Name, loginDTO.UserName),
-                new Claim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            };
+    {
+        new Claim(ClaimTypes.Name, loginDTO.UserName),
+        new Claim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+    };
             var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
             const int expiresIn = 1440; // minutes
             var token = new JwtSecurityToken(
@@ -55,9 +55,10 @@ namespace Domain.Services
                 signingCredentials: new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha256Signature)
                 );
 
-            var accessToken =  new JwtSecurityTokenHandler().WriteToken(token);
+            var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return new TokenDTO {
+            return new TokenDTO
+            {
                 AccessToken = accessToken,
                 ExpiresIn = expiresIn,
                 UserName = loginDTO.UserName,

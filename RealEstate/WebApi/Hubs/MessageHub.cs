@@ -18,15 +18,13 @@ namespace Domain.Services
         public static Dictionary<string, List<string>> ConnectedUsers = new Dictionary<string, List<string>>();
 
         private readonly MessageService _messageService;
-        private readonly IMapper _mapper;
 
         private const string NEW_MESSAGE = "NewMessage";
         private const string NEW_MESSAGE_COUNT_CHANGED = "NewMessageCountChanged";
 
-        public MessageHub(MessageService messageService, IMapper mapper)
+        public MessageHub(MessageService messageService)
         {
             _messageService = messageService;
-            _mapper = mapper;
         }
 
         public override async Task OnConnectedAsync()
@@ -72,8 +70,7 @@ namespace Domain.Services
         public MessageDTO Send(string recipient, string message)
         {
             string userName = GetUserName();
-
-            MessageDTO messageDto = _mapper.Map<MessageDTO>(_messageService.CreateMessage(recipient, userName, message));
+            MessageDTO messageDto = _messageService.CreateMessage(recipient, userName, message);
 
             if (ConnectedUsers.ContainsKey(recipient))
             {

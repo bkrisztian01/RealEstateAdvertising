@@ -27,15 +27,15 @@ const phoneRegExp =
   /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
 
 const registerSchema = yup.object<RegisterFormInput>({
-  userName: yup.string().required(),
-  password: yup.string().required(),
-  fullName: yup.string().required(),
-  email: yup.string().email().required(),
-  phoneNumber: yup.string().test(
-    'phoneNumber',
-    () => 'Phone number is not valid.',
-    (value, testContext) => !value || phoneRegExp.test(value),
-  ),
+  /*...*/
+  phoneNumber: yup
+    .string()
+    .label('Phone number')
+    .test(
+      'phoneNumber',
+      () => 'Phone number is not valid.',
+      (value, testContext) => !value || phoneRegExp.test(value),
+    ),
 });
 
 export const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
@@ -58,9 +58,7 @@ export const RegisterModal = ({ isOpen, onClose }: RegisterModalProps) => {
     AxiosError,
     SignUpProps
   >({
-    mutationFn: (data: SignUpProps) => {
-      return userSignUp(data);
-    },
+    mutationFn: (data: SignUpProps) => userSignUp(data),
     onSuccess: () => {
       onClose();
       successOnOpen();

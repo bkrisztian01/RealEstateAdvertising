@@ -16,6 +16,7 @@ namespace Domain.DTOs
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        [Required]
         public string FullName { get; set; }
 
         [Required]

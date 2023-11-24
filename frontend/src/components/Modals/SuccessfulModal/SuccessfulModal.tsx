@@ -8,15 +8,16 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react';
-import { SuccesfulModalProps } from './types';
+import { SuccessfulModalProps } from './types';
 
 export const SuccessfulModal = ({
   isOpen,
   onClose,
   text,
-}: SuccesfulModalProps) => {
+  isCentered,
+}: SuccessfulModalProps) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered={isCentered}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Succesful</ModalHeader>

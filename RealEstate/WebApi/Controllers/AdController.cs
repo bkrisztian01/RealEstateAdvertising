@@ -76,7 +76,12 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult CreateAd([FromBody] CreateAdDTO ad)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var userName = User.Identity!.Name;
+
             var newAd = _adService.CreateAd(ad, userName!);
             try
             {

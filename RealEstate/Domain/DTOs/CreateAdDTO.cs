@@ -6,7 +6,6 @@ namespace Domain.DTOs
     {
         [Required]
         public string Title { get; set; }
-        [Required]
         public string Description { get; set; }
         [Required]
         public string Address { get; set; }

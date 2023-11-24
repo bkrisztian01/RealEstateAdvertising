@@ -12,20 +12,20 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { getAdById } from 'api/adApi';
-import { sendMessage } from 'api/messageApi';
 import { AxiosError } from 'axios';
 import { Loading } from 'components/Loading';
 import { MessageModal } from 'components/MessageModal';
 import { MessageFormInput } from 'components/MessageModal/MessageModal';
+import useMessageHub from 'hooks/useMessageHub';
 import { Ad } from 'model/Ad';
-import { useAuthHeader, useAuthUser, useIsAuthenticated } from 'react-auth-kit';
+import { useAuthUser, useIsAuthenticated } from 'react-auth-kit';
 import { SubmitHandler } from 'react-hook-form';
 import { BsFillTelephoneFill } from 'react-icons/bs';
 import { FaRulerVertical } from 'react-icons/fa';
 import { GoPerson } from 'react-icons/go';
 import { ImLocation2, ImPriceTag } from 'react-icons/im';
 import { MdBed, MdEmail } from 'react-icons/md';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { formatPrice } from 'util/formatPrice';
 import './style.css';
@@ -34,11 +34,8 @@ export const AdPage = () => {
   const { adId } = useParams();
 
   const isAuthenticated = useIsAuthenticated();
-  const auth = useAuthUser();
-  const authHeader = useAuthHeader();
-
   const queryClient = useQueryClient();
-
+  const auth = useAuthUser();
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -47,40 +44,34 @@ export const AdPage = () => {
     isError,
     error,
     data: ad,
-  } = useQuery<Ad, AxiosError>(['ad', adId], () =>
-    getAdById(parseInt(adId || '0')),
+  } = useQuery<Ad, AxiosError>(
+    ['ad', adId],
+    () => getAdById(parseInt(adId || '0')),
+    {
+      onError: (error) => {
+        if (error.response?.status === 404) {
+          navigate('/404');
+        }
+      },
+    },
   );
 
-  const mutationFn = async (data: MessageFormInput) => {
-    if (!ad) {
-      return;
-    }
-
-    return sendMessage(
-      authHeader(),
-      ad.owner.userName,
-      messageHeader + data.content,
-    );
-  };
-
-  const { isLoading: isSendLoading, mutate } = useMutation({
-    mutationFn,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries([ad?.owner.userName, 'messages']);
-      navigate(`/messages/${ad?.owner.userName}`);
-      onClose();
-    },
-  });
-
+  const { sendMessage } = useMessageHub();
   const messageHeader = `__Advertisement:__ [__${ad?.title}__](/ad/${adId})\n\n\n`;
-
+  let isSendLoading = false;
   const onSubmit: SubmitHandler<MessageFormInput> = async (
     data: MessageFormInput,
   ) => {
     if (!ad) {
       return;
     }
-    mutate(data);
+    isSendLoading = true;
+    await sendMessage(messageHeader + data.content, ad.owner.userName).finally(
+      () => (isSendLoading = false),
+    );
+    await queryClient.invalidateQueries([ad?.owner.userName, 'messages']);
+    navigate(`/messages/${ad?.owner.userName}`);
+    onClose();
   };
 
   const details = (ad: Ad) => (
