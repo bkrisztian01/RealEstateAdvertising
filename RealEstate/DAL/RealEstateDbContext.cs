@@ -1,13 +1,24 @@
 ﻿using Domain.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using System.Runtime.CompilerServices;
 
 namespace DAL
 {
     public class RealEstateDbContext : IdentityDbContext<User>
     {
-        public RealEstateDbContext() { }
-        public RealEstateDbContext(DbContextOptions options) : base(options) { }
+        private readonly IWebHostEnvironment environment;
+
+        public RealEstateDbContext(IWebHostEnvironment environment)
+        {
+            this.environment = environment;
+        }
+        public RealEstateDbContext(DbContextOptions options, IWebHostEnvironment environment) : base(options)
+        {
+            this.environment = environment;
+        }
 
         public DbSet<Ad> Ads { get; set; } = null!;
         public DbSet<Message> Messages { get; set; } = null!;
@@ -17,12 +28,23 @@ namespace DAL
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
             builder.Entity<Subscription>(sub =>
             {
                 sub.HasOne(s => s.User)
                 .WithOne()
                 .HasForeignKey<Subscription>();
             });
+
+            if (environment.IsDevelopment())
+            {
+                if (Database.GetPendingMigrations().Count() > 0)
+                {
+                    Database.EnsureDeleted();
+                    Database.Migrate();
+                    Database.ExecuteSql(FormattableStringFactory.Create(TestDataConstant.SqlString));
+                }
+            }
         }
     }
 }
