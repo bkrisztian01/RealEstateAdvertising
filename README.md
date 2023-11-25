@@ -22,3 +22,7 @@ A Rest API alapértelmezett elérési útvonala `https://localhost:7202`
 3. Indítsuk el az alkalmazást: `npm run dev`
 
 A klienst alapértelmezett elérési útvonala `https://localhost:5173`. Ha használsz reklámblokkoló kiegészítőt a böngésződön, akkor érdemes kikapcsolni. 
+
+Ha fejlesztői módban indítottuk el a kiszolgáló szervert, az alkalmazás kipróbálásához használhatjuk a lenti fiókot:
+- Felhasználónév: `ozi`
+- Jelszó: `Test123!@#`
