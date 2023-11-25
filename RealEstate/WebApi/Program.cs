@@ -14,6 +14,8 @@ using Domain.MapperProfiles;
 using System.Runtime.Serialization;
 using Quartz;
 using WebApi.Jobs;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -137,6 +139,23 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    using var scope = app.Services.CreateScope();
+    using RealEstateDbContext context = scope.ServiceProvider.GetRequiredService<RealEstateDbContext>();
+
+    if (context.Database.GetPendingMigrations().Count() > 0)
+    {
+        context.Database.EnsureDeleted();
+        context.Database.Migrate();
+        var assembly = Assembly.GetExecutingAssembly();
+        string resourceName = assembly.GetManifestResourceNames().Single();
+        using Stream? stream = assembly.GetManifestResourceStream(resourceName);
+        if (stream == null)
+            return;
+        using StreamReader streamReader = new StreamReader(stream);
+        context.Database.ExecuteSql(FormattableStringFactory.Create(streamReader.ReadToEnd()));
+        context.SaveChanges();
+    }
 }
 
 app.UseHttpsRedirection();
