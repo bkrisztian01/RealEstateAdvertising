@@ -1,3 +1,5 @@
+# Ingatlanhirdető alkalmazás
+
 ## Szükséges szoftverek
 
 A fejlesztői környezet felállításához a következő szoftvereket kell feltelepíteni:
